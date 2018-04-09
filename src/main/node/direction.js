@@ -29,7 +29,7 @@ function nextLocation(loc, direction) {
     case Direction.DOWN:
       return {x: loc.x, y:loc.y+1};
   }
-  return null
+  return null;
 }
 
 function turnLeft(facing) {
