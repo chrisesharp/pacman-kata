@@ -12,7 +12,7 @@ const positions = Object.keys(Direction).length;
 
 function getDelta(direction) {
   if (typeof direction == "number") {
-    return Deltas[direction]
+    return Deltas[direction];
   } else if (typeof direction === "string") {
     return Deltas[Direction[direction]];
   } 
