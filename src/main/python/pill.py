@@ -3,7 +3,7 @@ class Pill(object):
              "o": 50}
 
     def isPill(icon):
-        if type(icon) is Pill:
+        if isinstance(icon, Pill):
             return True
         elif icon in Pill.icons:
             return True

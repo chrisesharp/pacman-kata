@@ -10,9 +10,9 @@ from levels import LevelMaps
 
 
 class Game(object):
-    def __init__(self, input=None):
-        if input is not None:
-            self.input = input.rstrip()
+    def __init__(self, inputMap=None):
+        if inputMap is not None:
+            self.inputMap = inputMap.rstrip()
         self.field = None
         self.lives = 3
         self.score = 0
@@ -40,15 +40,15 @@ class Game(object):
 
     def parse(self):
         if self.levelMaps:
-            self.input = self.levelMaps.getLevel(self.level)
+            self.inputMap = self.levelMaps.getLevel(self.level)
         else:
-            if "SEPARATOR" in self.input:
-                self.levelMaps = LevelMaps(self.input)
+            if "SEPARATOR" in self.inputMap:
+                self.levelMaps = LevelMaps(self.inputMap)
                 self.lastLevel = self.levelMaps.maxLevel()
-                self.input = self.levelMaps.getLevel(self.level)
-        columns = self.input.index("\n")
-        self.parseStatus(self.input[:columns])
-        screenRows = self.input[columns+1:].split('\n')
+                self.inputMap = self.levelMaps.getLevel(self.level)
+        columns = self.inputMap.index("\n")
+        self.parseStatus(self.inputMap[:columns])
+        screenRows = self.inputMap[columns+1:].split('\n')
         rows = len(screenRows)
         self.field = GameField(columns, rows)
         self.parseField(screenRows)
@@ -128,7 +128,7 @@ class Game(object):
         if self.pacman:
             newField.add(self.pacman.coordinates, self.pacman)
         if self.gameOver:
-            self.printGameOver(newField)
+            Game.printGameOver(newField)
         self.field = newField
 
     def getElement(self, coords):
@@ -150,7 +150,7 @@ class Game(object):
         return Pill.isPill(self.field.get(coordinates))
 
     def isPacman(self, coordinates):
-        return type(self.field.get(coordinates)) is Pacman
+        return isinstance(self.field.get(coordinates), Pacman)
 
     def eatPill(self, coordinates):
         pill = self.field.get(coordinates)
@@ -180,18 +180,6 @@ class Game(object):
     def move(self, direction):
         self.pacman.move(direction)
 
-    def printGameOver(self, field):
-        cols = field.width()
-        rows = field.height()
-        GAME = "GAME"
-        OVER = "OVER"
-        y = floor(rows / 2) - 2
-        padding = floor(((cols - 2) - len(GAME)) / 2)
-        for i in range(len(GAME)):
-            x = padding + i + 1
-            field.add((x, y), GAME[i])
-            field.add((x, y+1), OVER[i])
-
     def setLevel(self, level):
         self.level = level
 
@@ -217,6 +205,18 @@ class Game(object):
 
     def getScore(self):
         return self.score
+
+    def printGameOver(field):
+        cols = field.width()
+        rows = field.height()
+        GAME = "GAME"
+        OVER = "OVER"
+        y = floor(rows / 2) - 2
+        padding = floor(((cols - 2) - len(GAME)) / 2)
+        for i in range(len(GAME)):
+            x = padding + i + 1
+            field.add((x, y), GAME[i])
+            field.add((x, y+1), OVER[i])
 
 
 if __name__ == "__main__":

@@ -1,4 +1,5 @@
-from direction import next, wrap, Direction
+from direction import nextLocation, wrap
+from direction import Direction
 
 
 class Pacman:
@@ -18,7 +19,7 @@ class Pacman:
             }
 
     def isPacman(icon):
-        if type(icon) is Pacman:
+        if isinstance(icon, Pacman):
             return True
         elif icon in Pacman.icons:
             return True
@@ -42,7 +43,7 @@ class Pacman:
         self.frame = 0
 
     def setDirection(self, facing):
-        if type(facing) is str:
+        if isinstance(facing, str):
             for name, item in Direction.__members__.items():
                 if name == facing:
                     self.facing = item
@@ -74,7 +75,7 @@ class Pacman:
             self.setDirection(direction)
 
     def nextMove(self, facing):
-        return wrap(next(self.coordinates, facing),
+        return wrap(nextLocation(self.coordinates, facing),
                     self.width,
                     self.height)
 

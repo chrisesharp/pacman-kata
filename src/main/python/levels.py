@@ -1,6 +1,6 @@
 class LevelMaps(object):
-    def __init__(self, input):
-        self.levels = input.split("SEPARATOR\n")
+    def __init__(self, inputMaps):
+        self.levels = inputMaps.split("SEPARATOR\n")
         try:
             self.max = int(self.levels[0])
         except ValueError:

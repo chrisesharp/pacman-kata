@@ -14,7 +14,7 @@ def step_impl(context):
     if not game:
         context.game = Game(context.text)
     else:
-        context.game.input = context.text
+        context.game.inputMap = context.text
 
 
 @given(u'the game field of {width:d} x {height:d}')
@@ -69,7 +69,7 @@ def step_impl(context, sequence, hex):
 
 @given(u'a game with {levels:d} levels')
 def step_impl(context, levels):
-    context.game.input = context.text
+    context.game.inputMap = context.text
 
 
 @given(u'this is level {level:d}')

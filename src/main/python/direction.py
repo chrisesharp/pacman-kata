@@ -8,7 +8,7 @@ class Direction(IntEnum):
     DOWN = 3
 
 
-def next(coords, direction):
+def nextLocation(coords, direction):
     return {
         Direction.LEFT: lambda coords: ((coords[0] - 1),
                                         coords[1]),

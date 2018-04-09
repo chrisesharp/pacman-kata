@@ -1,4 +1,5 @@
-from direction import avoid, next, wrap, left, right, opposite, Direction
+from direction import avoid, nextLocation, wrap, left, right, opposite
+from direction import Direction
 from random import randint
 
 
@@ -13,7 +14,7 @@ class Ghost(object):
             }
 
     def isGhost(icon):
-        if type(icon) is Ghost:
+        if isinstance(icon, Ghost):
             return True
         elif icon in Ghost.icons:
             return True
@@ -83,7 +84,7 @@ class Ghost(object):
         self.icon = Ghost.iconByState[self.panicLevel > 0]
 
     def nextMove(self, direction):
-        return wrap(next(self.coordinates, direction),
+        return wrap(nextLocation(self.coordinates, direction),
                     self.width,
                     self.height)
 
