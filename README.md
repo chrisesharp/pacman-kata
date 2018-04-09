@@ -65,7 +65,7 @@ are as follows:
 * Animation
 
 The structure of this repo is described in more detail [here]
-(https://github.ibm.com/sharpc/pacman-kata/ReposStructure.md)
+(https://github.com/chrisesharp/pacman-kata/ReposStructure.md)
 
 Once the basic features were implemented, I then focused on refactoring
 extensively to clean the code.
@@ -77,7 +77,6 @@ I also added colour support in, just for fun!
 ![pacman-colour](images/pacman.png)
 
 
-Special credit to [@stephen-rowles](https://github.ibm.com/stephen-rowles)
 for finding better chars to use for the maps, and designing a much more
 accurate sample maze!
 
