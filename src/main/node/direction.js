@@ -13,9 +13,8 @@ function facing(facing) {
       return Direction.UP;
     case "DOWN":
       return Direction.DOWN;
-    default:
-      return -1;
   }
+  return -1;
 }
 
 function nextLocation(loc, direction) {

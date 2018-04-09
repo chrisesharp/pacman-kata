@@ -8,4 +8,4 @@ module.exports = Object.freeze({
    REVOFF : "\u001B[?5l",
    BLINK  : "\u001B[5m",
    REV    : "\u001B[7m" 
-})
+});

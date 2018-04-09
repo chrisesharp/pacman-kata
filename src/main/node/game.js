@@ -102,7 +102,7 @@ class Game {
     }
     
     tick () {
-      this.ghosts.forEach((ghost) => {ghost.tick()});
+      this.ghosts.forEach((ghost) => { ghost.tick(); });
       if (this.pacman) {this.pacman.tick();}
       if (this.levelCleared()) {this.nextLevel();}
       this.updatePlayfield();
@@ -279,7 +279,7 @@ class Game {
     }
     
     isGate(loc) {
-      let element = this.playfield.getLocation(loc)
+      let element = this.playfield.getLocation(loc);
       return ( element instanceof Wall && element.isGate() );
     }
 }

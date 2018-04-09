@@ -16,3 +16,5 @@ src/main/python/__pycache__/
 .vscode/
 *.code-workspace
 .ropeproject
+sonarscan.sh
+.scannerwork

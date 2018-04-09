@@ -22,7 +22,7 @@ module.exports =
 class PacmanType  extends GameElement {
   constructor ({x,y}, icon) {
     super ({x,y}, icon);
-    this.start = {x:x,y:y};
+    this.start = {x,y};
     this.game = null;
     this.playfield = null;
     this.facing = this.getDirectionByIcon(icon);

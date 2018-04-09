@@ -1,8 +1,8 @@
 
-const { setWorldConstructor } = require("cucumber")
-const Game = require("../game.js")
-const Playfield = require("../playField.js")
-const g = require("../game-elements.js")
+const { setWorldConstructor } = require("cucumber");
+const Game = require("../game.js");
+const Playfield = require("../playField.js");
+const g = require("../game-elements.js");
 const Pacman = require("../pacman.js");
 const Ghost = require("../ghost.js");
 const Wall = require("../walls.js");
@@ -26,7 +26,7 @@ CustomWorld.prototype.setPlayfield = function(x,y) {
 }
 
 CustomWorld.prototype.setPacman = function(x,y,facing) {
-  direction = Direction.facing(facing);
+  let direction = Direction.facing(facing);
   this.pacman = new Pacman({x,y});
   this.pacman.setDirection(direction);
   this.pacman.alive = true;
@@ -138,7 +138,7 @@ CustomWorld.prototype.displayOut = function() {
 
 CustomWorld.prototype.convertToHex = function(output) {
   let received = "";
-  output = output.join('').toString();
+  output = output.join("").toString();
   for (var i=0;i<output.length;i++) {
     var hex= output.codePointAt(i).toString(16).toUpperCase();
     received += "0".repeat(2 - hex.length) + hex;

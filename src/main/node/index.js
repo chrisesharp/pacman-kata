@@ -34,7 +34,7 @@ if (require.main === module) {
   
   let file = (args.file) ?  args.file : "data/pacman.txt";
   let colour = (args.colour) ?  args.colour : false;
-  let contents = fs.readFileSync(file,'utf8');
+  let contents = fs.readFileSync(file,"utf8");
   
   game = new Game(contents);
   let keyboard = new Keyboard(game);
@@ -49,7 +49,7 @@ if (require.main === module) {
   game.useAnimation();
   game.parse();
   
-  process.stdin.on('keypress', (str, key) => {
+  process.stdin.on("keypress", (str, key) => {
     keyboard.keyPressed(key);
   });
   
