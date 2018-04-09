@@ -3,10 +3,12 @@
 module.exports =
 
 class GameElement {
-  constructor ({x,y}, icon) {
-    this.x = x;
-    this.y = y;
-    this.image = icon;
+  constructor (options) {
+    if (options) {
+      this.x = options.coords.x;
+      this.y = options.coords.y;
+      this.image = options.icon;
+    }
   }
   
   icon() {

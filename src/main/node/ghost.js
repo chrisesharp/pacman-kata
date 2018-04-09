@@ -31,23 +31,36 @@ function setGhostColour() {
 module.exports =
 
 class Ghost extends GameElement {
-  constructor ({x,y},icon) {
-    super ({x,y}, icon);
-    this.start = {x,y};
-    this.points = 200;
-    this.direction = UP;
-    this.game = null;
-    this.gatePassed = false;
-    this.uniqueColour = setGhostColour();
-    
-    this.panicLevel = (icons.find( (ghost) => {
-      return ghost.icon === icon;
-    }).panicked) ? 50 : 0;
+  constructor (options) {
+    super(options);
+    if (options) {
+      this.start = options.coords;
+      this.points = 200;
+      this.direction = UP;
+      this.game = null;
+      this.gatePassed = false;
+      this.uniqueColour = setGhostColour();
+      
+      this.panicLevel = (icons.find( (ghost) => {
+        return ghost.icon === options.icon;
+      }).panicked) ? 50 : 0;
+    }
   } 
   
   static isGhost(token) {
     return (icons.filter(element => element.icon === token).length>0);
   }
+  
+  getElement(coords, icon) {
+    if (Ghost.isGhost(icon)) {
+      return new Ghost({coords, icon});
+    }
+  }
+  
+  addToGame(game) {
+    game.addGhost(this);
+  }
+  
   colour() {
     return this.getColour(this.panicLevel>0);
   }

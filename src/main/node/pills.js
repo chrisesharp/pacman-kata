@@ -11,13 +11,25 @@ const icons = [
 
 module.exports =
 class Pill extends GameElement {
-  constructor ({x,y},icon) {
-    super ({x,y}, icon);
-    this.points = icons.find((pill) => {return pill.icon === icon;}).points;
+  constructor (options) {
+    super(options);
+    if (options) {
+      this.points = icons.find((pill) => {return pill.icon === options.icon;}).points;
+    }
   } 
   
   static isPill(token) {
     return (icons.filter((element) => element.icon === token).length>0);
+  }
+  
+  getElement(coords, icon) {
+    if (Pill.isPill(icon)) {
+      return new Pill({coords, icon});
+    }
+  }
+  
+  addToGame(game) {
+    game.addPill(this);
   }
   
   colour() {

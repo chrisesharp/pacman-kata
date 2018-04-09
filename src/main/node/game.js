@@ -1,5 +1,6 @@
 "use strict";
 
+const Tokenizer = require("./tokenizer.js");
 const Playfield = require("./playField.js");
 const display = require("./display.js");
 const ArrayList = require("arraylist");
@@ -74,31 +75,19 @@ class Game {
       let cols = this.playfield.width();
       for (var y=0;y<rows;y++) {
         for (var x=0;x<cols;x++) {
-          let token = screenRows[y][x];
-          if (Pacman.isPacman(token)) {
-            let pacman = new Pacman({x,y},token);
-            pacman.setPlayfield(this.playfield);
-            pacman.setGame(this);
-            if (this.animated) {
-              pacman.useAnimation();
-            }
-            this.setPacman(pacman);
-          }
-          if (Wall.isWall(token)) {
-            let wall = new Wall({x,y},token);
-            this.addWall(wall);
-          }
-          if (Pill.isPill(token)) {
-            let pill = new Pill({x,y},token);
-            this.addPill(pill);
-          }
-          if (Ghost.isGhost(token)) {
-            let ghost = new Ghost({x,y},token);
-            ghost.setGame(this);
-            this.addGhost(ghost);
-          }
+          let element = Tokenizer.getElement({x, y}, screenRows[y][x]);
+          if (element) { element.addToGame(this); }
         }
       }
+    }
+    
+    addPacman(pacman) {
+      pacman.setPlayfield(this.playfield);
+      pacman.setGame(this);
+      if (this.animated) {
+        pacman.useAnimation();
+      }
+      this.setPacman(pacman);
     }
     
     tick () {
@@ -243,6 +232,7 @@ class Game {
     }
     
     addGhost (ghost) {
+      ghost.setGame(this);
       this.playfield.setLocation(ghost.getLocation(),ghost);
       this.ghosts.add(ghost);
     }

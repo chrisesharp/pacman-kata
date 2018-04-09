@@ -19,19 +19,31 @@ const icons = [
 ];
 
 module.exports =
-class PacmanType  extends GameElement {
-  constructor ({x,y}, icon) {
-    super ({x,y}, icon);
-    this.start = {x,y};
-    this.game = null;
-    this.playfield = null;
-    this.facing = this.getDirectionByIcon(icon);
-    this.alive = this.getLivenessByIcon(icon);
-    this.frame = 0;
+class Pacman  extends GameElement {
+  constructor (options) {
+    super(options);
+    if (options) {
+      this.start = options.coords;
+      this.game = null;
+      this.playfield = null;
+      this.facing = this.getDirectionByIcon(options.icon);
+      this.alive = this.getLivenessByIcon(options.icon);
+      this.frame = 0;    
+    }
   } 
   
   static isPacman(token) {
     return (icons.filter((element) => element.icon.indexOf(token)>=0).length>0);
+  }
+  
+  getElement(coords, icon) {
+    if (Pacman.isPacman(icon)) {
+      return new Pacman({coords, icon});
+    }
+  }
+  
+  addToGame(game) {
+    game.addPacman(this);
   }
   
   setGame(game) {

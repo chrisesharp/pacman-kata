@@ -27,7 +27,7 @@ CustomWorld.prototype.setPlayfield = function(x,y) {
 
 CustomWorld.prototype.setPacman = function(x,y,facing) {
   let direction = Direction.facing(facing);
-  this.pacman = new Pacman({x,y});
+  this.pacman = new Pacman({coords:{x,y}});
   this.pacman.setDirection(direction);
   this.pacman.alive = true;
   this.pacman.setPlayfield(this.game.getPlayfield());
@@ -54,7 +54,7 @@ CustomWorld.prototype.addWalls = function(dataTable) {
     let icon = entry[0];
     let x = entry[1];
     let y = entry[2];
-    this.game.addWall(new Wall({x,y},icon));
+    this.game.addWall(new Wall({coords:{x,y},icon:icon}));
   });
 }
 

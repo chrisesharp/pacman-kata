@@ -74,6 +74,13 @@ clean-java:
 .PHONY: deploy-java
 deploy-java:
 	mvn package
+	
+.PHONY: scan-java
+scan-java:
+	mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
+    -Dsonar.host.url=https://sonarcloud.io \
+    -Dsonar.organization=chrisesharp-github \
+    -Dsonar.login=e482c0a7955455e3d152bb592c3140605a34443e
 
 .PHONY: docker-java
 docker-java:
