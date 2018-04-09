@@ -1,0 +1,36 @@
+matrix:
+  exclude:
+    - language: ruby
+      dist: precise
+  include:
+    - language: java
+      jdk: openjdk8
+      script: make local-java
+      cache:
+        directories:
+        - "$HOME/.m2"
+      before_cache:
+        - rm -rf $HOME/.m2/repository/io/cucumber
+      sudo: false
+      dist: trusty
+    - language: go
+      go:
+        - "1.10"
+      script: make local-go
+      sudo: false
+      dist: trusty
+    - language: node_js
+      node_js:
+        - "9.3.0"
+      script: make local-node
+      sudo: false
+      dist: trusty
+    - language: python
+      python:
+        - "3.6"
+      install:
+        - pip install -r requirements-test.txt
+      script: make local-python
+      sudo: false
+      dist: trusty
+        

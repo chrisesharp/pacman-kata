@@ -1,0 +1,233 @@
+package com.example.pacman;
+
+import static org.junit.Assert.*;
+import cucumber.api.java.en.*;
+import cucumber.api.PendingException;
+import java.io.ByteArrayOutputStream;
+import java.util.List;
+
+
+public class PacmanGameStepDef {
+
+    @Given("^the game state is$")
+    public void theGameStateIs(String state) throws Throwable {
+        throw new PendingException("");
+    }
+
+    @Given("^the game uses animation$")
+    public void the_game_uses_animation() throws Throwable {
+        throw new PendingException("");
+    }
+
+    @Given("^a game with (\\d+) levels$")
+    public void a_game_with_levels(int levels, String levelMaps) throws Throwable {
+      throw new PendingException("");
+    }
+
+    @Given("^this is the last level$")
+    public void this_is_the_last_level() throws Throwable {
+        throw new PendingException("");
+    }
+
+    @Given("^this is level (\\d+)$")
+    public void this_is_level(int level) throws Throwable {
+        throw new PendingException("");
+    }
+
+    @Given("^the max level  is (\\d+)$")
+    public void the_max_level_is(int level) throws Throwable {
+        throw new PendingException("");
+    }
+
+    @Given("^the score is (\\d+)$")
+    public void the_score_is(int score) throws Throwable {
+        throw new PendingException("");
+    }
+
+    @Given("^the lives are (\\d+)$")
+    public void the_lives_are(int lives) throws Throwable {
+        throw new PendingException("");
+    }
+
+    @Given("^a game is polling for a key input$")
+    public void aGameIsPollingForAKeyInput() throws Throwable {
+        // Can't do anything here because of Java keyboard eventing
+    }
+
+    @Given("^a display$")
+    public void a_display() throws Throwable {
+      throw new PendingException("");
+    }
+
+    @Given("^a colour display$")
+    public void a_colour_display() throws Throwable {
+      throw new PendingException("");
+    }
+
+    @Given("^the ANSI \"(.*?)\" sequence is \"(.*?)\"$")
+    public void the_ANSI_sequence_is(String sequence, String hex) throws Throwable {
+        throw new PendingException("");
+    }
+
+    @When("^we parse the state$")
+    public void weParseTheState() throws Throwable {
+        throw new PendingException("");
+    }
+
+    @When("^we render the game$")
+    public void weRenderTheGame() throws Throwable {
+        throw new PendingException("");
+    }
+
+    @When("^we play (\\d+) turn")
+    public void wePlayATurn(int turns) throws Throwable {
+        throw new PendingException("");
+    }
+
+    @When("^the player presses \"([^\"]*)\"$")
+    public void thePlayerPresses(char key) throws Throwable {
+        throw new PendingException("");
+    }
+
+    @When("^the game refreshes the display with the buffer$")
+    public void the_game_refreshes_the_display_with_the_output(String buffer) throws Throwable {
+        throw new PendingException("");
+    }
+
+    @When("^the game refreshes the display with the buffer \"(.*?)\"$")
+    public void the_game_refreshes_the_display_with_the_buffer(String buffer) throws Throwable {
+        throw new PendingException("");
+    }
+
+    @When("^the display renders the icon \"(.*?)\" in yellow and refreshes$")
+    public void the_dispay_renders_the_icon_and_refreshes_the_display(String icon) throws Throwable {
+        throw new PendingException("");
+    }
+
+    @Then("^the game lives should be (\\d+)$")
+    public void the_game_lives_should_be(int lives) throws Throwable {
+        throw new PendingException("");
+    }
+
+    @Then("^the game score should be (\\d+)$")
+    public void the_game_score_should_be(int score) throws Throwable {
+        throw new PendingException("");
+    }
+
+    @Then("^the game field should be (\\d+) x (\\d+)$")
+    public void the_game_field_should_be_x(int x, int y) throws Throwable {
+        throw new PendingException("");
+    }
+
+    @Then("^pacman is at (\\d+) , (\\d+)$")
+    public void pacmanIsAt(int x, int y) throws Throwable {
+        throw new PendingException("");
+    }
+
+    @Then("^ghost is at (\\d+) , (\\d+)$")
+    public void ghostIsAt(int x, int y) throws Throwable {
+        throw new PendingException("");
+    }
+
+    @Then("^there is a 50 point pill at (\\d+) , (\\d+)$")
+    public void powerPillIsAt(int x, int y) throws Throwable {
+        throw new PendingException("");
+    }
+
+    @Then("^there is a 10 point pill at (\\d+) , (\\d+)$")
+    public void tenPointPillIsAt(int x, int y) throws Throwable {
+        throw new PendingException("");
+    }
+
+    @Then("^there is a wall at (\\d+) , (\\d+)$")
+    public void wallIsAt(int x, int y) throws Throwable {
+        throw new PendingException("");
+    }
+
+    @Then("^the player has (\\d+) lives$")
+    public void thePlayerHasLives(int lives) throws Throwable {
+        throw new PendingException("");
+    }
+
+    @Then("^the player score is (\\d+)$")
+    public void thePlayerScoreIs(int score) throws Throwable {
+        throw new PendingException("");
+    }
+
+    @Then("^pacman is facing \"([^\"]*)\"$")
+    public void pacmanIsFacing(String direction) throws Throwable {
+        throw new PendingException("");
+    }
+    
+    @Then("^pacman is dead$")
+    public void pacman_is_dead() throws Throwable {
+        throw new PendingException("");
+    }
+
+    @Then("^the game screen is$")
+    public void theGameScreenIs(String expected) throws Throwable {
+        throw new PendingException("");
+    }
+
+    @Then("^then pacman goes \"([^\"]*)\"$")
+    public void thenPacmanGoes(String direction) throws Throwable {
+        throw new PendingException("");
+    }
+
+    @Then("^there is a gate at (\\d+) , (\\d+)$")
+    public void there_is_a_gate_at(int x, int y) throws Throwable {
+        throw new PendingException("");
+    }
+
+    @Then("^there is a force field at (\\d+) , (\\d+)$")
+    public void there_is_a_force_field_at(int x, int y) throws Throwable {
+        throw new PendingException("");
+    }
+
+    @Then("^the display byte stream should be$")
+    public void the_display_byte_stream_should_be(List<String> sequences) throws Throwable {
+        throw new PendingException("");
+    }
+
+
+
+    public static byte[] hexStringToByteArray(String input) {
+      int len = input.length();
+      byte[] data = new byte[len / 2];
+      for (int i = 0; i < len; i += 2) {
+          data[i / 2] = (byte) ((Character.digit(input.charAt(i), 16) << 4)
+                               + Character.digit(input.charAt(i+1), 16));
+      }
+      return data;
+    }
+    public static String stringToHexString(String input) {
+      StringBuilder sb = new StringBuilder();
+      for (int i = 0; i < input.length(); i++) {
+        int hex = (int) input.charAt(i);
+          sb.append(Integer.toHexString(hex));
+      }
+      return sb.toString();
+    }
+
+    public static byte[] flattenArrayListOfBytes(List<byte[]> list) {
+      return  list.stream()
+                  .collect(
+                    () -> new ByteArrayOutputStream(),
+                    (b, e) -> {
+                        try {
+                            b.write(e);
+                        } catch (Exception e1) {
+                            throw new RuntimeException(e1);
+                        }
+                    },
+                    (a, b) -> {}).toByteArray();
+    }
+
+    public static void printByteArray(String name, byte[] bytes) {
+      System.out.println(name + " bytes:");
+      for (byte b: bytes) {
+        System.out.print("[" + b + "]");
+      }
+      System.out.println();
+    }
+}

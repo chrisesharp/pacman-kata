@@ -1,0 +1,88 @@
+@leave 
+Feature: Display and colour effects
+  As a game engine
+  I can rely on the Display provided to me to render everything correctly
+  So that I can support multiple displays
+
+  As a game element
+  I can rely on the Display provided to me to render everything correctly
+  So that my behaviour is consistent across displays
+
+
+Scenario: display buffer rendered as a new screen
+Given a display
+And the ANSI "clearscreen" sequence is "1B5B481B5B324A"
+And the ANSI "bold" sequence is "1B5B316D"
+And the ANSI "reset" sequence is "1B5B306D"
+And the ANSI "newline" sequence is "0A"
+When the game refreshes the display with the buffer "+"
+Then the display byte stream should be
+| clearscreen |
+| bold        |
+| +           |
+| reset       |
+| newline     |
+
+Scenario: display buffer rendered as a new screen with bold white pill
+Given a colour display
+And the ANSI "clearscreen" sequence is "1B5B481B5B324A"
+And the ANSI "bold" sequence is "1B5B316D"
+And the ANSI "black-background" sequence is "1B5B34306D"
+And the ANSI "white-foreground" sequence is "1B5B33376D"
+And the ANSI "reset" sequence is "1B5B306D"
+And the ANSI "newline" sequence is "0A"
+When the game refreshes the display with the buffer "."
+Then the display byte stream should be
+| clearscreen      |
+| bold             |
+| black-background |
+| white-foreground |
+| .                |
+| reset            |
+| newline          |
+
+Scenario: display buffer rendered as a new screen with yellow pacman
+Given a colour display
+And the ANSI "clearscreen" sequence is "1B5B481B5B324A"
+And the ANSI "bold" sequence is "1B5B316D"
+And the ANSI "black-background" sequence is "1B5B34306D"
+And the ANSI "white-foreground" sequence is "1B5B33376D"
+And the ANSI "yellow" sequence is "1B5B33336D"
+And the ANSI "reset" sequence is "1B5B306D"
+And the ANSI "newline" sequence is "0A"
+When the display renders the icon "<" in yellow and refreshes
+Then the display byte stream should be
+| clearscreen      |
+| bold             |
+| black-background |
+| white-foreground |
+| yellow           |
+| <                |
+| reset            |
+| black-background |
+| white-foreground |
+| reset            |
+| newline          |
+# For ref - ANSI codes
+#  | hex   |  character |
+#  |  1B   |     \      |
+#  |  5B   |     [      |
+#  |  48   |     H      |
+#  |  1B   |     \      |
+#  |  5B   |     [      |
+#  |  32   |     2      |
+#  |  4A   |     J      |
+#  |  30   |     0      |
+#  |  31   |     1      |
+#  |  32   |     2      |
+#  |  33   |     3      |
+#  |  34   |     4      |
+#  |  35   |     5      |
+#  |  6D   |     m      |
+#  |  0A   |     \n     |
+# clear screen = \[H\[2J
+# reset = \[0m
+# See https://en.wikipedia.org/wiki/List_of_Unicode_characters
+# and
+# http://ascii-table.com/ansi-escape-sequences.php
+# for more details.

@@ -1,0 +1,26 @@
+{
+  "name": "pacman-kata",
+  "version": "1.0.0",
+  "description": "Pacman kata",
+  "main": "game.js",
+  "dependencies": {
+    "arraylist": "^0.1.0",
+    "mainloop.js": "^1.0.4",
+    "minimist": "^1.2.0"
+  },
+  "devDependencies": {
+    "assert": "^1.4.1",
+    "chai": "^4.1.2",
+    "cucumber": "^4.0.0"
+  },
+  "scripts": {
+    "test": "cucumber-js features/*feature --require support/",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.ibm.com/sharpc/pacman-kata"
+  },
+  "author": "Chris Sharp",
+  "license": "ISC"
+}

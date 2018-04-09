@@ -1,0 +1,12 @@
+FROM python:3
+
+COPY src/main/python/requirements.txt /opt/requirements.txt
+RUN pip install --no-cache-dir -r /opt/requirements.txt
+ADD src/main/python/requirements-test.txt /opt/requirements-test.txt
+RUN pip install -r /opt/requirements-test.txt
+RUN mkdir -p /opt/src/pacman
+WORKDIR /opt/src/pacman
+COPY src/main/python/ .
+COPY src/test/resources/ .
+
+CMD ["python","game.py"]

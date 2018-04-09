@@ -1,0 +1,2 @@
+FROM maven:3.2-jdk-8-onbuild
+CMD ["./pacman.java.sh","--colour","--file=src/test/resources/data/pacman.txt"]
