@@ -41,7 +41,7 @@ class Ghost extends GameElement {
     this.uniqueColour = setGhostColour();
     
     this.panicLevel = (icons.find( (ghost) => {
-      return ghost.icon == icon;
+      return ghost.icon === icon;
     }).panicked) ? 50 : 0;
   } 
   
