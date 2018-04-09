@@ -8,9 +8,6 @@ public class DisplayStream {
   private String videoBuffer = "";
   private List<Colour> colourBuffer = new ArrayList<Colour>();
   
-  public DisplayStream() {
-  }
-  
   public String getVideoStream() {
     return videoBuffer;
   }

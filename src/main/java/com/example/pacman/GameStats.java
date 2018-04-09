@@ -6,10 +6,6 @@ public class GameStats {
   private int score = 0;
   private int columns = 0;
 
-  public GameStats() {
-
-  }
-
   public void update(String statusLine) {
     columns = statusLine.length();
     String[] data = statusLine.split(" ");

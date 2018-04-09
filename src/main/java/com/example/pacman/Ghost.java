@@ -48,7 +48,7 @@ public class Ghost extends GameElement implements Moveable {
     public void tick() {
         GameElement pacman = game.getGameElementByType(Pacman.class);
         Location pacmanLocation;
-        gate = game.getGameElementByType(Gate.class);;
+        gate = game.getGameElementByType(Gate.class);
         pacmanLocation = (pacman!=null) ? pacman.location() : this.location();
 
         if (panicked()) {
@@ -158,8 +158,9 @@ public class Ghost extends GameElement implements Moveable {
     public boolean isClear(Direction direction) {
       GameElement el = game.getGameElement(location().next(direction));
       return !(el instanceof Wall || 
-          el instanceof ForceField || 
-         (el instanceof Gate && !!passedGate));
+               el instanceof ForceField || 
+               (el instanceof Gate && passedGate)
+              );
     }
     public void setDirection(Direction direction) {
       this.direction = direction;
@@ -170,7 +171,9 @@ public class Ghost extends GameElement implements Moveable {
     public boolean moving() {
       return moving;
     }
-    public void move(Direction direction) {}
+    public void move(Direction direction) {
+      // Ghosts are not controlled externally
+    }
 
     public void go() {
       moving = true;

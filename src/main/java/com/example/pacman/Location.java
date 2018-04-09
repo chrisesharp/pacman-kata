@@ -51,6 +51,7 @@ public class Location {
                   default:
                       dx=0;
                       dy=0;
+                      break;
               }
           }
         return (new Location(x+dx, y+dy));

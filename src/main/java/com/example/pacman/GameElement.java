@@ -21,8 +21,12 @@ public abstract class GameElement {
       return location;
     }
 
-    public void triggerEffect(GameElement element) {}
-    public void kill() {}
+    public void triggerEffect(GameElement element) {
+      // Base elements have no effect by default
+    }
+    public void kill() {
+      // Base elements are not killable by default
+    }
     public boolean isDead() {
       return true;
     }

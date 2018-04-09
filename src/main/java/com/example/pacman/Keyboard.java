@@ -8,18 +8,17 @@ import org.jline.terminal.Terminal;
 import org.jline.utils.NonBlockingReader;
 
 public class Keyboard implements InputController {
-  private Terminal terminal;
   private NonBlockingReader keyboard;
   private Moveable element;
 
   public Keyboard() {
     try {
-      terminal = TerminalBuilder.terminal();
+      Terminal terminal = TerminalBuilder.terminal();
       terminal.enterRawMode();
+      keyboard = terminal.reader();
     } catch (IOException e) {
       System.out.println("err...we got " + e.getMessage());
     }
-    keyboard = terminal.reader();
   }
 
   private int read() {
