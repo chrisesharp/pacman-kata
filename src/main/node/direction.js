@@ -15,11 +15,8 @@ function getDelta(direction) {
     return Deltas[direction]
   } else if (typeof direction === "string") {
     return Deltas[Direction[direction]];
-  } else {
-    console.log("We got something weird");
-    console.dir(direction);
-    return null
-  }
+  } 
+  return null;
 }
 
 function facing(facing) {
