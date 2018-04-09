@@ -1,34 +1,34 @@
 "use strict";
 
-const Direction = Object.freeze({"LEFT":0,"UP":1,"RIGHT":2,"DOWN":3});
+const Direction = Object.freeze({LEFT:0,UP:1,RIGHT:2,DOWN:3});
+const Deltas = Object.freeze({
+  0:  {dx:-1,dy:0},
+  1:  {dx:0, dy:-1},
+  2:  {dx:1, dy:0},
+  3:  {dx:0, dy:1}
+});
 const positions = Object.keys(Direction).length;
 
-function facing(facing) {
-  switch (facing) {
-    case "LEFT":
-      return Direction.LEFT;
-    case "RIGHT":
-      return Direction.RIGHT;
-    case "UP":
-      return Direction.UP;
-    case "DOWN":
-      return Direction.DOWN;
+
+function getDelta(direction) {
+  if (typeof direction == "number") {
+    return Deltas[direction]
+  } else if (typeof direction === "string") {
+    return Deltas[Direction[direction]];
+  } else {
+    console.log("We got something weird");
+    console.dir(direction);
+    return null
   }
-  return -1;
+}
+
+function facing(facing) {
+  return Direction[facing];
 }
 
 function nextLocation(loc, direction) {
-  switch (direction) {
-    case Direction.LEFT:
-      return {x: loc.x-1, y:loc.y};
-    case Direction.RIGHT:
-      return {x: loc.x+1, y:loc.y};
-    case Direction.UP:
-      return {x: loc.x, y:loc.y-1};
-    case Direction.DOWN:
-      return {x: loc.x, y:loc.y+1};
-  }
-  return null;
+  let delta = getDelta(direction);
+  return {x: (loc.x + delta.dx), y: (loc.y + delta.dy) };
 }
 
 function turnLeft(facing) {

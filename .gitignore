@@ -18,3 +18,4 @@ src/main/python/__pycache__/
 .ropeproject
 sonarscan.sh
 .scannerwork
+sonar-project.properties
