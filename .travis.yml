@@ -29,7 +29,8 @@ matrix:
       python:
         - "3.6"
       install:
-        - pip install -r requirements-test.txt
+        - pip install -r $HOME/src/main/python/requirements.txt
+        - pip install -r $HOME/src/main/python/requirements-test.txt
       script: make local-python
       sudo: false
       dist: trusty
