@@ -1,4 +1,5 @@
-'use strict'
+'use strict';
+
 const d = require('./direction.js');
 const nextLocation = d.nextLocation;
 const turnLeft = d.turnLeft;

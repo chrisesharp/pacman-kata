@@ -1,4 +1,5 @@
-'use strict'
+'use strict';
+
 const Playfield = require('./playField.js');
 const display = require('./display.js');
 const ArrayList = require('arraylist');
@@ -52,7 +53,7 @@ class Game {
           this.input = this.levelMaps.getLevel(this.level);
         }
       }
-      this.columns = parseInt(this.input.indexOf('\n'),10);
+      this.columns = parseInt(this.input.indexOf("\n"),10);
       this.parseStatus(this.input.substring(0, this.columns));
       let screenRows = this.input.substring(this.columns).split("\n").filter(x => x);
       this.playfield = new Playfield(this.columns,screenRows.length);

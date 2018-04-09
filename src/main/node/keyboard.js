@@ -1,4 +1,5 @@
-'use strict'
+'use strict';
+
 const RIGHT = require('./direction.js').Direction.RIGHT;
 const LEFT = require('./direction.js').Direction.LEFT;
 const UP = require('./direction.js').Direction.UP;
@@ -23,7 +24,7 @@ class Keyboard {
   } 
   
   keyPressed (key) {
-    if(key.sequence === '\u0003' || key.sequence === '\u001B') {
+    if(key.sequence === "\u0003" || key.sequence === "\u001B") {
       process.stdin.setRawMode(false);
       process.exit();
     }

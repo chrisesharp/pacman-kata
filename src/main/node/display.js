@@ -1,4 +1,5 @@
-'use strict'
+'use strict';
+
 const { Writable } = require('stream'); 
 const { ESC, CLR, RST, REVON, REVOFF, BLINK } = require('./ansi-term.js');
 module.exports =

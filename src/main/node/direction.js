@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const Direction = Object.freeze({"LEFT":0,"UP":1,"RIGHT":2,"DOWN":3});
 const positions = Object.keys(Direction).length;

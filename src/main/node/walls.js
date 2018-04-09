@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const Colour = require('./colour.js');
 const GameElement = require('./game-elements.js');

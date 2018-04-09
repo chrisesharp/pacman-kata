@@ -1,4 +1,5 @@
-'use strict'
+'use strict';
+
 const nextLocation = require('./direction.js').nextLocation;
 const RIGHT = require('./direction.js').Direction.RIGHT;
 const LEFT = require('./direction.js').Direction.LEFT;
