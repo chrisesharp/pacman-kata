@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 const Direction = Object.freeze({"LEFT":0,"UP":1,"RIGHT":2,"DOWN":3});
 const positions = Object.keys(Direction).length;
@@ -29,6 +29,7 @@ function nextLocation(loc, direction) {
     case Direction.DOWN:
       return {x: loc.x, y:loc.y+1};
   }
+  return null
 }
 
 function turnLeft(facing) {
@@ -46,7 +47,7 @@ function opposite(facing) {
 function avoid(ours, theirs) {
   if (ours.x < theirs.x) {
     return Direction.LEFT;
-  } else {
+  } else if (ours.x > theirs.x) {
     return Direction.RIGHT;
   }
   if (ours.y < theirs.y) {

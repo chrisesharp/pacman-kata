@@ -1,21 +1,21 @@
-'use strict';
+"use strict";
 
-const Game = require('./game.js');
-const Keyboard = require('./keyboard.js');
-const ColourDisplay = require('./colourdisplay.js');
-const Display = require('./display.js');
-const fs = require('fs');
-const readline = require('readline');
-const MainLoop = require('mainloop.js');
-const args = require('minimist')(process.argv.slice(2));
+const Game = require("./game.js");
+const Keyboard = require("./keyboard.js");
+const ColourDisplay = require("./colourdisplay.js");
+const Display = require("./display.js");
+const fs = require("fs");
+const readline = require("readline");
+const MainLoop = require("mainloop.js");
+const args = require("minimist")(process.argv.slice(2));
 const interval_ms = 100;
 var game;
 
 function draw() {
   game.refreshDisplay();
   if (!(game.getPacman().isAlive())) {
-    game.display.flash()
-    game.pacman.restart()
+    game.display.flash();
+    game.pacman.restart();
   }
   if (game.gameOver) {
     MainLoop.stop();

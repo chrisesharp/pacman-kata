@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-const RIGHT = require('./direction.js').Direction.RIGHT;
-const LEFT = require('./direction.js').Direction.LEFT;
-const UP = require('./direction.js').Direction.UP;
-const DOWN = require('./direction.js').Direction.DOWN;
+const RIGHT = require("./direction.js").Direction.RIGHT;
+const LEFT = require("./direction.js").Direction.LEFT;
+const UP = require("./direction.js").Direction.UP;
+const DOWN = require("./direction.js").Direction.DOWN;
 
 const keyMap = {
   "j":    LEFT,

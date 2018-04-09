@@ -1,4 +1,5 @@
-'use strict';
+"use strict";
+
 module.exports = Object.freeze({
    ESC    : "\u001B[",
    CLR    : "\u001B[H" + "\u001B[2J" + "\u001B[1m",

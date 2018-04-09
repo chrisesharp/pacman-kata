@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-const Colour = require('./colour.js');
-const Display = require('./display.js');
-const { ESC, CLR, RST, REVON, REVOFF, BLINK } = require('./ansi-term.js');
+const Colour = require("./colour.js");
+const Display = require("./display.js");
+const { ESC, CLR, RST, REVON, REVOFF, BLINK } = require("./ansi-term.js");
 
 const DEFAULT = ESC+Colour.WHITE+"m"+ESC+Colour.BLACK_BG+"m";
 

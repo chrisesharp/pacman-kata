@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 module.exports = 
 Object.freeze({
@@ -20,4 +20,4 @@ Object.freeze({
   "PURPLE_BG":45,
   "CYAN_BG":46,
   "WHITE_BG":47
-})
+});

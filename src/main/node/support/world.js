@@ -1,19 +1,19 @@
 
-const { setWorldConstructor } = require('cucumber')
-const Game = require('../game.js')
-const Playfield = require('../playField.js')
-const g = require('../game-elements.js')
-const Pacman = require('../pacman.js');
-const Ghost = require('../ghost.js');
-const Wall = require('../walls.js');
-const Direction = require('../direction.js');
-const Keyboard = require('../keyboard.js');
-const Display = require('../display.js');
+const { setWorldConstructor } = require("cucumber")
+const Game = require("../game.js")
+const Playfield = require("../playField.js")
+const g = require("../game-elements.js")
+const Pacman = require("../pacman.js");
+const Ghost = require("../ghost.js");
+const Wall = require("../walls.js");
+const Direction = require("../direction.js");
+const Keyboard = require("../keyboard.js");
+const Display = require("../display.js");
 
 function CustomWorld() {
   this.game = new Game();
   this.keyboard = new Keyboard(this.game);
-  this.ansiMap = []
+  this.ansiMap = [];
 }
 
 CustomWorld.prototype.setGame = function(docString) {
@@ -22,7 +22,7 @@ CustomWorld.prototype.setGame = function(docString) {
 
 CustomWorld.prototype.setPlayfield = function(x,y) {
   let playfield = new Playfield(x,y);
-  this.game.setPlayfield(playfield)
+  this.game.setPlayfield(playfield);
 }
 
 CustomWorld.prototype.setPacman = function(x,y,facing) {
@@ -52,8 +52,8 @@ CustomWorld.prototype.isGhostPanicked = function(loc) {
 CustomWorld.prototype.addWalls = function(dataTable) {
   dataTable.rows().forEach((entry) => {
     let icon = entry[0];
-    x = entry[1];
-    y = entry[2];
+    let x = entry[1];
+    let y = entry[2];
     this.game.addWall(new Wall({x,y},icon));
   });
 }
@@ -120,7 +120,7 @@ CustomWorld.prototype.keyPressed = function(key) {
 CustomWorld.prototype.gameDimensionsMatchDisplay = function() {
   let playfield = this.game.getPlayfield();
   let display = this.game.getDisplay();
-  return (playfield.width()==display.width() && playfield.height()==display.height());
+  return (playfield.width()===display.width() && playfield.height()===display.height());
 }
 
 CustomWorld.prototype.refreshDisplay = function(string) {
@@ -140,10 +140,10 @@ CustomWorld.prototype.convertToHex = function(output) {
   let received = "";
   output = output.join('').toString();
   for (var i=0;i<output.length;i++) {
-    var hex= output.codePointAt(i).toString(16).toUpperCase()
+    var hex= output.codePointAt(i).toString(16).toUpperCase();
     received += "0".repeat(2 - hex.length) + hex;
   } 
   return received;
 }
 
-setWorldConstructor(CustomWorld)
+setWorldConstructor(CustomWorld);

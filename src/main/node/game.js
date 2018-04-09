@@ -1,13 +1,13 @@
-'use strict';
+"use strict";
 
-const Playfield = require('./playField.js');
-const display = require('./display.js');
-const ArrayList = require('arraylist');
-const Pacman = require('./pacman.js');
-const Ghost = require('./ghost.js');
-const Wall = require('./walls.js');
-const Pill = require('./pills.js');
-const LevelMap = require('./levels.js');
+const Playfield = require("./playField.js");
+const display = require("./display.js");
+const ArrayList = require("arraylist");
+const Pacman = require("./pacman.js");
+const Ghost = require("./ghost.js");
+const Wall = require("./walls.js");
+const Pill = require("./pills.js");
+const LevelMap = require("./levels.js");
 
 
 module.exports = 
@@ -55,13 +55,14 @@ class Game {
       }
       this.columns = parseInt(this.input.indexOf("\n"),10);
       this.parseStatus(this.input.substring(0, this.columns));
-      let screenRows = this.input.substring(this.columns).split("\n").filter(x => x);
+      let screenRows = this.input.substring(this.columns)
+                                  .split("\n").filter((x) => x);
       this.playfield = new Playfield(this.columns,screenRows.length);
       this.parseTokens(screenRows);
     }
 
     parseStatus (statusLine) {
-      let elements = statusLine.split(" ").filter(x => x);
+      let elements = statusLine.split(" ").filter((x) => x);
       let lives = parseInt(elements[0],10);
       this.lives =  isNaN(lives) ? this.lives : lives;
       let score = parseInt(elements[1],10);
@@ -102,8 +103,8 @@ class Game {
     
     tick () {
       this.ghosts.forEach((ghost) => {ghost.tick()});
-      if (this.pacman) {this.pacman.tick()}
-      if (this.levelCleared()) {this.nextLevel()}
+      if (this.pacman) {this.pacman.tick();}
+      if (this.levelCleared()) {this.nextLevel();}
       this.updatePlayfield();
      }
     
@@ -130,7 +131,7 @@ class Game {
       let colourbuf = [];
         for (let y=0;y<this.playfield.height();y++) {
           for (let x=0;x<this.playfield.width();x++) {
-            let element = this.playfield.getLocation({x,y})
+            let element = this.playfield.getLocation({x,y});
             buffer += element.icon();
             colourbuf.push(element.colour());
           }
@@ -152,10 +153,11 @@ class Game {
       (this.walls.concat(this.pills)
                   .concat(this.ghosts)
                   .concat([this.pacman]))
-                  .filter((x)=>x)
-                  .forEach((e)=>{
-                    this.playfield.setLocation(e.getLocation(),e)});
-      if (this.gameOver) {this.printGameOver()}
+                  .filter((x) => x)
+                  .forEach((e) => {
+                    this.playfield.setLocation(e.getLocation(),e);
+                  });
+      if (this.gameOver) {this.printGameOver();}
     }
     
     levelCleared() {
@@ -186,7 +188,7 @@ class Game {
     }
     
     setPlayfield (playfield) {
-      this.playfield = playfield
+      this.playfield = playfield;
     }
     
     getPlayfield () {
@@ -211,7 +213,7 @@ class Game {
     
     loseLife() {
       this.lives -= 1;
-      if (this.lives===0) {this.gameOver=true}
+      if (this.lives===0) {this.gameOver=true;}
     }
     
     setLevel(level) {
@@ -226,13 +228,13 @@ class Game {
       let cols = this.playfield.width();
       let rows = this.playfield.height();
       const GAME = "GAME";
-    	const OVER = "OVER";
+      const OVER = "OVER";
       let y = Math.floor((rows / 2)) - 2;
-    	let padding = Math.floor(((cols - 2) - GAME.length) / 2);
-    	for (let i=0; i< GAME.length; i++) {
-    		this.playfield.setLocation({x: padding + i + 1,y:y  },GAME[i])
-        this.playfield.setLocation({x: padding + i + 1,y:y+1},OVER[i])
-    	}
+      let padding = Math.floor(((cols - 2) - GAME.length) / 2);
+      for (let i=0; i< GAME.length; i++) {
+        this.playfield.setLocation({x: padding + i + 1,y:y  },GAME[i]);
+        this.playfield.setLocation({x: padding + i + 1,y:y+1},OVER[i]);
+      }
     }
     
     addWall (wall) {
@@ -255,8 +257,8 @@ class Game {
       let pillScore = pill.score();
       this.score += pillScore;
       this.pills.removeElement(pill);
-      if (pillScore == 50) {
-        this.ghosts.forEach((ghost)=>{ghost.panic()});
+      if (pillScore === 50) {
+        this.ghosts.forEach((ghost) => {ghost.panic();});
       }
     }
     

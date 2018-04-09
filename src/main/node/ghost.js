@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const d = require('./direction.js');
+const d = require("./direction.js");
 const nextLocation = d.nextLocation;
 const turnLeft = d.turnLeft;
 const turnRight = d.turnRight;
@@ -10,8 +10,8 @@ const RIGHT = d.Direction.RIGHT;
 const LEFT = d.Direction.LEFT;
 const UP = d.Direction.UP;
 const DOWN = d.Direction.DOWN;
-const Colour = require('./colour.js');
-const GameElement = require('./game-elements.js');
+const Colour = require("./colour.js");
+const GameElement = require("./game-elements.js");
 
 const icons = [
     {icon:"M",panicked:false,colour:null},
@@ -46,14 +46,14 @@ class Ghost extends GameElement {
   } 
   
   static isGhost(token) {
-    return (icons.filter(element => element.icon == token).length>0);
+    return (icons.filter(element => element.icon === token).length>0);
   }
   colour() {
     return this.getColour(this.panicLevel>0);
   }
   
   getColour(panicked) {
-    let colour= icons.find((a) => { return a.panicked==panicked;}).colour;
+    let colour= icons.find((a) => { return a.panicked === panicked;}).colour;
     if (colour) {
       return colour;
     } else {
@@ -79,7 +79,7 @@ class Ghost extends GameElement {
     if (options.length > 0) {
       let i = Math.floor((Math.random() * options.length));
       this.direction = options[i];
-      if ((this.panicLevel % 2) == 0) {
+      if ((this.panicLevel % 2) === 0) {
         let next = nextLocation(this.getLocation(),this.direction);
         this.setLocation(next);
       }
@@ -100,7 +100,7 @@ class Ghost extends GameElement {
       this.gatePassed = true;
     }
     this.image = (icons.find( (ghost) => {
-      return ghost.panicked == (this.panicLevel > 0);
+      return ghost.panicked === (this.panicLevel > 0);
     }).icon);
   }
   
@@ -133,7 +133,7 @@ class Ghost extends GameElement {
     if (this.game.getPacman()) {
       let pacLoc = this.game.getPacman().getLocation();
       let ourLoc = this.getLocation();
-      return (pacLoc.x == ourLoc.x && pacLoc.y == ourLoc.y);
+      return (pacLoc.x === ourLoc.x && pacLoc.y === ourLoc.y);
     } else {
       return false;
     }
@@ -146,7 +146,7 @@ class Ghost extends GameElement {
   panic() {
     this.panicLevel = 50;
     this.image = (icons.find( (ghost) => {
-      return ghost.panicked == (this.panicLevel > 0);
+      return ghost.panicked === (this.panicLevel > 0);
     }).icon);
   }
   

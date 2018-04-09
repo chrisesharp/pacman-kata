@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-const Colour = require('./colour.js');
-const GameElement = require('./game-elements.js');
+const Colour = require("./colour.js");
+const GameElement = require("./game-elements.js");
 
 const gateIcons = [
     {icon:"=",colour:Colour.WHITE},
@@ -35,15 +35,15 @@ class Wall extends GameElement {
   } 
   
   static isWall(token) {
-    return (icons.filter(element => element.icon == token).length>0);
+    return (icons.filter((element) => element.icon === token).length>0);
   }
 
   setGate(token) {
-    return (gateIcons.filter(element => element.icon == token).length>0);
+    return (gateIcons.filter((element) => element.icon === token).length>0);
   }
 
   setForcefield(token) {
-    return (forcefieldIcons.filter(element => element.icon == token).length>0);
+    return (forcefieldIcons.filter((element) => element.icon === token).length>0);
   }
   
   colour() {

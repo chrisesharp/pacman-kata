@@ -1,14 +1,14 @@
-'use strict';
+"use strict";
 
-const nextLocation = require('./direction.js').nextLocation;
-const RIGHT = require('./direction.js').Direction.RIGHT;
-const LEFT = require('./direction.js').Direction.LEFT;
-const UP = require('./direction.js').Direction.UP;
-const DOWN = require('./direction.js').Direction.DOWN;
-const Colour = require('./colour.js');
-const GameElement = require('./game-elements.js');
-const Pill = require('./pills.js');
-const Wall = require('./walls.js');
+const nextLocation = require("./direction.js").nextLocation;
+const RIGHT = require("./direction.js").Direction.RIGHT;
+const LEFT = require("./direction.js").Direction.LEFT;
+const UP = require("./direction.js").Direction.UP;
+const DOWN = require("./direction.js").Direction.DOWN;
+const Colour = require("./colour.js");
+const GameElement = require("./game-elements.js");
+const Pill = require("./pills.js");
+const Wall = require("./walls.js");
 
 const icons = [
   {icon:["*","*"],direction:-1,alive:false,colour:Colour.YELLOW},
@@ -31,7 +31,7 @@ class PacmanType  extends GameElement {
   } 
   
   static isPacman(token) {
-    return (icons.filter(element => element.icon.indexOf(token)>=0).length>0);
+    return (icons.filter((element) => element.icon.indexOf(token)>=0).length>0);
   }
   
   setGame(game) {
@@ -44,19 +44,19 @@ class PacmanType  extends GameElement {
   
   setDirection(facing) {
     this.facing = facing;
-    let tokens = icons.find((a) => {return a.direction == facing;});
+    let tokens = icons.find((a) => {return a.direction === facing;});
     this.image = tokens[this.frame];
   }
   
   getDirectionByIcon(icon) {
-    let token= icons.find((a) => { return a.icon.indexOf(icon)>=0;});
+    let token = icons.find((a) => { return a.icon.indexOf(icon)>=0;});
     if (token) {
       return token.direction;
     }
   }
   
   getLivenessByIcon(icon) {
-    let token= icons.find((a) => { return a.icon[0] == icon;});
+    let token = icons.find((a) => { return a.icon[0] === icon;});
     if (token) {
       return token.alive;
     }
@@ -67,11 +67,11 @@ class PacmanType  extends GameElement {
   }
   
   getColour(alive) {
-    return icons.find((a) => { return a.alive==alive;}).colour;
+    return icons.find((a) => { return a.alive === alive;}).colour;
   }
   
   getIconByLiveness(alive) {
-    let token= icons.find((a) => { return a.alive == alive;});
+    let token= icons.find((a) => { return a.alive === alive;});
     if (token) {
       return token.icon[this.frame];
     }
@@ -85,7 +85,7 @@ class PacmanType  extends GameElement {
   
   icon() {
     if (this.alive) {
-      return icons.find((a) => { return a.direction == this.direction();}).icon[this.frame];
+      return icons.find((a) => { return a.direction === this.direction();}).icon[this.frame];
     }
     return this.getIconByLiveness(this.alive);
   }
