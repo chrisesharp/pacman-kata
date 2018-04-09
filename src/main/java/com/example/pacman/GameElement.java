@@ -49,6 +49,7 @@ public abstract class GameElement {
     }
 
     public void tick() {
+      // Base elements are inert and therefore have no default behaviour
     }
 
     public void restart() {
