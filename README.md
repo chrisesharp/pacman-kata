@@ -65,7 +65,7 @@ are as follows:
 * Animation
 
 The structure of this repo is described in more detail [here]
-(https://github.com/chrisesharp/pacman-kata/ReposStructure.md)
+(ReposStructure.md)
 
 Once the basic features were implemented, I then focused on refactoring
 extensively to clean the code.
