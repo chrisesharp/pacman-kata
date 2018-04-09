@@ -1,4 +1,3 @@
-[![Build Status](https://travis.ibm.com/sharpc/pacman-kata.svg?token=RwS6W1qRBpCfJCPywSxC&branch=master)](https://travis.ibm.com/sharpc/pacman-kata)
 # pacman-kata
 
 This kata is designed to make some interesting game mechanics, parsing and
