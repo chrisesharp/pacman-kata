@@ -13,7 +13,7 @@ class Tokenizer {
                     new Ghost, 
                     new Pill, 
                     new Wall
-                  ]
+                  ];
     let result;
     types.forEach( (obj) => {
       let element = obj.getElement(coords, icon);

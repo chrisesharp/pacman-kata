@@ -42,7 +42,7 @@ class Wall extends GameElement {
   
   getElement(coords, icon) {
     if (Wall.isWall(icon)) {
-      return new Wall({coords: coords, icon: icon});
+      return new Wall({coords, icon});
     }
   }
   
