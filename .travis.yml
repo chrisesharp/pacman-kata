@@ -34,10 +34,10 @@ matrix:
       script: make local-python
       sudo: false
       dist: trusty
-addons:
-  sonarcloud:
-    organization: "org.chrisesharp.pacman-kata"
-script:
-  # other script steps might be done before running the actual analysis
-  - sonar-scanner
+  addons:
+    sonarcloud:
+      organization: "org.chrisesharp.pacman-kata"
+  script:
+    # other script steps might be done before running the actual analysis
+    - sonar-scanner
         
