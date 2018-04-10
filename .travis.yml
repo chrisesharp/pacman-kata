@@ -4,11 +4,15 @@ matrix:
       dist: precise
   include:
     - language: java
+      addons:
+        sonarcloud:
+          organization: "chrisesharp-github"
       jdk: openjdk8
       script: make local-java
       cache:
         directories:
         - "$HOME/.m2"
+        - "$HOME/.sonar/cache"
       before_cache:
         - rm -rf $HOME/.m2/repository/io/cucumber
       sudo: false
@@ -31,13 +35,8 @@ matrix:
       install:
         - pip install -r src/main/python/requirements.txt
         - pip install -r src/main/python/requirements-test.txt
-      script: make local-python
+      script: 
+        - make local-python
       sudo: false
       dist: trusty
-      addons:
-        sonarcloud:
-          organization: "chrisesharp-github"
-      script:
-        # other script steps might be done before running the actual analysis
-        - sonar-scanner
         

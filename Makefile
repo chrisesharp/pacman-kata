@@ -69,7 +69,10 @@ test-java:
 
 .PHONY: clean-java
 clean-java:
-	mvn clean
+	mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
+	    -Dsonar.host.url=https://sonarcloud.io \
+	    -Dsonar.organization=chrisesharp-github \
+    	-Dsonar.login=$(SONAR_TOKEN)
 
 .PHONY: deploy-java
 deploy-java:
