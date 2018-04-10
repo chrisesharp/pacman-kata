@@ -103,8 +103,6 @@ class Game(object):
                 ghost.tick()
             if self.pacman:
                 self.pacman.tick()
-        if self.controller:
-            self.controller.tick()
         self.updateField()
 
     def render(self):
