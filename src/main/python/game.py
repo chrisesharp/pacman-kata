@@ -1,3 +1,4 @@
+from argparse import ArgumentParser
 from time import sleep
 from math import floor
 from gamefield import GameField
@@ -220,7 +221,18 @@ class Game(object):
 
 
 if __name__ == "__main__":
-    file = "data/pacman.txt"
+    parser = ArgumentParser()
+    parser.add_argument("-f", "--file",
+                        help="level map for the game.")
+    parser.add_argument("-c", "--colour",
+                        help="use colour display.",
+                        action="store_true")
+    args = parser.parse_args()
+    if args.file:
+        file = args.file
+    else:
+        file = "data/pacman.txt"
+
     with open(file) as f:
         levelMap = f.read()
 

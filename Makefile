@@ -21,7 +21,7 @@ endif
 JAVA_TEST_CMD	= mvn test -Dcucumber.options="--glue com.example.pacman \
 																						--tags $(shell echo $(BDD)|sed "s/not /~/g") \
 																					  classpath:features"
-GO_TEST_CMD = go test -args $(shell echo $(BDD)|sed "s/not /~/g")
+GO_TEST_CMD = go test -coverprofile=coverage.out -args $(shell echo $(BDD)|sed "s/not /~/g")
 NODE_TEST_CMD = npm test -- --tags $(BDD)
 PYTHON_TEST_CMD = behave -t $(shell echo $(BDD)|sed "s/not /~/g") -k
 
@@ -94,19 +94,20 @@ local-go: clean-go build-go test-go deploy-go
 
 .PHONY: clean-go
 clean-go:
-	cd $(GOSRC)/src/pacman ; sonar-scanner -Dsonar.login=$(SONAR_TOKEN)
+	cd $(GOSRC)/src/pacman
 
 .PHONY: build-go
 build-go: export GOPATH = $(CURDIR)/$(GOSRC)
 build-go: export GOBIN = $(CURDIR)/$(GOSRC)/bin
 build-go:
-	cd $(GOSRC)/src/pacman; go get && go build
+	cd $(GOSRC)/src/pacman; go get && go build 
 
 .PHONY: test-go
 test-go: export GOPATH = $(CURDIR)/$(GOSRC)
 test-go: export GOBIN = $(CURDIR)/$(GOSRC)/bin
 test-go:
-	cd $(GOSRC)/src/pacman; go get -t && $(GO_TEST_CMD)
+	cd $(GOSRC)/src/pacman; go get -t && $(GO_TEST_CMD) ;sonar-scanner -Dsonar.login=$(SONAR_TOKEN)
+
 
 .PHONY: deploy-go
 deploy-go: export GOPATH = $(CURDIR)/$(GOSRC)
