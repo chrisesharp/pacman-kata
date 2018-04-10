@@ -80,7 +80,9 @@ scan-java:
 	mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
     -Dsonar.host.url=https://sonarcloud.io \
     -Dsonar.organization=chrisesharp-github \
-    -Dsonar.login=$(SQTOKEN)
+		sonar.projectKey=org.chrisesharp.pacman-kata \
+		sonar.projectName=Pacman Kata \
+    -Dsonar.login=$(SONAR_TOKEN)
 
 .PHONY: docker-java
 docker-java:
