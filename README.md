@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/78fd24d51e0e46839682c038a86cfd91)](https://app.codacy.com/app/chrisesharp/pacman-kata?utm_source=github.com&utm_medium=referral&utm_content=chrisesharp/pacman-kata&utm_campaign=badger)
 [![Build Status](https://travis-ci.org/chrisesharp/pacman-kata.svg?branch=master)](https://travis-ci.org/chrisesharp/pacman-kata/)
 
 # pacman-kata
