@@ -157,8 +157,9 @@ local-python: clean-python build-python test-python deploy-python
 clean-python:
 	rm -rf $(PYTHONSRC)/__pycache__
 	cd $(PYTHONSRC) ; coverage erase ; \
-			coverage run game.py -d -f ../../test/resources/data/pacman.txt; \
+			coverage run --source='.' -m behave; \
 			coverage xml -i
+
 
 .PHONY: build-python
 build-python:
