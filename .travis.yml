@@ -4,9 +4,6 @@ matrix:
       dist: precise
   include:
     - language: java
-      addons:
-        sonarcloud:
-          organization: "chrisesharp-github"
       jdk: openjdk8
       script: make local-java
       cache:
@@ -17,18 +14,27 @@ matrix:
         - rm -rf $HOME/.m2/repository/io/cucumber
       sudo: false
       dist: trusty
+      addons:
+        sonarcloud:
+          organization: "chrisesharp-github"
     - language: go
       go:
         - "1.10"
       script: make local-go
       sudo: false
       dist: trusty
+      addons:
+        sonarcloud:
+          organization: "chrisesharp-github"
     - language: node_js
       node_js:
         - "9.3.0"
       script: make local-node
       sudo: false
       dist: trusty
+      addons:
+        sonarcloud:
+          organization: "chrisesharp-github"
     - language: python
       python:
         - "3.6"
@@ -39,4 +45,7 @@ matrix:
         - make local-python
       sudo: false
       dist: trusty
+      addons:
+        sonarcloud:
+          organization: "chrisesharp-github"
         
