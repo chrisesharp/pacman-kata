@@ -29,7 +29,7 @@ class Game(object):
         self.levelMaps = None
         self.animation = False
 
-    def play(self):
+    def play(self, debug):
         self.parse()
         while (self.gameOver is False):
             self.tick()
@@ -38,6 +38,8 @@ class Game(object):
             sleep(0.1)
             if (self.pacman.alive is False):
                 self.pacman.restart()
+            if (debug is True):
+                self.gameOver = True
 
     def parse(self):
         if self.levelMaps:
@@ -225,6 +227,9 @@ if __name__ == "__main__":
     parser.add_argument("-c", "--colour",
                         help="use colour display.",
                         action="store_true")
+    parser.add_argument("-d", "--debug",
+                        help="one frame for debug mode.",
+                        action="store_true")
     args = parser.parse_args()
     if args.file:
         file = args.file
@@ -236,6 +241,9 @@ if __name__ == "__main__":
 
     game = Game(levelMap)
     controller = Keyboard(game)
+    if (args.debug is None):
+        controller.init()
     game.setController(controller)
     game.useAnimation()
-    game.play()
+    game.play(args.debug)
+    controller.close()

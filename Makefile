@@ -48,10 +48,10 @@ VOLUME		 = -v$(CURDIR)
 all: local-all
 
 .PHONY: docker-all
-docker-all: docker-java docker-go docker-node #docker-python
+docker-all: docker-java docker-go docker-node docker-python
 
 .PHONY: local-all
-local-all: local-java local-go local-node #local-python
+local-all: local-java local-go local-node local-python
 
 ################################################################################
 # Java
@@ -156,6 +156,9 @@ local-python: clean-python build-python test-python deploy-python
 .PHONY: clean-python
 clean-python:
 	rm -rf $(PYTHONSRC)/__pycache__
+	cd $(PYTHONSRC) ; coverage erase ; \
+			coverage run game.py -d -f ../../test/resources/data/pacman.txt; \
+			coverage xml -i
 
 .PHONY: build-python
 build-python:

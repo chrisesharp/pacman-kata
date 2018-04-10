@@ -9,6 +9,8 @@ class Keyboard(object):
     def __init__(self, game):
         self.game = game
         self.orig_settings = termios.tcgetattr(sys.stdin)
+
+    def init(self):
         tty.setcbreak(sys.stdin)
         threading.Thread(group=None, target=self.listen).start()
 
@@ -38,4 +40,4 @@ class Keyboard(object):
         self.close()
 
     def close(self):
-        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, self.orig_settings)
+        termios.tcsetattr(sys.stdin, termios.TCSANOW, self.orig_settings)
