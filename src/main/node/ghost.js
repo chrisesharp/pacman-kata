@@ -48,7 +48,7 @@ class Ghost extends GameElement {
   } 
   
   static isGhost(token) {
-    return (icons.filter(element => element.icon === token).length>0);
+    return (icons.filter((element) => element.icon === token).length>0);
   }
   
   getElement(coords, icon) {
