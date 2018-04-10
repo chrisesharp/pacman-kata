@@ -72,20 +72,13 @@ clean-java:
 	mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
 	    -Dsonar.host.url=https://sonarcloud.io \
 	    -Dsonar.organization=chrisesharp-github \
+			-Dsonar.projectKey=org.chrisesharp.pacman-kata-java \
+			-Dsonar.projectName=pacman-kata-java \
     	-Dsonar.login=$(SONAR_TOKEN)
 
 .PHONY: deploy-java
 deploy-java:
 	mvn package
-	
-.PHONY: scan-java
-scan-java:
-	mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
-    -Dsonar.host.url=https://sonarcloud.io \
-    -Dsonar.organization=chrisesharp-github \
-		sonar.projectKey=org.chrisesharp.pacman-kata \
-		sonar.projectName=Pacman Kata \
-    -Dsonar.login=$(SONAR_TOKEN)
 
 .PHONY: docker-java
 docker-java:
@@ -101,6 +94,7 @@ local-go: clean-go build-go test-go deploy-go
 
 .PHONY: clean-go
 clean-go:
+	cd $(GOSRC)/src/pacman ; sonar-scanner -Dsonar.login=$(SONAR_TOKEN)
 
 .PHONY: build-go
 build-go: export GOPATH = $(CURDIR)/$(GOSRC)
@@ -134,6 +128,7 @@ local-node: clean-node build-node deploy-node test-node
 
 .PHONY: clean-node
 clean-node:
+	cd $(NODESRC) ; sonar-scanner -Dsonar.login=$(SONAR_TOKEN)
 
 .PHONY: build-node
 build-node:
@@ -163,6 +158,7 @@ clean-python:
 
 .PHONY: build-python
 build-python:
+	cd $(PYTHONSRC) ; sonar-scanner -Dsonar.login=$(SONAR_TOKEN)
 
 .PHONY: test-python
 test-python:
