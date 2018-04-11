@@ -28,6 +28,18 @@ function setGhostColour() {
   return ghostColours[ghostColour++];
 }
 
+function findPanicLevel(icon) {
+  return (icons.find( (ghost) => {
+          return ghost.icon === icon;
+          }).panicked) ? 50 : 0;
+}
+
+function findIcon(panic) {
+    return (icons.find( (ghost) => {
+            return panic === ghost.panicked;
+            }).icon);
+  }
+
 module.exports =
 
 class Ghost extends GameElement {
@@ -40,10 +52,7 @@ class Ghost extends GameElement {
       this.game = null;
       this.gatePassed = false;
       this.uniqueColour = setGhostColour();
-      
-      this.panicLevel = (icons.find( (ghost) => {
-        return ghost.icon === options.icon;
-      }).panicked) ? 50 : 0;
+      this.panicLevel = findPanicLevel(options.icon)
     }
   } 
   
@@ -62,7 +71,7 @@ class Ghost extends GameElement {
   }
   
   colour() {
-    return this.getColour(this.panicLevel>0);
+    return this.getColour(this.isPanicked());
   }
   
   getColour(panicked) {
@@ -75,13 +84,29 @@ class Ghost extends GameElement {
   }
   
   tick() {
-    let pacman=this.game.getPacman();
-    let pacLoc= (pacman) ? pacman.getLocation() : this.getLocation();
+    this.managePanic();
+    this.chooseDirection();
+    this.checkCollisions();
+    this.image = findIcon(this.isPanicked());
+  }
+  
+  managePanic() {
     if (this.isPanicked()) {
+      let pacman=this.game.getPacman();
+      let pacLoc= (pacman) ? pacman.getLocation() : this.getLocation();
       this.direction = avoid(this.getLocation(),pacLoc);
       this.panicLevel--;      
     } 
+  }
+  
+  chooseDirection() {
     let choices = [this.direction, turnLeft(this.direction),turnRight(this.direction)];
+    let options = this.findOptions(choices);
+    this.direction = (options.length > 0) ? this.randomChoice(options) : this.noOption();
+    this.move();
+  }
+  
+  findOptions(choices) {
     let options = [];
     choices.forEach( (direction) => {
       let next = nextLocation(this.getLocation(), direction);
@@ -89,42 +114,48 @@ class Ghost extends GameElement {
         options.push(direction);
       } 
     });
-    if (options.length > 0) {
-      let i = Math.floor((Math.random() * options.length));
-      this.direction = options[i];
-      if ((this.panicLevel % 2) === 0) {
-        let next = nextLocation(this.getLocation(),this.direction);
+    return options;
+  }
+  
+  noOption() {
+    return (!this.isPanicked()) ? opposite(this.direction) : this.direction;
+  }
+  
+  randomChoice(options) {
+    let i = Math.floor((Math.random() * options.length));
+    return options[i];
+  }
+  
+  move() {
+    if ((this.panicLevel % 2) === 0) {
+      let next = nextLocation(this.getLocation(),this.direction);
+      if (this.isClear(next))  {
         this.setLocation(next);
       }
-    } else {
-      if (!this.isPanicked()) {
-        this.direction = opposite(this.direction);
-        let next = nextLocation(this.getLocation(),this.direction);
-        if (this.isClear(next))  {
-          this.setLocation(next);
-        }
-      }
     }
-
+  }
+  
+  checkCollisions() {
     if (this.isOnPacman()) {
       this.collision(this.game.playfield.getLocation(this.getLocation()));
     }
+
     if (this.game.isGate(this.getLocation())) {
       this.gatePassed = true;
     }
-    this.image = (icons.find( (ghost) => {
-      return ghost.panicked === (this.panicLevel > 0);
-    }).icon);
   }
   
   isClear(loc) {
-    let element = this.game.playfield.getLocation(loc);
-    if (!(this.game.isWall(loc))) {
-      return true;
-    } else if (element.isGate() && !this.gatePassed) {
-      return true;
-    } 
-    return false;
+    return (this.isNotAWall(loc) || this.isOpenGate(loc)) ? true : false;
+  }
+  
+  isNotAWall(loc) {
+    return (!(this.game.isWall(loc)));
+  }
+  
+  isOpenGate(loc) {
+    let it = this.game.playfield.getLocation(loc);
+    return (this.game.isWall(loc)) ? (it.isGate() && !this.gatePassed) : false;
   }
   
   restart() {
@@ -158,9 +189,7 @@ class Ghost extends GameElement {
   
   panic() {
     this.panicLevel = 50;
-    this.image = (icons.find( (ghost) => {
-      return ghost.panicked === (this.panicLevel > 0);
-    }).icon);
+    this.image = findIcon(this.isPanicked());
   }
   
   isPanicked() {
