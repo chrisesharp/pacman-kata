@@ -102,8 +102,10 @@ class Pacman  extends GameElement {
     return this.getIconByLiveness(this.alive);
   }
   
-  animate() {
-    this.frame = (this.frame+1) % 2;  
+  animateIcon() {
+    if (this.animated) {
+      this.frame = (this.frame+1) % 2;  
+    }
   }
   
   useAnimation() {
@@ -125,13 +127,16 @@ class Pacman  extends GameElement {
     let next = nextLocation(this.getLocation(),this.direction());
     if (this.isClear(next))  {
       this.setLocation(next);
-      if (this.animated) {
-        this.animate();
-      }
+      this.animateIcon();
     }
+    this.checkCollisions();
+  }
+  
+  checkCollisions() {
     if (this.isOnPill()) {
       this.game.eatPill(this.playfield.getLocation(this.getLocation()));
     }
+    
     if (this.game.isGhost(this.getLocation())) {
       this.playfield.getLocation(this.getLocation()).collision(this);
     }
