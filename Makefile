@@ -133,14 +133,15 @@ docker-go:
 # Node
 ################################################################################
 .PHONY: local-node
-local-node: clean-node build-node deploy-node test-node 
+local-node: clean-node build-node deploy-node coverage-node test-node 
 
 .PHONY: clean-node
 clean-node:
+	cd $(NODESRC) ; rm -rf ./coverage
 	
 .PHONY: coverage-node
 coverage-node:
-	cd $(NODESRC) ; sonar-scanner -Dsonar.login=$(SONAR_TOKEN) && npm run coverage
+	cd $(NODESRC) ; npm run coverage && sonar-scanner -Dsonar.login=$(SONAR_TOKEN)
 
 .PHONY: build-node
 build-node:

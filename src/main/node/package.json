@@ -18,7 +18,7 @@
   },
   "scripts": {
     "test": "cucumber-js features/*feature --require support/",
-    "coverage": "istanbul cover cucumber-js -- features/*feature --require support/ && cat ./coverage/lcov.info | codacy-coverage && rm -rf ./coverage",
+    "coverage": "istanbul cover cucumber-js -- features/*feature --require support/ && cat ./coverage/lcov.info | codacy-coverage ",
     "start": "node index.js"
   },
   "repository": {

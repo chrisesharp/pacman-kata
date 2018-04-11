@@ -20,4 +20,5 @@ src/main/python/__pycache__/
 src/main/python/.coverage
 src/main/python/coverage.xml
 src/main/go/src/pacman/coverage.out
+src/main/node/coverage/
 
