@@ -17,5 +17,5 @@ src/main/python/__pycache__/
 *.code-workspace
 .ropeproject
 .scannerwork
-.coverage
-coverage.xml
+src/main/python/.coverage
+src/main/python/coverage.xml
