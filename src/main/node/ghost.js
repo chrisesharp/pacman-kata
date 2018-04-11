@@ -52,7 +52,7 @@ class Ghost extends GameElement {
       this.game = null;
       this.gatePassed = false;
       this.uniqueColour = setGhostColour();
-      this.panicLevel = findPanicLevel(options.icon)
+      this.panicLevel = findPanicLevel(options.icon);
     }
   } 
   
