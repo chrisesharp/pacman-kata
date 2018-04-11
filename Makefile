@@ -23,6 +23,7 @@ JAVA_TEST_CMD	= mvn test -Dcucumber.options="--glue com.example.pacman \
 																					  classpath:features"
 GO_TEST_CMD = go test -coverprofile=coverage.out -args $(shell echo $(BDD)|sed "s/not /~/g")
 NODE_TEST_CMD = npm test -- --tags $(BDD)
+NODE_COVERAGE_CMD = npm run coverage
 PYTHON_TEST_CMD = behave -t $(shell echo $(BDD)|sed "s/not /~/g") -k
 
 JAVA_IMG   = java-pacman
@@ -57,7 +58,7 @@ local-all: local-java local-go local-node local-python
 # Java
 ################################################################################
 .PHONY: local-java
-local-java: clean-java build-java test-java deploy-java
+local-java: clean-java build-java test-java coverage-java deploy-java
 
 .PHONY: build-java
 build-java:
@@ -69,12 +70,19 @@ test-java:
 
 .PHONY: clean-java
 clean-java:
+	mvn clean
+
+.PHONY: coverage-java
+coverage-java:
 	mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
 	    -Dsonar.host.url=https://sonarcloud.io \
 	    -Dsonar.organization=chrisesharp-github \
 			-Dsonar.projectKey=org.chrisesharp.pacman-kata-java \
 			-Dsonar.projectName=pacman-kata-java \
     	-Dsonar.login=$(SONAR_TOKEN)
+	mvn com.gavinmogan:codacy-maven-plugin:coverage \
+			-DcoverageReportFile=target/site/jacoco-ut/jacoco.xml \
+			-DprojectToken=$(CODACY_PROJECT_TOKEN) -DapiToken=7FnGdigREcGP8j88LxQz
 
 .PHONY: deploy-java
 deploy-java:
@@ -129,7 +137,10 @@ local-node: clean-node build-node deploy-node test-node
 
 .PHONY: clean-node
 clean-node:
-	cd $(NODESRC) ; sonar-scanner -Dsonar.login=$(SONAR_TOKEN)
+	
+.PHONY: coverage-node
+coverage-node:
+	cd $(NODESRC) ; sonar-scanner -Dsonar.login=$(SONAR_TOKEN) && npm run coverage
 
 .PHONY: build-node
 build-node:
