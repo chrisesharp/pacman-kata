@@ -57,59 +57,81 @@ func NewGhost(game Game, icon rune, loc Location) Ghost {
 
 // Tick activates this elements turn
 func (g *ghostStruct) Tick() {
-	var options []Direction
-	pacmanLoc := g.Location()
-	options = nil
-	pacman := g.game.GetPacman()
-	if pacman != nil {
-		pacmanLoc = pacman.Location()
-	}
+	g.managePanic()
+	g.chooseDirection()
+	g.checkCollisions()
+	g.SetIcon(GhostIcon(g.IsPanicked()))
+}
+
+func (g *ghostStruct) managePanic() {
 	if g.panic > 0 {
+		pacman := g.game.GetPacman()
+		if pacman != nil {
+			g.SetDirection(g.Location().Avoid(pacman.Location()))
+		}
 		g.SetColour(panicColour)
-		g.SetDirection(g.Location().Avoid(pacmanLoc))
 		g.panic--
 	} else {
 		g.SetColour(g.origColour)
 	}
+}
 
+func (g *ghostStruct) chooseDirection() {
 	ahead := g.Direction()
-	left := ahead.Left()
-	right := ahead.Right()
-	walls := g.game.GetWalls()
+	choices := []Direction{ahead, ahead.Left(), ahead.Right()}
+	options := g.findOptions(choices)
+	if options != nil {
+		g.SetDirection(randomChoice(options))
+	} else {
+		g.SetDirection(g.noChoice())
+	}
+	g.move()
+}
 
-	for _, nextDir := range []Direction{ahead, left, right} {
-		if g.isClear(g.Location().Next(nextDir), walls) {
+func (g *ghostStruct) findOptions(choices []Direction) []Direction {
+	var options []Direction
+	for _, nextDir := range choices {
+		if g.isClear(g.Location().Next(nextDir)) {
 			options = append(options, nextDir)
 		}
 	}
-	if options != nil {
-		index := rand.Intn(len(options))
-		g.SetDirection(options[index])
-		if g.panic%2 == 0 {
+	return options
+}
+
+func randomChoice(options []Direction) Direction {
+	index := rand.Intn(len(options))
+	return options[index]
+}
+
+func (g *ghostStruct) noChoice() Direction {
+	direction := g.Direction()
+	if g.panic == 0 {
+		direction = direction.Opposite()
+	}
+	return direction
+}
+
+func (g *ghostStruct) move() {
+	if g.panic%2 == 0 {
+		if g.isClear(g.Location().Next(g.Direction())) {
 			g.SetLocation(g.Location().Next(g.Direction()))
 		}
-	} else {
-		if g.panic == 0 {
-			g.SetDirection(g.Direction().Opposite())
-			if g.isClear(g.Location().Next(g.Direction()), walls) {
-				g.SetLocation(g.Location().Next(g.Direction()))
-			}
-		}
 	}
+}
 
+func (g *ghostStruct) checkCollisions() {
 	gate := g.game.GetGate()
 	if gate != nil {
 		if g.Location() == gate.Location() {
 			g.gatePassed = true
 		}
 	}
+	pacman := g.game.GetPacman()
 	if pacman != nil {
 		if g.Location() == pacman.Location() {
 			g.TriggerEffect(pacman)
 		}
 	}
-	g.SetIcon(GhostIcon(g.panic > 0))
-
 }
 
 // Panic the ghost
@@ -136,8 +158,9 @@ func (g *ghostStruct) TriggerEffect(pacman GameElement) {
 	}
 }
 
-func (g *ghostStruct) isClear(nextLoc Location, walls []GameElement) bool {
+func (g *ghostStruct) isClear(nextLoc Location) bool {
 	clear := true
+	walls := g.game.GetWalls()
 	for _, wall := range walls {
 		if wall.Location() == nextLoc {
 			if !wall.IsGate() {
