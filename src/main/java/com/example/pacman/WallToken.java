@@ -3,7 +3,7 @@ import java.util.List;
 import java.util.Arrays;
 
 public class WallToken implements GameToken {
-  private static List<String> Tokens = Arrays.asList(
+  private static List<String> tokens = Arrays.asList(
     "+",
     "|",
     "-",
@@ -32,6 +32,6 @@ public class WallToken implements GameToken {
   }
 
   public static boolean contains(String token) {
-    return Tokens.contains(token);
+    return tokens.contains(token);
   }
 }

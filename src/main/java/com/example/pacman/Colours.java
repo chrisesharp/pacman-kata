@@ -1,6 +1,6 @@
 package com.example.pacman;
 
-public abstract class Colours {
+public final class Colours {
   public static enum Colour {
     BLINK,
     REVERSE,

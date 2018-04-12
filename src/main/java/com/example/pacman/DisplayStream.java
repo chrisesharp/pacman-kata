@@ -6,7 +6,7 @@ import com.example.pacman.Colours.Colour;
 
 public class DisplayStream {
   private String videoBuffer = "";
-  private List<Colour> colourBuffer = new ArrayList<Colour>();
+  private List<Colour> colourBuffer = new ArrayList<>();
   
   public String getVideoStream() {
     return videoBuffer;

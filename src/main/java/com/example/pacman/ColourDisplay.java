@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ColourDisplay implements Display {
   private PrintStream display;
-  private final static Map<Colour,String> COLOURMAP =
+  private static final Map<Colour,String> COLOURMAP =
   Collections.unmodifiableMap(new HashMap<Colour, String>() {
     private static final long serialVersionUID = 42L;
     {
@@ -35,7 +35,8 @@ public class ColourDisplay implements Display {
         put(DEFAULT, "\u001B[40m\u001B[37m");
     }
   });
-  private int width, height;
+  private int width;
+  private int height;
 
   public ColourDisplay(OutputStream stream) {
     setOutputStream(stream);
@@ -60,7 +61,7 @@ public class ColourDisplay implements Display {
     final AtomicInteger y = new AtomicInteger(0);
     for (String line: outputStream.split("\n")) {
         final AtomicInteger x = new AtomicInteger(0);
-        line.codePoints().forEach((i) -> {
+        line.codePoints().forEach(i -> {
           StringBuilder codepoint = new StringBuilder().appendCodePoint(i);
           Colour colour = colourStream[y.intValue()*width + x.intValue()];
           display.print(COLOURMAP.get(colour));
@@ -79,6 +80,7 @@ public class ColourDisplay implements Display {
     try {
       Thread.sleep(150);
     } catch (Exception e) {
+      // Doesn't matter if we're woken up
     }
 
     display.print(ANSI_REVERSE_OFF);

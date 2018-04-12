@@ -3,7 +3,7 @@ import java.util.List;
 import java.util.Arrays;
 
 public class GateToken implements GameToken {
-  private static List<String> Tokens = Arrays.asList(
+  private static List<String> tokens = Arrays.asList(
     "━",
     "="
   );
@@ -23,6 +23,6 @@ public class GateToken implements GameToken {
       game.addElement(wall);
   }
   public static boolean contains(String token) {
-    return Tokens.contains(token);
+    return tokens.contains(token);
   }
 }

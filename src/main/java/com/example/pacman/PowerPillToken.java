@@ -3,7 +3,7 @@ import java.util.List;
 import java.util.Arrays;
 
 public class PowerPillToken implements GameToken {
-  private static List<String> Tokens = Arrays.asList(
+  private static List<String> tokens = Arrays.asList(
     "◉",
     "o"
   );
@@ -21,6 +21,6 @@ public class PowerPillToken implements GameToken {
   }
 
   public static boolean contains(String token) {
-    return Tokens.contains(token);
+    return tokens.contains(token);
   }
 }

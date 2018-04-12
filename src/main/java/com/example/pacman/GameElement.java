@@ -4,9 +4,11 @@ import static com.example.pacman.Colours.Colour;
 import static com.example.pacman.Colours.Colour.DEFAULT;
 
 public abstract class GameElement {
-    private Location startingLocation, location;
+    private Location startingLocation;
+    private Location location;
     private String icon;
     private GameEngine game;
+    private int score = 0;
 
     public GameElement(Location location) {
       this.location = location;
@@ -79,6 +81,6 @@ public abstract class GameElement {
     }
 
     public int score() {
-      return 0;
+      return score;
     }
 }

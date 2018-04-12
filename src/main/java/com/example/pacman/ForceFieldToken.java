@@ -3,7 +3,7 @@ import java.util.List;
 import java.util.Arrays;
 
 public class ForceFieldToken implements GameToken {
-  private static List<String> Tokens = Arrays.asList(
+  private static List<String> tokens = Arrays.asList(
     "#",
     "┃"
   );
@@ -19,6 +19,6 @@ public class ForceFieldToken implements GameToken {
       game.addElement(field);
   }
   public static boolean contains(String token) {
-    return Tokens.contains(token);
+    return tokens.contains(token);
   }
 }
