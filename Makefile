@@ -91,7 +91,7 @@ deploy-java:
 .PHONY: docker-java
 docker-java:
 	$(DOCKERBUILD) $(JAVA_IMG) . -f Dockerfile.$(JAVA_IMG)
-	$(DOCKERTEST)  $(VOLUME)/$(JAVASRC):/usr/app/src -e BDD $(JAVA_IMG) $(JAVA_TEST_CMD)
+	$(DOCKERTEST)   $(VOLUME)/.m2:/root/.m2 $(VOLUME)/$(JAVASRC):/usr/app/src -e BDD $(JAVA_IMG) $(JAVA_TEST_CMD)
 
 ################################################################################
 # Golang
