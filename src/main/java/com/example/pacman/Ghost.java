@@ -83,23 +83,18 @@ public class Ghost extends GameElement implements Moveable {
     }
 
     private void move() {
-      if (panic%2==0) {
-
-        if (isClear(direction())) {
+      if (panic%2==0 && isClear(direction())) {
           setLocation(location().next(direction()));
-        }
       }
     }
     
     private void checkCollisions() {
       GameElement pacman = game.getGameElementByType(Pacman.class);
-      if (pacman != null) {
-        if (location().equals(pacman.location())) {
+      if (pacman != null && location().equals(pacman.location())) {
           triggerEffect(pacman);
-        }
       }
       GameElement gate = game.getGameElementByType(Gate.class);
-      if (gate != null && (location().equals(gate.location())))  {
+      if (gate != null && location().equals(gate.location()))  {
         passedGate = true;
       }
     }
