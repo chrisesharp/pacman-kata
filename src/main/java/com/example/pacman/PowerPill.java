@@ -3,8 +3,8 @@ import static com.example.pacman.Colours.Colour;
 import static com.example.pacman.Colours.Colour.*;
 
 public class PowerPill extends GameElement {
-  private static final int score = 50;
-  private static final Colour colour = BLINK;
+  private static final int SCORE = 50;
+  private static final Colour COLOUR = BLINK;
   private GameEngine game;
 
   public PowerPill(Location location) {
@@ -13,7 +13,7 @@ public class PowerPill extends GameElement {
 
   @Override
   public int score() {
-      return score;
+      return SCORE;
   }
 
   @Override
@@ -28,7 +28,7 @@ public class PowerPill extends GameElement {
 
   @Override
   public Colour getColour() {
-    return colour;
+    return COLOUR;
   }
   
   @Override

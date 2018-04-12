@@ -12,10 +12,12 @@ public class GameStats {
     try {
       setLives(Integer.parseInt(data[0]));
     } catch (NumberFormatException e) {
+      // We must have a ?
     }
     try {
       setScore(Integer.parseInt(data[data.length - 1]));
     } catch (NumberFormatException e) {
+      // We must have a ?
     }
   }
   

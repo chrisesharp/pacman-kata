@@ -2,7 +2,7 @@ package com.example.pacman;
 
 public class Pill extends GameElement {
   private GameEngine game;
-  private static final int score = 10;
+  private static final int SCORE = 10;
   public Pill(Location location) {
       super(location);
   }
@@ -19,7 +19,7 @@ public class Pill extends GameElement {
 
   @Override
   public int score() {
-      return score;
+      return SCORE;
   }
   
   @Override

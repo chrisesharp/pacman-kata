@@ -14,7 +14,7 @@ public class Ghost extends GameElement implements Moveable {
     private GameEngine game;
     private Direction direction;
     private boolean moving;
-    private static Colour[] COLOURS = {
+    private static final Colour[] COLOURS = {
       RED,
       GREEN,
       PURPLE,
@@ -23,8 +23,8 @@ public class Ghost extends GameElement implements Moveable {
     private static final int SCORE=200;
     private static final int PANIC_LEVEL=50;
     private static final int CALM_LEVEL=0;
-    private static int colour=0;
-    private Colour NORMAL_COLOUR;
+    private int colour=0;
+    private Colour normalColour;
     private final Colour PANIC_COLOUR = BLUE;
     private int panic=0;
     private boolean passedGate=false;
@@ -32,7 +32,7 @@ public class Ghost extends GameElement implements Moveable {
 
     public Ghost(Location location) {
         super(location);
-        NORMAL_COLOUR = COLOURS[colour%COLOURS.length];
+        normalColour = COLOURS[colour%COLOURS.length];
         colour++;
         setDirection(UP);
     }
@@ -143,7 +143,7 @@ public class Ghost extends GameElement implements Moveable {
     
     @Override
     public Colour getColour() {
-      return panicked() ? PANIC_COLOUR : NORMAL_COLOUR;
+      return panicked() ? PANIC_COLOUR : normalColour;
     }
 
     @Override
