@@ -28,8 +28,6 @@ public class Ghost extends GameElement implements Moveable {
     private final Colour PANIC_COLOUR = BLUE;
     private int panic=0;
     private boolean passedGate=false;
-    private GameElement gate;
-
     private Random randomizer = new Random();
 
     public Ghost(Location location) {
@@ -46,21 +44,21 @@ public class Ghost extends GameElement implements Moveable {
 
     @Override
     public void tick() {
+        managePanic();
+        chooseDirection();
+        move();
+        checkCollisions();
+    }
+    
+    private void managePanic() {
+      if (panicked()) {
         GameElement pacman = game.getGameElementByType(Pacman.class);
         Location pacmanLocation;
-        gate = game.getGameElementByType(Gate.class);
         pacmanLocation = (pacman!=null) ? pacman.location() : this.location();
-
-        if (panicked()) {
-            setDirection(location().avoid(pacmanLocation));
-            panic--;
-            setIcon(GhostToken.getToken(panic));
-        }
-        move(panic%2==0);
-
-        if (location().equals(pacmanLocation)) {
-          triggerEffect(pacman);
-        }
+        setDirection(location().avoid(pacmanLocation));
+        panic--;
+        setIcon(GhostToken.getToken(panic));
+      }
     }
 
     @Override
@@ -76,17 +74,33 @@ public class Ghost extends GameElement implements Moveable {
         }
       }
     }
+    
+    private void chooseDirection() {
+      Direction next = chooseOption(gatherOptions());
+      if (next != null) {
+        setDirection(next);
+      }
+    }
 
-    private void move(boolean moving) {
-      if (moving) {
-        Direction next = chooseOption(gatherOptions());
-        if (next != null) {
-          setDirection(next);
+    private void move() {
+      if (panic%2==0) {
+
+        if (isClear(direction())) {
           setLocation(location().next(direction()));
-          if (haveGate() && (location().equals(gate.location())))  {
-            passedGate = true;
-          }
         }
+      }
+    }
+    
+    private void checkCollisions() {
+      GameElement pacman = game.getGameElementByType(Pacman.class);
+      if (pacman != null) {
+        if (location().equals(pacman.location())) {
+          triggerEffect(pacman);
+        }
+      }
+      GameElement gate = game.getGameElementByType(Gate.class);
+      if (gate != null && (location().equals(gate.location())))  {
+        passedGate = true;
       }
     }
 
@@ -124,10 +138,6 @@ public class Ghost extends GameElement implements Moveable {
 
     protected boolean panicked() {
       return (panic > CALM_LEVEL);
-    }
-
-    private boolean haveGate() {
-      return (gate != null);
     }
 
     @Override
