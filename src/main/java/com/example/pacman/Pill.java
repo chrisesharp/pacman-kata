@@ -21,4 +21,19 @@ public class Pill extends GameElement {
   public int score() {
       return SCORE;
   }
+  
+  @Override
+  public boolean equals(Object obj) {
+      if (obj instanceof Pill) {
+          final Pill gate = (Pill) obj;
+          return (this.location().equals(gate.location()));
+      } else {
+        return false;
+      }
+  }
+  
+  @Override
+  public int hashCode() {
+    return super.hashCode() * 23;
+  }
 }

@@ -1,6 +1,8 @@
 package com.example.pacman;
 
 import java.nio.charset.StandardCharsets;
+import org.apache.log4j.Logger;
+
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
@@ -9,6 +11,8 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Level {
+  private static final Logger log = Logger.getLogger(Level.class);
+  
   private List<String> levelMap = new ArrayList<String>();
   private int lastLevel = 1;
   private int currentLevel =1;
@@ -26,7 +30,7 @@ public class Level {
     }
   }
 
-  public void readFile(String filePath) {
+  public void readFile(String filePath){
     StringBuilder contentBuilder = new StringBuilder();
 
     try (Stream<String> stream = Files.lines( Paths.get(filePath), StandardCharsets.UTF_8))
@@ -35,7 +39,7 @@ public class Level {
     }
     catch (IOException e)
     {
-      e.printStackTrace();
+      log.error(e);
     }
     addLevelMaps(contentBuilder.toString());
 

@@ -16,7 +16,7 @@ public class Location {
             return vals[(this.ordinal()+2) % vals.length];
         }
     }
-    public int x, y;
+    private int x, y;
 
     public Location(int x, int y) {
         this.x = x;
@@ -26,6 +26,14 @@ public class Location {
     public Location(Location loc) {
         this.x = loc.x;
         this.y = loc.y;
+    }
+    
+    public int X() {
+      return this.x;
+    }
+    
+    public int Y() {
+      return this.y;
     }
 
     public Location next(Direction direction) {
@@ -87,11 +95,16 @@ public class Location {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
+        if (obj instanceof Location) {
+          Location loc = (Location) obj;
+          return (loc.x == this.x && loc.y == this.y);
         } else {
-            Location loc = (Location) obj;
-            return (loc.x == this.x && loc.y == this.y);
+          return false;
         }
+    }
+    
+    @Override
+    public int hashCode() {
+      return (13 * (13 + this.x) + this.y);
     }
 }

@@ -8,16 +8,6 @@ public class ForceField extends GameElement {
     public ForceField(Location location) {
         super(location);
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        } else {
-            final ForceField field = (ForceField) obj;
-            return (this.location().equals(field.location()));
-        }
-    }
     
     public Colour getColour() {
       return COLOUR;

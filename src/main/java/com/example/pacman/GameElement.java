@@ -31,13 +31,19 @@ public abstract class GameElement {
       return true;
     }
 
+    @Override
     public boolean equals(Object obj) {
-      if (obj == null) {
-          return false;
-      } else {
+      boolean result = false;
+      if (obj instanceof GameElement) {
           final GameElement element = (GameElement) obj;
-          return (this.location().equals(element.location()));
+          result = (this.location().equals(element.location()));
       }
+      return result;
+    }
+    
+    @Override
+    public int hashCode() {
+      return (7 * ( 7 * this.location().hashCode()));
     }
 
     public String render() {

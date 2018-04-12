@@ -32,10 +32,9 @@ public class GameField {
   }
 
   private Location setLocation(Location loc, GameElement value) {
-    loc.x = (loc.x + width) % width;
-    loc.y = (loc.y + height) % height;
-    gameField[loc.x][loc.y] = value;
-    return loc;
+    Location location = this.wrappedLocation(loc);
+    gameField[location.X()][location.Y()] = value;
+    return location;
   }
 
   public void setLocation(GameElement element) {
@@ -43,9 +42,12 @@ public class GameField {
   }
 
   public GameElement getLocation(Location loc) {
-    loc.x = (loc.x + width) % width;
-    loc.y = (loc.y + height) % height;
-    return gameField[loc.x][loc.y];
+    Location location = this.wrappedLocation(loc);
+    return gameField[location.X()][location.Y()];
+  }
+  
+  private Location wrappedLocation(Location loc) {
+    return new Location(((loc.X() + width) % width), ((loc.Y() + height) % height));
   }
 
   public void printGameOver() {
