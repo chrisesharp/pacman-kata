@@ -1,20 +1,20 @@
 package com.example.pacman;
 
 import com.example.pacman.Colours.Colour;
-//import com.example.pacman.Colours.Colour.*;
 import java.util.Arrays;
 import java.util.ArrayList;
 
 public class GameField {
-  private GameElement [][] gameField;
-  private int width, height;
+  private GameElement [][] field;
+  private int width;
+  private int height;
   private Colour[] colourStream;
   private String videoStream;
 
   public GameField(int width, int height) {
     this.width = width;
     this.height = height;
-    gameField = new GameElement [width][height];
+    field = new GameElement [width][height];
   }
 
   public int width() {
@@ -26,14 +26,14 @@ public class GameField {
   }
 
   protected void clear() {
-    for (GameElement[] row: gameField) {
+    for (GameElement[] row: field) {
       Arrays.fill(row,null);
     }
   }
 
   private Location setLocation(Location loc, GameElement value) {
     Location location = this.wrappedLocation(loc);
-    gameField[location.x()][location.y()] = value;
+    field[location.x()][location.y()] = value;
     return location;
   }
 
@@ -43,7 +43,7 @@ public class GameField {
 
   public GameElement getLocation(Location loc) {
     Location location = this.wrappedLocation(loc);
-    return gameField[location.x()][location.y()];
+    return field[location.x()][location.y()];
   }
   
   private Location wrappedLocation(Location loc) {
@@ -51,8 +51,8 @@ public class GameField {
   }
 
   public void printGameOver() {
-      String GAME = "GAME";
-      String OVER = "OVER";
+      final String GAME = "GAME";
+      final String OVER = "OVER";
       int y = (height/2)-2;
       int padding = ((width-2)-GAME.length())/2;
       TextElement character;
@@ -60,19 +60,19 @@ public class GameField {
       for (int x=0; x < GAME.length(); x++) {
           character = new TextElement(null);
           character.setIcon("" + GAME.charAt(x));
-          gameField[padding+1+x][y]= character;
+          field[padding+1+x][y]= character;
           character = new TextElement(null);
           character.setIcon("" + OVER.charAt(x));
-          gameField[padding+1+x][y+1]= character;
+          field[padding+1+x][y+1]= character;
       }
   }
   
   public void generateDisplayStream() {
     StringBuffer buffer = new StringBuffer();
-    ArrayList<Colour> colours = new ArrayList<Colour>();
+    ArrayList<Colour> colours = new ArrayList<>();
     for (int y=0; y < height; y++) {
         for (int x=0; x < width; x++) {
-          GameElement el = gameField[x][y];
+          GameElement el = field[x][y];
           if (el != null) {
             buffer.append(el.render());
             colours.add(el.getColour());

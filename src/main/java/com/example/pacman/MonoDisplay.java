@@ -4,7 +4,8 @@ import java.io.OutputStream;
 
 public class MonoDisplay implements Display {
   private PrintStream display;
-  private int width, height;
+  private int width;
+  private int height;
 
   public MonoDisplay(OutputStream stream) {
     setOutputStream(stream);
@@ -31,6 +32,7 @@ public class MonoDisplay implements Display {
     try {
       Thread.sleep(150);
     } catch (Exception e) {
+      // Doesn't matter if we wake up
     }
 
     display.print(ANSI_REVERSE_OFF);

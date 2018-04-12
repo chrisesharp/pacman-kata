@@ -25,7 +25,7 @@ public class Ghost extends GameElement implements Moveable {
     private static final int CALM_LEVEL=0;
     private int colour=0;
     private Colour normalColour;
-    private final Colour PANIC_COLOUR = BLUE;
+    private static final Colour PANIC_COLOUR = BLUE;
     private int panic=0;
     private boolean passedGate=false;
     private Random randomizer = new Random();
@@ -100,7 +100,7 @@ public class Ghost extends GameElement implements Moveable {
     }
 
     private List<Direction> gatherOptions() {
-      List<Direction> options = new ArrayList<Direction>();
+      List<Direction> options = new ArrayList<>();
       List<Direction> possibleRoutes = Arrays.asList(direction(),
                                                       direction().turnLeft(),
                                                       direction().turnRight());
@@ -137,8 +137,7 @@ public class Ghost extends GameElement implements Moveable {
 
     @Override
     public String render() {
-      String icon = this.icon();
-      return icon;
+      return this.icon();
     }
     
     @Override
