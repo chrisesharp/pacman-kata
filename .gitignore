@@ -21,5 +21,9 @@ src/main/python/.coverage
 src/main/python/coverage.xml
 src/main/go/src/pacman/coverage.out
 src/main/node/coverage/
+<<<<<<< HEAD
 pacman-game.log
+=======
+.m2
+>>>>>>> 4615b917934f5530820c3e34bfabb3947e19f2ef
 
