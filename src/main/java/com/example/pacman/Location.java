@@ -28,11 +28,11 @@ public class Location {
         this.y = loc.y;
     }
     
-    public int X() {
+    public int x() {
       return this.x;
     }
     
-    public int Y() {
+    public int y() {
       return this.y;
     }
 
