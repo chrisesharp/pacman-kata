@@ -51,8 +51,8 @@ public class GameStats {
 
   public String toString() {
       String output = "";
-      String LIVES = ""+lives;
-      String SCORE = ""+score;
+      final String LIVES = ""+lives;
+      final String SCORE = ""+score;
       output += LIVES;
       int padding= columns - LIVES.length() - SCORE.length();
       for (int i=0; i < padding; i++) {

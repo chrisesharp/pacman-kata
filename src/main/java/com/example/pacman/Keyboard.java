@@ -6,30 +6,32 @@ import java.io.IOException;
 import org.jline.terminal.TerminalBuilder;
 import org.jline.terminal.Terminal;
 import org.jline.utils.NonBlockingReader;
+import org.apache.log4j.Logger;
 
 public class Keyboard implements InputController {
-  private NonBlockingReader keyboard;
+  private NonBlockingReader keybrd;
   private Moveable element;
+  private static final Logger log = Logger.getLogger(Keyboard.class);
 
   public Keyboard() {
     try {
       Terminal terminal = TerminalBuilder.terminal();
       terminal.enterRawMode();
-      keyboard = terminal.reader();
+      keybrd = terminal.reader();
     } catch (IOException e) {
-      System.out.println("err...we got " + e.getMessage());
+      log.error(e.getMessage());
     }
   }
 
   private int read() {
     int key;
     try {
-        key = keyboard.read(125);
+        key = keybrd.read(125);
         if (key != -1 || key != -2) {
           return  key;
         }
     } catch (Exception e) {
-      System.out.println("err...we got " + e.getMessage());
+      log.error(e.getMessage());
     }
     return -1;
   }

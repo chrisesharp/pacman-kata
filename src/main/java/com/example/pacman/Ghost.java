@@ -186,4 +186,19 @@ public class Ghost extends GameElement implements Moveable {
     public void stop() {
       moving = false;
     }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Ghost) {
+            final Ghost ghost = (Ghost) obj;
+            return (this.location().equals(ghost.location()));
+        } else {
+          return false;
+        }
+    }
+    
+    @Override
+    public int hashCode() {
+      return super.hashCode() * 31;
+    }
 }
