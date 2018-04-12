@@ -98,11 +98,14 @@ docker-java:
 ################################################################################
 
 .PHONY: local-go
-local-go: clean-go build-go test-go deploy-go
+local-go: clean-go build-go test-go coverage-go deploy-go
 
 .PHONY: clean-go
 clean-go:
 	cd $(GOSRC)/src/pacman
+
+.PHONY: coverage-go
+coverage-go:
 
 .PHONY: build-go
 build-go: export GOPATH = $(CURDIR)/$(GOSRC)
@@ -133,7 +136,7 @@ docker-go:
 # Node
 ################################################################################
 .PHONY: local-node
-local-node: clean-node build-node deploy-node coverage-node test-node 
+local-node: clean-node build-node test-node coverage-node deploy-node 
 
 .PHONY: clean-node
 clean-node:
@@ -145,6 +148,7 @@ coverage-node:
 
 .PHONY: build-node
 build-node:
+	cd $(NODESRC) ; npm install
 
 .PHONY: test-node
 test-node:
@@ -163,19 +167,24 @@ docker-node:
 # Python
 ################################################################################
 .PHONY: local-python
-local-python: clean-python build-python test-python deploy-python
+local-python: clean-python build-python test-python coverage-python deploy-python
 
 .PHONY: clean-python
 clean-python:
-	rm -rf $(PYTHONSRC)/__pycache__
-	cd $(PYTHONSRC) ; coverage erase ; \
-			coverage run --source='.' -m behave; \
-			coverage xml -i
+	cd $(PYTHONSRC)
+	rm -rf ./__pycache__
+	coverage erase
+	
+.PHONY: coverage-python
+coverage-python:
+	cd $(PYTHONSRC) ; \
+		coverage run --source='.' -m behave; \
+		coverage xml -i ; \
+		sonar-scanner -Dsonar.login=$(SONAR_TOKEN)
 
 
 .PHONY: build-python
 build-python:
-	cd $(PYTHONSRC) ; sonar-scanner -Dsonar.login=$(SONAR_TOKEN)
 
 .PHONY: test-python
 test-python:
