@@ -3,8 +3,8 @@ import static com.example.pacman.Colours.Colour;
 import static com.example.pacman.Colours.Colour.*;
 
 public class PowerPill extends GameElement {
-  private final int SCORE = 50;
-  private final Colour COLOUR = BLINK;
+  private static final int score = 50;
+  private static final Colour colour = BLINK;
   private GameEngine game;
 
   public PowerPill(Location location) {
@@ -13,7 +13,7 @@ public class PowerPill extends GameElement {
 
   @Override
   public int score() {
-      return SCORE;
+      return score;
   }
 
   @Override
@@ -28,6 +28,21 @@ public class PowerPill extends GameElement {
 
   @Override
   public Colour getColour() {
-    return COLOUR;
+    return colour;
+  }
+  
+  @Override
+  public boolean equals(Object obj) {
+      if (obj instanceof PowerPill) {
+          final PowerPill pill = (PowerPill) obj;
+          return (this.location().equals(pill.location()));
+      } else {
+        return false;
+      }
+  }
+  
+  @Override
+  public int hashCode() {
+    return super.hashCode() * 23;
   }
 }

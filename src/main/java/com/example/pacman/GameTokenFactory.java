@@ -26,7 +26,7 @@ public class GameTokenFactory {
         final AtomicInteger y = new AtomicInteger(0);
         for (String line: screen.split("\n")) {
             final AtomicInteger x = new AtomicInteger(0);
-            line.codePoints().forEach((i) -> {
+            line.codePoints().forEach( i -> {
               StringBuilder codepoint = new StringBuilder().appendCodePoint(i);
               GameToken token = getToken(codepoint.toString());
               if (token != null) {

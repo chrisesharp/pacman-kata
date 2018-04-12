@@ -7,7 +7,7 @@ public class Pacman extends GameElement implements Moveable {
     private GameEngine game;
     private boolean alive=true;
     private boolean iconState=true;
-    private final Colour COLOUR = YELLOW;
+    private static final Colour colour = YELLOW;
     private Direction direction;
     private boolean moving;
 
@@ -85,7 +85,7 @@ public class Pacman extends GameElement implements Moveable {
     
     @Override
     public Colour getColour() {
-      return COLOUR;
+      return colour;
     }
 
     public boolean isClear(Direction direction) {
@@ -110,5 +110,20 @@ public class Pacman extends GameElement implements Moveable {
 
     public void stop() {
       moving = false;
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+      if (!super.equals(obj)) {
+        return false;
+      } else {
+        Pacman other = (Pacman) obj;
+        return (this.getColour() == other.getColour());
+      }
+    }
+    
+    @Override
+    public int hashCode() {
+      return super.hashCode() * 27;
     }
 }

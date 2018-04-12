@@ -1,7 +1,7 @@
 package com.example.pacman;
 
 public final class Colours {
-  public static enum Colour {
+  enum Colour {
     BLINK,
     REVERSE,
     NORMAL,

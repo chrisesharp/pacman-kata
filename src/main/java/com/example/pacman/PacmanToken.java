@@ -24,7 +24,7 @@ public class PacmanToken implements GameToken {
                         .put(DOWN,"^")
                         .build();
 
-  private static String DEAD_ICON = "*";
+  private static String deadICON = "*";
 
   public PacmanToken(String icon) {
       this.icon=icon;
@@ -44,7 +44,7 @@ public class PacmanToken implements GameToken {
   }
 
   public static boolean contains(String token) {
-    if (token.equals(DEAD_ICON)) {
+    if (token.equals(deadICON)) {
       return true;
     }
     return ourTokens.containsValue(token);
@@ -59,6 +59,6 @@ public class PacmanToken implements GameToken {
   }
 
   public static String getDeadToken() {
-    return DEAD_ICON;
+    return deadICON;
   }
 }

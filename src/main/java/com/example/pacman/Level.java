@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class Level {
   private static final Logger log = Logger.getLogger(Level.class);
   
-  private List<String> levelMap = new ArrayList<String>();
+  private List<String> levelMap = new ArrayList<>();
   private int lastLevel = 1;
   private int currentLevel =1;
 

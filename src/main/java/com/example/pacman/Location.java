@@ -1,6 +1,6 @@
 package com.example.pacman;
 public class Location {
-    public static enum Direction {
+    enum Direction {
         UP, RIGHT, DOWN, LEFT;
         private static Direction[] vals = values();
         public Direction turnRight()
@@ -16,8 +16,9 @@ public class Location {
             return vals[(this.ordinal()+2) % vals.length];
         }
     }
-    private int x, y;
-
+    private int x;
+    private int y;
+     
     public Location(int x, int y) {
         this.x = x;
         this.y = y;
@@ -37,7 +38,8 @@ public class Location {
     }
 
     public Location next(Direction direction) {
-        int dx=0, dy=0;
+        int dx=0;
+        int dy=0;
         if (direction!=null) {
           switch (direction) {
                   case LEFT:
