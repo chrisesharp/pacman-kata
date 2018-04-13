@@ -68,7 +68,7 @@ public class GameField {
   }
   
   public void generateDisplayStream() {
-    StringBuffer buffer = new StringBuffer();
+    StringBuilder buffer = new StringBuilder();
     ArrayList<Colour> colours = new ArrayList<>();
     for (int y=0; y < height; y++) {
         for (int x=0; x < width; x++) {
