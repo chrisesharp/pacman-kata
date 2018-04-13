@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.*;
+import java.util.Objects;
 
 public class Game implements GameEngine {
     private boolean gameOver=false;
@@ -18,11 +19,11 @@ public class Game implements GameEngine {
     private Display display = new MonoDisplay(System.out);
 
     private GameElement pacman;
-    private List<GameElement> ghosts = new ArrayList<GameElement>();
-    private List<GameElement> pills = new ArrayList<GameElement>();
-    private List<GameElement> powerPills = new ArrayList<GameElement>();
-    private List<GameElement> walls = new ArrayList<GameElement>();
-    private List<GameElement> forceFields = new ArrayList<GameElement>();
+    private List<GameElement> ghosts = new ArrayList<>();
+    private List<GameElement> pills = new ArrayList<>();
+    private List<GameElement> powerPills = new ArrayList<>();
+    private List<GameElement> walls = new ArrayList<>();
+    private List<GameElement> forceFields = new ArrayList<>();
     private GameElement gate;
 
     public Game() {
@@ -165,7 +166,7 @@ public class Game implements GameEngine {
                         Collections.singletonList(gate).stream()
                         )
                     .flatMap(s -> s)
-                    .filter(e -> e!=null)
+                    .filter(Objects::nonNull)
                     .collect(Collectors.toList());
     }
     
