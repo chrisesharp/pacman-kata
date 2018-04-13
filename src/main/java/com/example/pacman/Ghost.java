@@ -23,7 +23,7 @@ public class Ghost extends GameElement implements Moveable {
     private static final int SCORE=200;
     private static final int PANIC_LEVEL=50;
     private static final int CALM_LEVEL=0;
-    private int colour=0;
+    private static int colour=0;
     private Colour normalColour;
     private static final Colour PANIC_COLOUR = BLUE;
     private int panic=0;

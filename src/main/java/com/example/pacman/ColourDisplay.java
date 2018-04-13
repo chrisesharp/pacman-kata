@@ -5,11 +5,9 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Collections;
 import java.io.OutputStream;
-import java.io.PrintStream;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ColourDisplay implements Display {
-  private PrintStream display;
+public class ColourDisplay extends MonoDisplay {
   private static final Map<Colour,String> COLOURMAP =
   Collections.unmodifiableMap(new HashMap<Colour, String>() {
     private static final long serialVersionUID = 42L;
@@ -35,62 +33,35 @@ public class ColourDisplay implements Display {
         put(DEFAULT, "\u001B[40m\u001B[37m");
     }
   });
-  private int width;
-  private int height;
 
   public ColourDisplay(OutputStream stream) {
-    setOutputStream(stream);
+    super(stream);
   }
 
-  public void setOutputStream(OutputStream stream) {
-    display = new PrintStream(stream);
-  }
-  
-  public void init(int width, int height) {
-    this.width = width;
-    this.height = height;
-  }
-
+  @Override
   public void refresh(DisplayStream output) {
     String outputStream = output.getVideoStream();
     Colour[] colourStream = output.getColourStream();
     
-    display.print(Display.ANSI_CLEARSCREEN);
-    display.print(COLOURMAP.get(DEFAULT));
+    displayWrite(ANSI_CLEARSCREEN);
+    displayWrite(COLOURMAP.get(DEFAULT));
     
     final AtomicInteger y = new AtomicInteger(0);
     for (String line: outputStream.split("\n")) {
         final AtomicInteger x = new AtomicInteger(0);
         line.codePoints().forEach(i -> {
           StringBuilder codepoint = new StringBuilder().appendCodePoint(i);
-          Colour colour = colourStream[y.intValue()*width + x.intValue()];
-          display.print(COLOURMAP.get(colour));
-          display.print(codepoint.toString());
-          display.print(Display.ANSI_RESET + COLOURMAP.get(DEFAULT));    
+          Colour colour = colourStream[y.intValue()*this.width() + x.intValue()];
+          displayWrite(COLOURMAP.get(colour));
+          displayWrite(codepoint.toString());
+          displayWrite(ANSI_RESET + COLOURMAP.get(DEFAULT));    
           x.incrementAndGet();
         });
-        display.print("\n");
+        displayWrite("\n");
         y.incrementAndGet();
     }
-    display.println(Display.ANSI_RESET);
+    displayWrite(ANSI_RESET);
+    displayWrite("\n");
   }
 
-  public void flash() {
-    display.print(ANSI_REVERSE_ON);
-    try {
-      Thread.sleep(150);
-    } catch (Exception e) {
-      // Doesn't matter if we're woken up
-    }
-
-    display.print(ANSI_REVERSE_OFF);
-  }
-  
-  public int width() {
-    return width;
-  }
-  
-  public int height() {
-    return height;
-  }
 }
