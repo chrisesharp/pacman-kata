@@ -13,9 +13,13 @@ var game;
 
 function draw() {
   game.refreshDisplay();
-  if (!(game.getPacman().isAlive())) {
-    game.display.flash();
-    game.pacman.restart();
+  if (game.debug) {
+    game.gameOver = true;
+  } else {
+    if (!(game.getPacman().isAlive())) {
+      game.display.flash();
+      game.pacman.restart();
+    }
   }
   if (game.gameOver) {
     MainLoop.stop();
@@ -34,9 +38,11 @@ if (require.main === module) {
   
   let file = (args.file) ?  args.file : "data/pacman.txt";
   let colour = (args.colour) ?  args.colour : false;
+  let debug = (args.debug) ?  args.debug : false;
   let contents = fs.readFileSync(file,"utf8");
   
   game = new Game(contents);
+  game.setDebug(debug);
   let keyboard = new Keyboard(game);
   var display;
   if (colour==="true") {

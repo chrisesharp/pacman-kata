@@ -27,7 +27,7 @@ type Game interface {
 	GetGate() GameElement
 	GetOutput() (string, []Colour)
 	Tick()
-	Play()
+	Play(debug bool)
 	KeyPress(key string)
 	UseAnimation()
 	Animated() bool

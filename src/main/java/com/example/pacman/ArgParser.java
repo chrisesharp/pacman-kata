@@ -9,6 +9,9 @@ public class ArgParser {
 
   @Option(name="-c", aliases= {"--colour","--colour=true"}, usage="Use colour display")  
   private  boolean useColour;  
+  
+  @Option(name="-d", aliases= {"--debug","--debug=true"}, usage="Use debug mode to run only one frame tick")  
+  private  boolean debug;  
 
   public ArgParser(String... args) {
       CmdLineParser parser = new CmdLineParser(this);
@@ -31,5 +34,9 @@ public class ArgParser {
   
   public boolean useColour() {
     return this.useColour;
+  }
+  
+  public boolean getDebug() {
+    return this.debug;
   }
 }

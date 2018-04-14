@@ -5,6 +5,8 @@ import cucumber.api.java.en.*;
 import cucumber.api.DataTable;
 //import cucumber.api.PendingException;
 import java.io.ByteArrayOutputStream;
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -15,10 +17,18 @@ public class PacmanStepDef {
     GameField gameField;
     Level level;
     String output;
-    ByteArrayOutputStream result;
+    ByteArrayOutputStream result = new ByteArrayOutputStream();;
     Display display;
     Map<String,byte[]> ANSIcodes = new HashMap<String,byte[]>();
+    String command = "java -cp target/pacman-kata-1.0-SNAPSHOT.jar com.example.pacman.Game";
     
+    // Given steps
+    
+    @Given("^the command arg \"([^\"]*)\"$")
+    public void the_command(String arg) {
+        this.command += " " + arg;
+    }
+
     @Given("^walls at the following places:$")
     public void walls_at_the_following_places(DataTable data) {
       List<List<String>> wallList = data.cells(1);
@@ -110,19 +120,38 @@ public class PacmanStepDef {
 
     @Given("^a display$")
     public void a_display() throws Throwable {
-      result = new ByteArrayOutputStream();
       display = new MonoDisplay(result);
     }
 
     @Given("^a colour display$")
     public void a_colour_display() throws Throwable {
-      result = new ByteArrayOutputStream();
       display = new ColourDisplay(result);
     }
 
     @Given("^the ANSI \"(.*?)\" sequence is \"(.*?)\"$")
     public void the_ANSI_sequence_is(String sequence, String hex) throws Throwable {
         ANSIcodes.put(sequence, hexStringToByteArray(hex));
+    }
+    
+    // When steps
+    
+    @When("^I run the command with the args$")
+    public void i_run_the_command_with_the_args() {
+        Runtime rt = Runtime.getRuntime();
+        try {
+          Process pr = rt.exec(command);
+          InputStream input = new BufferedInputStream(pr.getInputStream());
+
+          byte[] buffer = new byte[4096];
+          int bytesRead;
+          while ((bytesRead = input.read(buffer)) != -1)
+          {
+              result.write(buffer, 0, bytesRead);
+          }
+          pr.waitFor();
+        } catch (Exception e) {
+          System.err.println("Failed to run command " + command);
+        }        
     }
     
     @When("^we parse the state$")
@@ -186,6 +215,19 @@ public class PacmanStepDef {
       DisplayStream video = new DisplayStream();
       video.writeVideo(buffer);
       display.refresh(video);
+    }
+    
+    // Then steps
+    
+    @Then("^I should get the following output:$")
+    public void i_should_get_the_following_output(String expected) {
+      String received = result.toString();
+      received = received.replaceAll("\u001B\\[[\\d]*m", "");
+      received = received.replaceAll("\u001B\\[H", "");
+      received = received.replaceAll("\u001B\\[2J", "");
+      received = received.replaceAll("\u001B\\[?5[h|l]", "");
+      received = received.trim();
+      assertEquals(expected, received);
     }
 
     @Then("^the game lives should be (\\d+)$")

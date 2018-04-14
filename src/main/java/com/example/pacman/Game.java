@@ -234,6 +234,14 @@ public class Game implements GameEngine {
       return gameOver;
     }
 
+    public void play(boolean debug) {
+      if (debug) {
+        tick();      
+        display.refresh(this.render());
+      } else {
+        play();
+      }
+    }
     public void play() {
       while (!gameOver) {
         tick();      
@@ -296,6 +304,6 @@ public class Game implements GameEngine {
       Game game = new Game(level);
       game.animateIcons();
       game.init(keyboard, display);
-      game.play();
+      game.play(parser.getDebug());
     }
 }

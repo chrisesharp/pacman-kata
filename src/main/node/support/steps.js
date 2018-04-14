@@ -6,6 +6,9 @@ const g = require('../game-elements.js')
 this.World = require('./world.js').World;
 
 // Givens
+Given('the command arg {string}', function (string) {
+  this.addCommandArg(string);
+  });
 Given('the game state is', function (docString) {
   this.setGame(docString);
   });
@@ -59,6 +62,10 @@ Given('this is level {int}', function (level, callback) {
   });
 
 // Whens
+When('I run the command with the args', function () {
+   this.runCommand();
+  });
+
 When('we parse the state', function (callback) {
   this.parse();
   callback();
@@ -100,69 +107,75 @@ When('we refresh the display with the buffer {string}', function (string, callba
 
 // Thens
 
+Then('I should get the following output:', function (docString, callback) {
+  let received = this.commandOutput;
+  assert.equal(received, docString);
+  callback();
+  });
+
 Then('the game field should be {int} x {int}', function (x, y) {
-  assert.equal(this.game.playfield.width(),x);
-  assert.equal(this.game.playfield.height(),y);
+  assert.equal(x, this.game.playfield.width());
+  assert.equal(y, this.game.playfield.height());
   });
 
 Then('the player has {int} lives', function (lives) {
-  assert.equal(this.game.lives,lives);
+  assert.equal(lives, this.game.lives);
   });
 
 Then('the player score is {int}', function (score) {
-  assert.equal(this.game.score,score);
+  assert.equal(score, this.game.score);
   });
 
 Then('pacman is at {int} , {int}', function (x, y) {
   this.pacman = this.getPacman();
-  assert.equal(this.pacman.x,x);
-  assert.equal(this.pacman.y,y);
+  assert.equal(x, this.pacman.x);
+  assert.equal(y, this.pacman.y);
   });
 
 Then('the game lives should be {int}', function (lives) {
-  assert.equal(this.game.lives,lives)
+  assert.equal(lives, this.game.lives)
   });
 
 Then('the game score should be {int}', function (score) {
-  assert.equal(this.game.score,score)
+  assert.equal(score, this.game.score)
   });
 
 Then('the game screen is', function (docString) {
-  assert.equal(this.game.output,docString)
+  assert.equal(docString, this.game.output)
   });
 
 Then('pacman is facing {string}', function (direction) {
   this.pacman = this.getPacman();
-  assert.equal(this.pacman.direction(),this.facing(direction));
+  assert.equal(this.facing(direction), this.pacman.direction());
   });
 
 Then('then pacman goes {string}', function (direction) {
   this.pacman = this.getPacman();
-  assert.equal(this.pacman.direction(),this.facing(direction));
+  assert.equal(this.facing(direction), this.pacman.direction());
   });
 
 Then('pacman is dead', function (callback) {
-  assert.equal(this.getPacman().isAlive(),false);
+  assert.equal(false, this.getPacman().isAlive());
   callback();
  });
  
 Then('pacman is alive', function (callback) {
-  assert.equal(this.getPacman().isAlive(),true);
+  assert.equal(true, this.getPacman().isAlive());
   callback();
  });
 
 Then('ghost is at {int} , {int}', function (x, y, callback) {
-  assert.equal(this.isGhostAtLocation({x,y}), true);
+  assert.equal(true, this.isGhostAtLocation({x,y}));
   callback();
   });
   
 Then('ghost at {int} , {int} should be calm', function (x, y, callback) {
-  assert.equal(this.isGhostPanicked({x,y}),false);
+  assert.equal(true, this.isGhostPanicked({x,y}));
   callback();
 });
   
 Then('ghost at {int} , {int} should be panicked', function (x, y, callback) {
-  assert.equal(this.isGhostPanicked({x,y}),true);
+  assert.equal(true, this.isGhostPanicked({x,y}));
   callback();
 });
 
@@ -174,7 +187,7 @@ Then('the game dimensions should equal the display dimensions', function (callba
 Then('the display byte stream should be', function (dataTable, callback) {
   let stream = dataTable.rawTable.map((x)=>this.ansiMap[x]).join('');
   let received = this.convertToHex(this.displayOut());
-  assert.equal(received,stream);
+  assert.equal(stream, received);
   callback();
   });
 

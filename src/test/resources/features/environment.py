@@ -10,3 +10,5 @@ def before_scenario(context, scenario):
         context.game = Game(None)
     context.keyboard = Keyboard(context.game)
     context.game.setController(context.keyboard)
+    context.command = ["python3", "game.py"]
+    context.command_output = ""

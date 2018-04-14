@@ -4,8 +4,11 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"log"
 	"os"
+	"os/exec"
 	"strconv"
+	"strings"
 	"testing"
 	"time"
 
@@ -18,6 +21,7 @@ var gameLevel *levelStruct
 var testDisplay Display
 var game Game
 var outputStream *bytes.Buffer
+var command []string
 
 func TestMain(m *testing.M) {
 	tags := os.Getenv("BDD")
@@ -37,6 +41,12 @@ func TestMain(m *testing.M) {
 }
 
 /** Givens ******************************************************/
+// Given
+func theCommandArg(arg string) error {
+	command = append(command, arg)
+	return nil
+}
+
 // Given
 func theGameFieldOfX(columns, rows int) error {
 	field := new(playField).New(rows, columns)
@@ -144,6 +154,17 @@ func thisIsTheLastLevel() error {
 /** Whens ******************************************************/
 
 // When
+func iRunTheCommandWithTheArgs() error {
+	cmd := exec.Command(command[0], command[1:]...)
+	cmd.Stdout = outputStream
+	err := cmd.Run()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return nil
+}
+
+// When
 func weParseTheState() error {
 	theGame.Parse()
 	return nil
@@ -184,6 +205,33 @@ func initializeTheDisplay() error {
 }
 
 /** Thens ******************************************************/
+
+// Then
+func iShouldGetTheFollowingOutput(expected *gherkin.DocString) error {
+	received := strings.TrimSpace(cleanupAnsi(outputStream.String()))
+	if expected.Content == received {
+		return nil
+	}
+	return fmt.Errorf("\nExpected:[%s]\nReceived:[%s]", expected.Content, received)
+}
+
+func cleanupAnsi(received string) string {
+	const esc = "\u001B["
+	const clr string = esc + "H" + esc + "2J" + esc + "1m"
+	const rst string = esc + "0m"
+	const revOn string = esc + "?5h"
+	const revOff string = esc + "?5l"
+	const blink string = esc + "5m"
+	const rev string = esc + "7m"
+	received = strings.Replace(received, rst, "", -1)
+	received = strings.Replace(received, clr, "", -1)
+	received = strings.Replace(received, revOn, "", -1)
+	received = strings.Replace(received, revOff, "", -1)
+	received = strings.Replace(received, rev, "", -1)
+	received = strings.Replace(received, blink, "", -1)
+	outstream := strings.TrimSpace(received)
+	return outstream
+}
 
 // Then
 func theGameFieldShouldBeX(x, y int) error {
@@ -435,7 +483,11 @@ func FeatureContext(s *godog.Suite) {
 	s.Step(`^pacman is alive$`, pacmanIsAlive)
 	s.Step(`^ghost at (\d+) , (\d+) should be calm$`, ghostAtShouldBeCalm)
 	s.Step(`^ghost at (\d+) , (\d+) should be panicked$`, ghostAtShouldBePanicked)
+	s.Step(`^the command arg "([^"]*)"$`, theCommandArg)
+	s.Step(`^I run the command with the args$`, iRunTheCommandWithTheArgs)
+	s.Step(`^I should get the following output:$`, iShouldGetTheFollowingOutput)
 	s.BeforeScenario(func(interface{}) {
+		command = []string{"./go_run_game"}
 		outputStream = new(bytes.Buffer)
 		theGame = new(gameState).New() // clean the state before every scenario
 		testDisplay = new(terminal).New(nil)

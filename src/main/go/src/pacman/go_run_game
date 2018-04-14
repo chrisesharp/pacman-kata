@@ -1,0 +1,2 @@
+#!/bin/bash
+go run game.go colour.go colourDisplay.go controller.go direction.go display.go game_element.go game_interface.go ghost.go level.go pacman.go pill.go playfield.go wall.go --colour=false $@

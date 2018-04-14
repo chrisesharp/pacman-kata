@@ -1,11 +1,18 @@
 from behave import given, when, then
 from game import Game
 from display import Display
+import subprocess
 
 
 #
 # Givens
 #
+
+
+@given(u'the command arg "{arg}"')
+def step_impl(context, arg):
+    pass
+    context.command.append(arg)
 
 
 @given(u'the game state is')
@@ -102,6 +109,21 @@ def step_impl(context):
 #
 
 
+@when(u'I run the command with the args')
+def step_impl(context):
+    received = subprocess.check_output(context.command,
+                                       stderr=None,
+                                       universal_newlines=True)
+    received = received.replace(Display.RST, "")
+    received = received.replace(Display.CLR, "")
+    received = received.replace(Display.REVON, "")
+    received = received.replace(Display.REVOFF, "")
+    received = received.replace(Display.REV, "")
+    received = received.replace(Display.BLINK, "")
+    received = received.lstrip("\n")
+    context.command_output = received.rstrip("\n")
+
+
 @when(u'we parse the state')
 def step_impl(context):
     context.output = context.game.parse()
@@ -160,6 +182,14 @@ def step_impl(context, string):
 #
 
 
+@then(u'I should get the following output')
+def step_impl(context):
+    print("===")
+    print(context.command_output)
+    print("===")
+    assert context.text == context.command_output
+
+
 @then(u'the game screen is')
 def step_impl(context):
     assert context.text == context.game.output
@@ -200,6 +230,7 @@ def step_impl(context, x, y):
         if (ghost.coordinates[0] is x) and (ghost.coordinates[1] is y):
             isGhost = True
     assert isGhost is True
+
 
 @then(u'there is a {points:d} point pill at {x:d} , {y:d}')
 def step_impl(context, points, x, y):

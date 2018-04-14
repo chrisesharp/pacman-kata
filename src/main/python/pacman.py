@@ -52,7 +52,6 @@ class Pacman:
         self.icon = Pacman.frame[self.facing][self.frame]
 
     def tick(self):
-        print("tick")
         if self.clear(self.nextMove(self.facing)):
             self.coordinates = (self.nextMove(self.facing))
             if self.animated:

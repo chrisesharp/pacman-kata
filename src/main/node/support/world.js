@@ -1,4 +1,3 @@
-
 const { setWorldConstructor } = require("cucumber");
 const Game = require("../game.js");
 const Playfield = require("../playField.js");
@@ -9,11 +8,40 @@ const Wall = require("../walls.js");
 const Direction = require("../direction.js");
 const Keyboard = require("../keyboard.js");
 const Display = require("../display.js");
+const ArrayList = require("arraylist");
+const { REV, ESC, CLR, RST, REVON, REVOFF, BLINK } = require("../ansi-term.js");
 
 function CustomWorld() {
   this.game = new Game();
   this.keyboard = new Keyboard(this.game);
   this.ansiMap = [];
+  this.command = "node";
+  this.commandArgs = new ArrayList;
+  this.commandArgs.add("index.js");
+  this.commandArgs.add("");
+  this.commandOutput = "";
+}
+
+CustomWorld.prototype.addCommandArg = function(arg) {
+  this.commandArgs.add(arg.toString());
+}
+
+CustomWorld.prototype.runCommand = function() {
+  const
+    { spawnSync } = require( 'child_process' ),
+    cmd = spawnSync( this.command.toString(), this.commandArgs.toArray(), {
+      detached: false,
+      stdio: ["inherit", "pipe", process.stderr]
+    });
+  let received = `${cmd.stdout.toString()}`;
+  received = received.replace(RST, "");
+  received = received.replace(CLR, "");
+  received = received.replace(REVON, "");
+  received = received.replace(REVOFF, "");
+  received = received.replace(REV, "");
+  received = received.replace(BLINK, "");
+  received = received.replace(/\n$/, "");
+  this.commandOutput = received;
 }
 
 CustomWorld.prototype.setGame = function(docString) {

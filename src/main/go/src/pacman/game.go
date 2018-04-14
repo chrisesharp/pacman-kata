@@ -335,10 +335,12 @@ func (game *gameState) printGameOver() {
 }
 
 // Play a game
-func (game *gameState) Play() {
+func (game *gameState) Play(debug bool) {
 	game.Parse()
 	game.display.Init(os.Stdout)
-	game.controller.Listen()
+	if !debug {
+		game.controller.Listen()
+	}
 	pacman := game.GetPacman()
 	for pacman != nil && !game.gameOver {
 		game.Tick()
@@ -349,9 +351,14 @@ func (game *gameState) Play() {
 			game.display.Flash()
 			pacman.Restart()
 		}
+		if debug {
+			game.gameOver = true
+		}
 	}
-	time.Sleep(time.Second * 5)
-	game.controller.Close()
+	if !debug {
+		time.Sleep(time.Second * 5)
+		game.controller.Close()
+	}
 	game.display.Close()
 }
 
@@ -384,6 +391,7 @@ func (game *gameState) Quit() {
 func main() {
 	filePtr := flag.String("file", "data/pacman.txt", "level txt file")
 	colour := flag.Bool("colour", true, "use colour display")
+	debug := flag.Bool("debug", false, "debug mode plays only one frame")
 	animation := flag.Bool("animation", true, "use animated icons")
 	flag.Parse()
 	theGame = new(gameState).New()
@@ -392,14 +400,16 @@ func main() {
 	} else {
 		theGame.SetDisplay(new(terminal).New(theGame))
 	}
-	theGame.SetController(new(keyboard).New(theGame))
-	if *animation {
-		theGame.UseAnimation()
+	if *debug == false {
+		theGame.SetController(new(keyboard).New(theGame))
+		if *animation {
+			theGame.UseAnimation()
+		}
 	}
 	level, err := ioutil.ReadFile(*filePtr)
 	if err != nil {
 		panic(err)
 	}
 	theGame.SetInput(string(level))
-	theGame.Play()
+	theGame.Play(*debug)
 }

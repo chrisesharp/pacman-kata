@@ -32,6 +32,10 @@ class Game {
       this.display = null;
     }
     
+    setDebug (debug) {
+      this.debug = debug;
+    }
+    
     setInput (docString) {
       this.input = docString;
     }
