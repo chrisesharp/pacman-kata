@@ -220,6 +220,20 @@ class Game(object):
             field.add((x, y+1), OVER[i])
 
 
+def startGame(file, colour, debug):
+    with open(file) as f:
+        levelMap = f.read()
+
+    game = Game(levelMap)
+    controller = Keyboard(game)
+    if (args.debug is None):
+        controller.init()
+        game.setController(controller)
+        game.useAnimation()
+    game.play(args.debug)
+    controller.close()
+
+
 if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument("-f", "--file",
@@ -235,15 +249,4 @@ if __name__ == "__main__":
         file = args.file
     else:
         file = "data/pacman.txt"
-
-    with open(file) as f:
-        levelMap = f.read()
-
-    game = Game(levelMap)
-    controller = Keyboard(game)
-    if (args.debug is None):
-        controller.init()
-        game.setController(controller)
-        game.useAnimation()
-    game.play(args.debug)
-    controller.close()
+    startGame(file, args.colour, args.debug)
