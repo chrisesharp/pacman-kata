@@ -14,7 +14,7 @@ class Keyboard(object):
         tty.setcbreak(sys.stdin)
         threading.Thread(group=None, target=self.listen).start()
 
-    def keyPressed(self, key):
+    def key_pressed(self, key):
         if (key == 'j'):
             self.game.move(Direction.LEFT)
         if (key == 'i'):
@@ -26,17 +26,17 @@ class Keyboard(object):
 
     def listen(self):
         key = None
-        while ((self.game.gameOver is False) and (key != chr(27))):
+        while ((self.game.game_over is False) and (key != chr(27))):
             key = sys.stdin.read(1)[0]
             if (key == chr(106)):
-                self.keyPressed("j")
+                self.key_pressed("j")
             if (key == chr(105)):
-                self.keyPressed("i")
+                self.key_pressed("i")
             if (key == chr(108)):
-                self.keyPressed("l")
+                self.key_pressed("l")
             if (key == chr(109)):
-                self.keyPressed("m")
-        self.game.gameOver = True
+                self.key_pressed("m")
+        self.game.game_over = True
         self.close()
 
     def close(self):

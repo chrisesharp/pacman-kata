@@ -11,7 +11,6 @@ import subprocess
 
 @given(u'the command arg "{arg}"')
 def step_impl(context, arg):
-    pass
     context.command.append(arg)
 
 
@@ -21,7 +20,7 @@ def step_impl(context):
     if not game:
         context.game = Game(context.text)
     else:
-        context.game.inputMap = context.text
+        context.game.input_map = context.text
 
 
 @given(u'the game field of {width:d} x {height:d}')
@@ -29,12 +28,12 @@ def step_impl(context, width, height):
     game = getattr(context, "game", None)
     if not game:
         context.game = Game()
-    context.game.setGameField(width, height)
+    context.game.set_field(width, height)
 
 
 @given(u'a pacman at {x:d} , {y:d} facing "{direction}"')
 def step_impl(context, x, y, direction):
-    context.game.setPacman((x, y), direction)
+    context.game.set_pacman((x, y), direction)
 
 
 @given(u'walls at the following places')
@@ -43,7 +42,7 @@ def step_impl(context):
         icon = row[0]
         x = int(row[1])
         y = int(row[2])
-        context.game.addWall((x, y), icon)
+        context.game.add_wall((x, y), icon)
 
 
 @given(u'the score is {score:d}')
@@ -68,36 +67,36 @@ def step_impl(context):
 
 @given(u'the ANSI "{sequence}" sequence is "{hex}"')
 def step_impl(context, sequence, hex):
-    ansiMap = getattr(context, "ansiMap", None)
-    if not ansiMap:
-        context.ansiMap = {}
-    context.ansiMap[sequence] = hex
+    ansi_map = getattr(context, "ansi_map", None)
+    if not ansi_map:
+        context.ansi_map = {}
+    context.ansi_map[sequence] = hex
 
 
 @given(u'a game with {levels:d} levels')
 def step_impl(context, levels):
-    context.game.inputMap = context.text
+    context.game.input_map = context.text
 
 
 @given(u'this is level {level:d}')
 def step_impl(context, level):
-    context.game.setLevel(level)
+    context.game.set_level(level)
 
 
 @given(u'the max level  is {max:d}')
 def step_impl(context, max):
-    context.game.setMaxLevel(max)
+    context.game.set_max_level(max)
 
 
 @given(u'the game uses animation')
 def step_impl(context):
-    context.game.useAnimation()
+    context.game.use_animation()
 
 
 @given(u'this is the last level')
 def step_impl(context):
-    context.game.setLevel(1)
-    context.game.setMaxLevel(1)
+    context.game.set_level(1)
+    context.game.set_max_level(1)
 
 
 @given(u'initialize the display')
@@ -160,7 +159,7 @@ def step_impl(context, icon):
 
 @when(u'the player presses "{key}"')
 def step_impl(context, key):
-    context.keyboard.keyPressed(key)
+    context.keyboard.key_pressed(key)
 
 
 @when(u'initialize the display')
@@ -174,7 +173,7 @@ def step_impl(context, string):
     sequence = ""
     for b in output:
         sequence += '{:02X}'.format(b)
-    context.ansiMap[string] = sequence
+    context.ansi_map[string] = sequence
     context.display.refresh(string)
 
 #
@@ -225,49 +224,49 @@ def step_impl(context, direction):
 
 @then(u'ghost is at {x:d} , {y:d}')
 def step_impl(context, x, y):
-    isGhost = False
+    is_ghost = False
     for ghost in context.game.ghosts:
         if (ghost.coordinates[0] is x) and (ghost.coordinates[1] is y):
-            isGhost = True
-    assert isGhost is True
+            is_ghost = True
+    assert is_ghost is True
 
 
 @then(u'there is a {points:d} point pill at {x:d} , {y:d}')
 def step_impl(context, points, x, y):
-    pill = context.game.getElement((x, y))
-    assert context.game.isPill((x, y)) and pill.score() == points
+    pill = context.game.get_element((x, y))
+    assert context.game.is_pill((x, y)) and pill.score() == points
 
 
 @then(u'there is a wall at {x:d} , {y:d}')
 def step_impl(context, x, y):
-    assert context.game.isWall((x, y))
+    assert context.game.is_wall((x, y))
 
 
 @then(u'there is a gate at {x:d} , {y:d}')
 def step_impl(context, x, y):
-    assert context.game.isGate((x, y))
+    assert context.game.is_gate((x, y))
 
 
 @then(u'there is a force field at {x:d} , {y:d}')
 def step_impl(context, x, y):
-    assert context.game.isField((x, y))
+    assert context.game.is_field((x, y))
 
 
 @then(u'the game lives should be {lives:d}')
 def step_impl(context, lives):
-    assert context.game.getLives() is lives
+    assert context.game.get_lives() is lives
 
 
 @then(u'the game score should be {score:d}')
 def step_impl(context, score):
-    assert context.game.getScore() is score
+    assert context.game.get_score() is score
 
 
 @then(u'the display byte stream should be')
 def step_impl(context):
     bytestream = ""
     for row in context.table:
-        bytestream += context.ansiMap[(row[0])]
+        bytestream += context.ansi_map[(row[0])]
 
     output = [ord(c) for c in context.display.output]
     received = ""

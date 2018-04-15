@@ -8,27 +8,24 @@ class Wall(object):
     icons.update(gates)
     icons.update(field)
 
-    def isWall(icon):
-        if isinstance(icon, Wall):
+    def is_wall(icon):
+        if isinstance(icon, Wall) or icon in Wall.icons:
             return True
-        elif icon in Wall.icons:
-            return True
-        else:
-            return False
+        return False
 
-    def isGate(icon):
+    def is_gate(icon):
         if isinstance(icon, Wall) and str(icon) in Wall.gates:
             return True
-        if icon in Wall.gates:
+        return False
+
+    def is_field(icon):
+        if isinstance(icon, Wall) and str(icon) in Wall.field:
             return True
         return False
 
-    def isField(icon):
-        if isinstance(icon, Wall) and str(icon) in Wall.field:
-            return True
-        if icon in Wall.gates:
-            return True
-        return False
+    def get_element(coords, icon):
+        if (Wall.is_wall(icon)):
+            return Wall(coords, icon)
 
     def __init__(self, coordinates, icon):
         self.coordinates = coordinates
@@ -36,3 +33,6 @@ class Wall(object):
 
     def __str__(self):
         return self.icon
+
+    def add_to_game(self, game):
+        game.add_wall(self.coordinates, self.icon)

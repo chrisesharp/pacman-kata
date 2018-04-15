@@ -8,12 +8,13 @@ from ghost import Ghost
 from wall import Wall
 from pill import Pill
 from levels import LevelMaps
+import tokenizer
 
 
 class Game(object):
-    def __init__(self, inputMap=None):
-        if inputMap is not None:
-            self.inputMap = inputMap.rstrip()
+    def __init__(self, input_map=None):
+        if input_map is not None:
+            self.input_map = input_map.rstrip()
         self.field = None
         self.lives = 3
         self.score = 0
@@ -21,17 +22,17 @@ class Game(object):
         self.ghosts = []
         self.pills = []
         self.walls = []
-        self.gameOver = False
+        self.game_over = False
         self.controller = None
         self.gate = None
         self.level = 1
-        self.lastLevel = 1
-        self.levelMaps = None
+        self.last_level = 1
+        self.level_maps = None
         self.animation = False
 
     def play(self, debug):
         self.parse()
-        while (self.gameOver is False):
+        while (self.game_over is False):
             self.tick()
             self.render()
             self.refresh()
@@ -39,73 +40,72 @@ class Game(object):
             if (self.pacman.alive is False):
                 self.pacman.restart()
             if (debug is True):
-                self.gameOver = True
+                self.game_over = True
 
     def parse(self):
-        if self.levelMaps:
-            self.inputMap = self.levelMaps.getLevel(self.level)
+        if self.level_maps:
+            self.input_map = self.level_maps.get_level(self.level)
         else:
-            if "SEPARATOR" in self.inputMap:
-                self.levelMaps = LevelMaps(self.inputMap)
-                self.lastLevel = self.levelMaps.maxLevel()
-                self.inputMap = self.levelMaps.getLevel(self.level)
-        columns = self.inputMap.index("\n")
-        self.parseStatus(self.inputMap[:columns])
-        screenRows = self.inputMap[columns+1:].split('\n')
-        rows = len(screenRows)
+            if "SEPARATOR" in self.input_map:
+                self.level_maps = LevelMaps(self.input_map)
+                self.last_level = self.level_maps.max_level()
+                self.input_map = self.level_maps.get_level(self.level)
+        columns = self.input_map.index("\n")
+        self.parse_status(self.input_map[:columns])
+        screen_rows = self.input_map[columns+1:].split('\n')
+        rows = len(screen_rows)
         self.field = GameField(columns, rows)
-        self.parseField(screenRows)
+        self.parse_field(screen_rows)
 
-    def parseStatus(self, statusLine):
-        elements = statusLine.split()
+    def parse_status(self, status_line):
+        elements = status_line.split()
         try:
             self.lives = int(elements[0])
             self.score = int(elements[1])
         except ValueError:
             pass
 
-    def parseField(self, screenRows):
+    def parse_field(self, screen_rows):
         for y in range(self.field.height()):
             for x in range(self.field.width()):
-                if Pacman.isPacman(screenRows[y][x]):
-                    self.pacman = Pacman(self, (x, y), screenRows[y][x])
-                    self.pacman.useAnimation(self.animation)
-                    self.field.add((x, y), self.pacman)
-                if Wall.isWall(screenRows[y][x]):
-                    wall = Wall((x, y), screenRows[y][x])
-                    self.walls.append(wall)
-                    self.field.add((x, y), wall)
-                    if Wall.isGate(screenRows[y][x]):
-                        self.gate = wall
-                if Pill.isPill(screenRows[y][x]):
-                    pill = Pill((x, y), screenRows[y][x])
-                    self.pills.append(pill)
-                    self.field.add((x, y), pill)
-                if Ghost.isGhost(screenRows[y][x]):
-                    ghost = Ghost(self, (x, y), screenRows[y][x])
-                    self.ghosts.append(ghost)
-                    self.field.add((x, y), ghost)
+                element = tokenizer.get_element((x, y), screen_rows[y][x])
+                if (element):
+                    element.add_to_game(self)
 
-    def setGameField(self, width, height):
+    def add_pill(self, pill):
+        self.pills.append(pill)
+        self.field.add(pill.coordinates, pill)
+
+    def add_ghost(self, ghost):
+        self.ghosts.append(ghost)
+        self.field.add(ghost.coordinates, ghost)
+
+    def set_field(self, width, height):
         self.field = GameField(width, height)
 
-    def setPacman(self, coordinates, direction):
-        self.pacman = Pacman(self, coordinates)
-        self.pacman.setDirection(direction)
-        self.field.add(coordinates, self.pacman)
+    def set_pacman(self, coordinates, direction):
+        pacman = Pacman(coordinates)
+        pacman.set_direction(direction)
+        pacman.add_to_game(self)
 
-    def addWall(self, coordinates, icon):
+    def add_pacman(self, pacman):
+        self.pacman = pacman
+        self.field.add(pacman.coordinates, pacman)
+
+    def add_wall(self, coordinates, icon):
         wall = Wall(coordinates, icon)
         self.walls.append(wall)
         self.field.add(coordinates, wall)
+        if Wall.is_gate(wall):
+            self.gate = wall
 
     def tick(self):
-        if not self.gameOver:
+        if not self.game_over:
             for ghost in self.ghosts:
                 ghost.tick()
             if self.pacman:
                 self.pacman.tick()
-        self.updateField()
+        self.update_field()
 
     def render(self):
         self.output = "{lives:1d}".format(lives=self.lives)
@@ -118,96 +118,96 @@ class Game(object):
         print("\u001B[H" + "\u001B[2J" + "\u001B[1m")
         print(self.output)
 
-    def updateField(self):
-        newField = GameField(self.field.width(), self.field.height())
+    def update_field(self):
+        new_field = GameField(self.field.width(), self.field.height())
         for wall in self.walls:
-            newField.add(wall.coordinates, wall)
+            new_field.add(wall.coordinates, wall)
         for pill in self.pills:
-            newField.add(pill.coordinates, pill)
+            new_field.add(pill.coordinates, pill)
         for ghost in self.ghosts:
-            newField.add(ghost.coordinates, ghost)
+            new_field.add(ghost.coordinates, ghost)
         if self.pacman:
-            newField.add(self.pacman.coordinates, self.pacman)
-        if self.gameOver:
-            Game.printGameOver(newField)
-        self.field = newField
+            new_field.add(self.pacman.coordinates, self.pacman)
+        if self.game_over:
+            Game.print_game_over(new_field)
+        self.field = new_field
 
-    def getElement(self, coords):
+    def get_element(self, coords):
         return self.field.get(coords)
 
-    def isGhost(self, coordinates):
-        return Ghost.isGhost(self.field.get(coordinates))
+    def is_ghost(self, coordinates):
+        return Ghost.is_ghost(self.field.get(coordinates))
 
-    def isWall(self, coordinates):
-        return Wall.isWall(self.field.get(coordinates))
+    def is_wall(self, coordinates):
+        return Wall.is_wall(self.field.get(coordinates))
 
-    def isGate(self, coordinates):
-        return Wall.isGate(self.field.get(coordinates))
+    def is_gate(self, coordinates):
+        return Wall.is_gate(self.field.get(coordinates))
 
-    def isField(self, coordinates):
-        return Wall.isField(self.field.get(coordinates))
+    def is_field(self, coordinates):
+        return Wall.is_field(self.field.get(coordinates))
 
-    def isPill(self, coordinates):
-        return Pill.isPill(self.field.get(coordinates))
+    def is_pill(self, coordinates):
+        return Pill.is_pill(self.field.get(coordinates))
 
-    def isPacman(self, coordinates):
+    def is_pacman(self, coordinates):
         return isinstance(self.field.get(coordinates), Pacman)
 
-    def eatPill(self, coordinates):
+    def eat_pill(self, coordinates):
         pill = self.field.get(coordinates)
         self.pills.remove(pill)
         self.score += pill.score()
         for ghost in self.ghosts:
-            ghost.triggerEffect(pill)
+            ghost.trigger_effect(pill)
         if len(self.pills) == 0:
-            self.nextLevel()
+            self.next_level()
 
-    def killGhost(self, ghost):
+    def kill_ghost(self, ghost):
         self.score += ghost.score()
         ghost.kill()
 
-    def killPacman(self):
+    def kill_pacman(self):
         self.pacman.kill()
         self.lives -= 1
         if (self.lives == 0):
-            self.gameOver = True
+            self.game_over = True
 
-    def getPacman(self):
+    def get_pacman(self):
         return self.pacman
 
-    def setController(self, controller):
+    def set_controller(self, controller):
         self.controller = controller
 
     def move(self, direction):
         self.pacman.move(direction)
 
-    def setLevel(self, level):
+    def set_level(self, level):
         self.level = level
 
-    def setMaxLevel(self, level):
-        self.lastLevel = level
+    def set_max_level(self, level):
+        self.last_level = level
 
-    def nextLevel(self):
-        if self.level < self.lastLevel:
+    def next_level(self):
+        if self.level < self.last_level:
             self.level += 1
             self.pills = []
             self.walls = []
             self.ghosts = []
             self.parse()
         else:
-            self.gameOver = True
+            self.game_over = True
             self.pacman.restart()
 
-    def useAnimation(self):
+    def use_animation(self):
         self.animation = True
 
-    def getLives(self):
+    def get_lives(self):
         return self.lives
 
-    def getScore(self):
+    def get_score(self):
         return self.score
 
-    def printGameOver(field):
+    def print_game_over(field):
         cols = field.width()
         rows = field.height()
         GAME = "GAME"
@@ -220,7 +220,7 @@ class Game(object):
             field.add((x, y+1), OVER[i])
 
 
-def startGame(file, colour, debug):
+def start_game(file, colour, debug):
     with open(file) as f:
         levelMap = f.read()
 
@@ -228,8 +228,8 @@ def startGame(file, colour, debug):
     controller = Keyboard(game)
     if (debug is None):
         controller.init()
-        game.setController(controller)
-        game.useAnimation()
+        game.set_controller(controller)
+        game.use_animation()
     game.play(debug)
     controller.close()
 
@@ -249,4 +249,4 @@ if __name__ == "__main__":
         file = args.file
     else:
         file = "data/pacman.txt"
-    startGame(file, args.colour, args.debug)
+    start_game(file, args.colour, args.debug)

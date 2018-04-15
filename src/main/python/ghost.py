@@ -1,4 +1,4 @@
-from direction import avoid, nextLocation, wrap, left, right, opposite
+from direction import avoid, next_location, wrap, left, right, opposite
 from direction import Direction
 from random import randint
 
@@ -8,97 +8,101 @@ class Ghost(object):
             "M": False,
             "W": True
             }
-    iconByState = {
+    icon_state = {
             False: "M",
             True: "W"
             }
 
-    def isGhost(icon):
-        if isinstance(icon, Ghost):
+    def is_ghost(icon):
+        if isinstance(icon, Ghost) or icon in Ghost.icons:
             return True
-        elif icon in Ghost.icons:
-            return True
-        else:
-            return False
+        return False
 
-    def __init__(self, game, coordinates, icon=""):
+    def get_element(coords, icon):
+        if (Ghost.is_ghost(icon)):
+            return Ghost(coords, icon)
+
+    def __init__(self, coordinates, icon=""):
         self.coordinates = coordinates
         self.start = coordinates
-        self.passedGate = False
+        self.passed_gate = False
         if icon in Ghost.icons:
             self.icon = icon
         if Ghost.icons[icon] is False:
-            self.panicLevel = 0
+            self.panic_level = 0
         else:
-            self.panicLevel = 50
+            self.panic_level = 50
         self.direction = Direction.UP
+
+    def add_to_game(self, game):
         self.game = game
         self.width = game.field.width()
         self.height = game.field.height()
+        game.add_ghost(self)
 
     def panicked(self):
-        return (self.panicLevel > 0)
+        return (self.panic_level > 0)
 
     def panic(self):
-            self.panicLevel = 50
+            self.panic_level = 50
             for icon, panic in Ghost.icons.items():
                 if panic is True:
                     self.icon = icon
 
-    def triggerEffect(self, pill):
+    def trigger_effect(self, pill):
         if pill.score() == 50:
             self.panic()
 
     def tick(self):
-        pacmanLoc = self.coordinates
-        pacman = self.game.getPacman()
+        pacman_loc = self.coordinates
+        pacman = self.game.get_pacman()
         if (pacman):
-            pacmanLoc = pacman.coordinates
+            pacman_loc = pacman.coordinates
 
         if (self.panicked() is True):
-            self.direction = avoid(self.coordinates, pacmanLoc)
-            self.panicLevel -= 1
+            self.direction = avoid(self.coordinates, pacman_loc)
+            self.panic_level -= 1
 
         front = self.direction
         directions = [front, left(front), right(front)]
         choices = []
         for option in directions:
-            if self.clear(self.nextMove(option)):
+            if self.clear(self.next_move(option)):
                 choices.append(option)
         if len(choices) > 0:
             self.direction = choices[randint(0, len(choices)-1)]
         elif self.panicked() is False:
             self.direction = opposite(front)
 
-        nextLocation = self.nextMove(self.direction)
-        if ((self.panicLevel % 2) == 0) and self.clear(nextLocation):
-            self.coordinates = (nextLocation)
+        next_location = self.next_move(self.direction)
+        if ((self.panic_level % 2) == 0) and self.clear(next_location):
+            self.coordinates = (next_location)
 
-        if (self.game.isPacman(self.coordinates)):
+        if (self.game.is_pacman(self.coordinates)):
             if (self.panicked() is True):
-                self.game.killGhost(self)
+                self.game.kill_ghost(self)
             else:
-                self.game.killPacman()
-        if (self.game.isGate(self.coordinates)):
-            self.passedGate = True
-        self.icon = Ghost.iconByState[self.panicLevel > 0]
+                self.game.kill_pacman()
+        if (self.game.is_gate(self.coordinates)):
+            self.passed_gate = True
+        self.icon = Ghost.icon_state[self.panic_level > 0]
 
-    def nextMove(self, direction):
-        return wrap(nextLocation(self.coordinates, direction),
+    def next_move(self, direction):
+        return wrap(next_location(self.coordinates, direction),
                     self.width,
                     self.height)
 
     def clear(self, coordinates):
-        if not self.game.isWall(coordinates):
+        if not self.game.is_wall(coordinates):
             return True
-        if self.game.isGate(coordinates) and not self.passedGate:
+        if self.game.is_gate(coordinates) and not self.passed_gate:
             return True
         return False
 
     def kill(self):
         self.coordinates = self.start
-        self.panicLevel = 0
-        self.passedGate = False
+        self.panic_level = 0
+        self.passed_gate = False
 
     def score(self):
         return 200

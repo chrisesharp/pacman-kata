@@ -1,4 +1,4 @@
-from direction import nextLocation, wrap
+from direction import next_location, wrap
 from direction import Direction
 
 
@@ -18,15 +18,23 @@ class Pacman:
             Direction.DOWN: ["Λ", "^"]
             }
 
-    def isPacman(icon):
-        if isinstance(icon, Pacman):
+    def is_pacman(icon):
+        if isinstance(icon, Pacman) or icon in Pacman.icons:
             return True
-        elif icon in Pacman.icons:
-            return True
-        else:
-            return False
+        return False
 
-    def __init__(self, game, coordinates, icon=""):
+    def get_element(coords, icon):
+        if (Pacman.is_pacman(icon)):
+            return Pacman(coords, icon)
+
+    def add_to_game(self, game):
+        self.game = game
+        self.width = game.field.width()
+        self.height = game.field.height()
+        self.use_animation(game.animation)
+        game.add_pacman(self)
+
+    def __init__(self, coordinates, icon=""):
         self.coordinates = coordinates
         self.start = coordinates
         self.facing = None
@@ -37,12 +45,9 @@ class Pacman:
                 self.facing = Pacman.icons[icon]
                 self.alive = True
         self.icon = icon
-        self.game = game
-        self.width = game.field.width()
-        self.height = game.field.height()
         self.frame = 0
 
-    def setDirection(self, facing):
+    def set_direction(self, facing):
         if isinstance(facing, str):
             for name, item in Direction.__members__.items():
                 if name == facing:
@@ -52,29 +57,29 @@ class Pacman:
         self.icon = Pacman.frame[self.facing][self.frame]
 
     def tick(self):
-        if self.clear(self.nextMove(self.facing)):
-            self.coordinates = (self.nextMove(self.facing))
+        if self.clear(self.next_move(self.facing)):
+            self.coordinates = (self.next_move(self.facing))
             if self.animated:
                 self.frame = (self.frame + 1) % 2
             self.icon = Pacman.frame[self.facing][self.frame]
-        if self.game.isPill(self.coordinates):
-            self.game.eatPill(self.coordinates)
-        if self.game.isGhost(self.coordinates):
-            self.game.killGhost(self.game.getElement(self.coordinates))
+        if self.game.is_pill(self.coordinates):
+            self.game.eat_pill(self.coordinates)
+        if self.game.is_ghost(self.coordinates):
+            self.game.kill_ghost(self.game.get_element(self.coordinates))
 
     def clear(self, coordinates):
-        if not self.game.isWall(coordinates):
+        if not self.game.is_wall(coordinates):
             return True
-        if self.game.isField(coordinates):
+        if self.game.is_field(coordinates):
             return True
         return False
 
     def move(self, direction):
-        if self.clear(self.nextMove(direction)):
-            self.setDirection(direction)
+        if self.clear(self.next_move(direction)):
+            self.set_direction(direction)
 
-    def nextMove(self, facing):
-        return wrap(nextLocation(self.coordinates, facing),
+    def next_move(self, facing):
+        return wrap(next_location(self.coordinates, facing),
                     self.width,
                     self.height)
 
@@ -87,9 +92,9 @@ class Pacman:
     def restart(self):
         self.coordinates = self.start
         self.alive = True
-        self.setDirection(self.facing)
+        self.set_direction(self.facing)
 
-    def useAnimation(self, animated):
+    def use_animation(self, animated):
         self.animated = animated
 
     def __str__(self):

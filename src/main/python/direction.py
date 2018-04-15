@@ -8,16 +8,16 @@ class Direction(IntEnum):
     DOWN = 3
 
 
-def nextLocation(coords, direction):
+def next_location(coords, direction):
     return {
         Direction.LEFT: lambda coords: ((coords[0] - 1),
                                         coords[1]),
         Direction.RIGHT: lambda coords: ((coords[0] + 1),
                                          coords[1]),
-        Direction.UP: lambda coords: ((coords[0],
-                                       (coords[1] - 1))),
-        Direction.DOWN: lambda coords: ((coords[0],
-                                         (coords[1] + 1)))
+        Direction.UP: lambda coords: (coords[0],
+                                      (coords[1] - 1)),
+        Direction.DOWN: lambda coords: (coords[0],
+                                        (coords[1] + 1))
         }[direction](coords)
 
 
