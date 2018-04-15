@@ -18,7 +18,6 @@ function CustomWorld() {
   this.command = "node";
   this.commandArgs = new ArrayList;
   this.commandArgs.add("index.js");
-  this.commandArgs.add("");
   this.commandOutput = "";
 }
 

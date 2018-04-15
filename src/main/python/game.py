@@ -243,7 +243,7 @@ if __name__ == "__main__":
     controller = Keyboard(game)
     if (args.debug is None):
         controller.init()
-    game.setController(controller)
-    game.useAnimation()
+        game.setController(controller)
+        game.useAnimation()
     game.play(args.debug)
     controller.close()

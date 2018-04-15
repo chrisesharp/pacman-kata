@@ -242,6 +242,7 @@ public class Game implements GameEngine {
         play();
       }
     }
+    
     public void play() {
       while (!gameOver) {
         tick();      
@@ -302,7 +303,9 @@ public class Game implements GameEngine {
         display = new MonoDisplay(System.out);
       }
       Game game = new Game(level);
-      game.animateIcons();
+      if (parser.getDebug()== false) {
+        game.animateIcons();
+      }
       game.init(keyboard, display);
       game.play(parser.getDebug());
     }

@@ -9,7 +9,7 @@ public class Pacman extends GameElement implements Moveable {
     private boolean iconState=true;
     private static final Colour colour = YELLOW;
     private Direction direction;
-    private boolean moving;
+    private boolean moving=true;
 
     public Pacman(Location location) {
         super(location);

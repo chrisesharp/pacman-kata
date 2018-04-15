@@ -12,23 +12,26 @@ const interval_ms = 100;
 var game;
 
 function draw() {
-  game.refreshDisplay();
-  if (game.debug) {
-    game.gameOver = true;
-  } else {
+  if (!game.firstFrame) {
+    game.refreshDisplay();
     if (!(game.getPacman().isAlive())) {
       game.display.flash();
       game.pacman.restart();
     }
-  }
-  if (game.gameOver) {
-    MainLoop.stop();
-    process.exit();
+    if (game.gameOver) {
+      MainLoop.stop();
+      process.exit();
+    }
+  } else {
+    game.firstFrame = false
   }
 }
 
 function update() {
   game.tick();
+  if (game.debug) {
+    game.gameOver = true
+  }
 }
 
 // This is the equivalent of 'main' in node
@@ -52,7 +55,7 @@ if (require.main === module) {
   }
   display.init(process.stdout);
   game.setDisplay(display);
-  game.useAnimation();
+  if (!debug) { game.useAnimation(); }
   game.parse();
   
   process.stdin.on("keypress", (str, key) => {

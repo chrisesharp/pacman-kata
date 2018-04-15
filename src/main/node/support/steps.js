@@ -170,7 +170,7 @@ Then('ghost is at {int} , {int}', function (x, y, callback) {
   });
   
 Then('ghost at {int} , {int} should be calm', function (x, y, callback) {
-  assert.equal(true, this.isGhostPanicked({x,y}));
+  assert.equal(false, this.isGhostPanicked({x,y}));
   callback();
 });
   
