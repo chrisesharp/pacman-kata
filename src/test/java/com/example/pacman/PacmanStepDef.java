@@ -5,9 +5,7 @@ import cucumber.api.java.en.*;
 import cucumber.api.DataTable;
 //import cucumber.api.PendingException;
 import java.io.ByteArrayOutputStream;
-//import java.io.BufferedInputStream;
 import java.io.PrintStream;
-//import java.io.InputStream;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -23,6 +21,7 @@ public class PacmanStepDef {
     Map<String,byte[]> ANSIcodes = new HashMap<>();
     String command = "java -cp target/pacman-kata-1.0-SNAPSHOT.jar com.example.pacman.Game";
     List<String> commandArgs = new ArrayList<>();
+    
     // Given steps
     
     @Given("^the command arg \"([^\"]*)\"$")
