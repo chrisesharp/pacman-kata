@@ -5,8 +5,9 @@ import cucumber.api.java.en.*;
 import cucumber.api.DataTable;
 //import cucumber.api.PendingException;
 import java.io.ByteArrayOutputStream;
-import java.io.BufferedInputStream;
-import java.io.InputStream;
+//import java.io.BufferedInputStream;
+import java.io.PrintStream;
+//import java.io.InputStream;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -19,14 +20,14 @@ public class PacmanStepDef {
     String output;
     ByteArrayOutputStream result = new ByteArrayOutputStream();;
     Display display;
-    Map<String,byte[]> ANSIcodes = new HashMap<String,byte[]>();
+    Map<String,byte[]> ANSIcodes = new HashMap<>();
     String command = "java -cp target/pacman-kata-1.0-SNAPSHOT.jar com.example.pacman.Game";
-    
+    List<String> commandArgs = new ArrayList<>();
     // Given steps
     
     @Given("^the command arg \"([^\"]*)\"$")
     public void the_command(String arg) {
-        this.command += " " + arg;
+        this.commandArgs.add(arg);
     }
 
     @Given("^walls at the following places:$")
@@ -137,21 +138,9 @@ public class PacmanStepDef {
     
     @When("^I run the command with the args$")
     public void i_run_the_command_with_the_args() {
-        Runtime rt = Runtime.getRuntime();
-        try {
-          Process pr = rt.exec(command);
-          InputStream input = new BufferedInputStream(pr.getInputStream());
-
-          byte[] buffer = new byte[4096];
-          int bytesRead;
-          while ((bytesRead = input.read(buffer)) != -1)
-          {
-              result.write(buffer, 0, bytesRead);
-          }
-          pr.waitFor();
-        } catch (Exception e) {
-          System.err.println("Failed to run command " + command);
-        }        
+      System.setOut(new PrintStream(result));
+      Game.main(commandArgs.toArray(new String[0]));
+      System.setOut(System.out);
     }
     
     @When("^we parse the state$")
