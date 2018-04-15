@@ -388,28 +388,33 @@ func (game *gameState) Quit() {
 	os.Exit(0)
 }
 
+// Start the game with correct flags
+func Start(filePtr string, colour bool, animation bool, debug bool) {
+	theGame = new(gameState).New()
+	if colour {
+		theGame.SetDisplay(new(colourTerminal).New(theGame))
+	} else {
+		theGame.SetDisplay(new(terminal).New(theGame))
+	}
+	if debug == false {
+		theGame.SetController(new(keyboard).New(theGame))
+		if animation {
+			theGame.UseAnimation()
+		}
+	}
+	level, err := ioutil.ReadFile(filePtr)
+	if err != nil {
+		panic(err)
+	}
+	theGame.SetInput(string(level))
+	theGame.Play(debug)
+}
+
 func main() {
 	filePtr := flag.String("file", "data/pacman.txt", "level txt file")
 	colour := flag.Bool("colour", true, "use colour display")
 	debug := flag.Bool("debug", false, "debug mode plays only one frame")
 	animation := flag.Bool("animation", true, "use animated icons")
 	flag.Parse()
-	theGame = new(gameState).New()
-	if *colour {
-		theGame.SetDisplay(new(colourTerminal).New(theGame))
-	} else {
-		theGame.SetDisplay(new(terminal).New(theGame))
-	}
-	if *debug == false {
-		theGame.SetController(new(keyboard).New(theGame))
-		if *animation {
-			theGame.UseAnimation()
-		}
-	}
-	level, err := ioutil.ReadFile(*filePtr)
-	if err != nil {
-		panic(err)
-	}
-	theGame.SetInput(string(level))
-	theGame.Play(*debug)
+	Start(*filePtr, *colour, *animation, *debug)
 }

@@ -2,11 +2,10 @@ package main
 
 import (
 	"bytes"
+	"flag"
 	"fmt"
 	"io"
-	"log"
 	"os"
-	"os/exec"
 	"strconv"
 	"strings"
 	"testing"
@@ -21,7 +20,7 @@ var gameLevel *levelStruct
 var testDisplay Display
 var game Game
 var outputStream *bytes.Buffer
-var command []string
+var commandArgs []string
 
 func TestMain(m *testing.M) {
 	tags := os.Getenv("BDD")
@@ -43,7 +42,7 @@ func TestMain(m *testing.M) {
 /** Givens ******************************************************/
 // Given
 func theCommandArg(arg string) error {
-	command = append(command, arg)
+	commandArgs = append(commandArgs, arg)
 	return nil
 }
 
@@ -155,12 +154,25 @@ func thisIsTheLastLevel() error {
 
 // When
 func iRunTheCommandWithTheArgs() error {
-	cmd := exec.Command(command[0], command[1:]...)
-	cmd.Stdout = outputStream
-	err := cmd.Run()
-	if err != nil {
-		log.Fatal(err)
-	}
+	originalStdOut := os.Stdout
+	originalArgs := os.Args
+	r, w, _ := os.Pipe()
+
+	os.Stdout = w
+	os.Args = commandArgs
+	filePtr := flag.String("file", "data/pacman.txt", "level txt file")
+	colour := flag.Bool("colour", false, "use colour display")
+	debug := flag.Bool("debug", false, "debug mode plays only one frame")
+	animation := flag.Bool("animation", false, "use animated icons")
+	flag.Parse()
+	Start(*filePtr, *colour, *animation, *debug)
+	go func() {
+		io.Copy(outputStream, r)
+	}()
+	w.Close()
+
+	os.Stdout = originalStdOut
+	os.Args = originalArgs
 	return nil
 }
 
@@ -487,13 +499,14 @@ func FeatureContext(s *godog.Suite) {
 	s.Step(`^I run the command with the args$`, iRunTheCommandWithTheArgs)
 	s.Step(`^I should get the following output:$`, iShouldGetTheFollowingOutput)
 	s.BeforeScenario(func(interface{}) {
-		command = []string{"./go_run_game"}
+		commandArgs = append(commandArgs, "game.go")
 		outputStream = new(bytes.Buffer)
 		theGame = new(gameState).New() // clean the state before every scenario
 		testDisplay = new(terminal).New(nil)
 		theGame.SetDisplay(testDisplay)
 	})
 	s.AfterScenario(func(interface{}, error) {
+		commandArgs = nil
 		return
 	})
 }
