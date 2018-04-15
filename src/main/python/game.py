@@ -226,11 +226,11 @@ def startGame(file, colour, debug):
 
     game = Game(levelMap)
     controller = Keyboard(game)
-    if (args.debug is None):
+    if (debug is None):
         controller.init()
         game.setController(controller)
         game.useAnimation()
-    game.play(args.debug)
+    game.play(debug)
     controller.close()
 
 
