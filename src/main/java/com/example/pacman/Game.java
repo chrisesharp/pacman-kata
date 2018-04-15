@@ -303,7 +303,7 @@ public class Game implements GameEngine {
         display = new MonoDisplay(System.out);
       }
       Game game = new Game(level);
-      if (parser.getDebug()== false) {
+      if (!parser.getDebug()) {
         game.animateIcons();
       }
       game.init(keyboard, display);

@@ -23,14 +23,14 @@ function draw() {
       process.exit();
     }
   } else {
-    game.firstFrame = false
+    game.firstFrame = false;
   }
 }
 
 function update() {
   game.tick();
   if (game.debug) {
-    game.gameOver = true
+    game.gameOver = true;
   }
 }
 

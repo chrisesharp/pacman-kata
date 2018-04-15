@@ -396,7 +396,7 @@ func Start(filePtr string, colour bool, animation bool, debug bool) {
 	} else {
 		theGame.SetDisplay(new(terminal).New(theGame))
 	}
-	if debug == false {
+	if !debug {
 		theGame.SetController(new(keyboard).New(theGame))
 		if animation {
 			theGame.UseAnimation()

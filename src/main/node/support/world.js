@@ -27,7 +27,7 @@ CustomWorld.prototype.addCommandArg = function(arg) {
 
 CustomWorld.prototype.runCommand = function() {
   const
-    { spawnSync } = require( 'child_process' ),
+    { spawnSync } = require( "child_process" ),
     cmd = spawnSync( this.command.toString(), this.commandArgs.toArray(), {
       detached: false,
       stdio: ["inherit", "pipe", process.stderr]

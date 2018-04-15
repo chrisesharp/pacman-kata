@@ -3,7 +3,7 @@ const assert = require('assert')
 const { expect } = require('chai')
 const g = require('../game-elements.js')
 
-this.World = require('./world.js').World;
+let World = require('./world.js').World;
 
 // Givens
 Given('the command arg {string}', function (string) {
@@ -72,7 +72,7 @@ When('we parse the state', function (callback) {
   });
 
 When('we play {int} turn(s)', function (turn) {
-  for (i=0;i<turn;i++) {
+  for (let i=0;i<turn;i++) {
     this.tick();
   }
   });

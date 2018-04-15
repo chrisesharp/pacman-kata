@@ -30,7 +30,7 @@ class Game {
       this.levelMaps = null;
       this.animated = false;
       this.display = null;
-      this.firstFrame = true
+      this.firstFrame = true;
     }
     
     setDebug (debug) {
