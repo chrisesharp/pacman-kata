@@ -222,9 +222,9 @@ class Game(object):
 
 def start_game(file, colour, debug):
     with open(file) as f:
-        levelMap = f.read()
+        level_map = f.read()
 
-    game = Game(levelMap)
+    game = Game(level_map)
     controller = Keyboard(game)
     if (debug is None):
         controller.init()
