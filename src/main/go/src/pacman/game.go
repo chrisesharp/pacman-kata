@@ -104,10 +104,7 @@ func (game *gameState) parseTokens(rowData []string) {
 	for y := 0; y < rows; y++ {
 		runes := []rune(rowData[y])
 		for x := 0; x < columns; x++ {
-			element := GetElement(runes[x], Location{x: x, y: y})
-			if element != nil {
-				element.AddToGame(game)
-			}
+			GetElement(runes[x], Location{x: x, y: y}).AddToGame(game)
 		}
 	}
 }

@@ -14,5 +14,5 @@ func GetElement(icon rune, location Location) GameElement {
 			return element
 		}
 	}
-	return nil
+	return NewElement(nil, icon, location, 0, 0)
 }
