@@ -54,30 +54,8 @@ class Ghost(object):
             self.panic()
 
     def tick(self):
-        pacman_loc = self.coordinates
-        pacman = self.game.get_pacman()
-        if (pacman):
-            pacman_loc = pacman.coordinates
-
-        if (self.panicked() is True):
-            self.direction = avoid(self.coordinates, pacman_loc)
-            self.panic_level -= 1
-
-        front = self.direction
-        directions = [front, left(front), right(front)]
-        choices = []
-        for option in directions:
-            if self.clear(self.next_move(option)):
-                choices.append(option)
-        if len(choices) > 0:
-            self.direction = choices[randint(0, len(choices)-1)]
-        elif self.panicked() is False:
-            self.direction = opposite(front)
-
-        next_location = self.next_move(self.direction)
-        if ((self.panic_level % 2) == 0) and self.clear(next_location):
-            self.coordinates = (next_location)
-
+        self.manage_panic()
+        self.choose_direction()
         if (self.game.is_pacman(self.coordinates)):
             if (self.panicked() is True):
                 self.game.kill_ghost(self)
@@ -87,7 +65,46 @@ class Ghost(object):
             self.passed_gate = True
         self.icon = Ghost.icon_state[self.panic_level > 0]
 
-    def next_move(self, direction):
+    def manage_panic(self):
+        if (self.panicked() is True):
+            pacman_loc = self.coordinates
+            pacman = self.game.get_pacman()
+            if (pacman):
+                pacman_loc = pacman.coordinates
+            self.direction = avoid(self.coordinates, pacman_loc)
+            self.panic_level -= 1
+
+    def choose_direction(self):
+        front = self.direction
+        choices = [front, left(front), right(front)]
+        options = self.find_options(choices)
+        if len(options) > 0:
+            self.direction = self.random_choice(options)
+        else:
+            self.direction = self.no_option()
+        self.move()
+
+    def find_options(self, choices):
+        options = []
+        for option in choices:
+            if self.clear(self.next_step(option)):
+                options.append(option)
+        return options
+
+    def random_choice(self, options):
+        return options[randint(0, len(options)-1)]
+
+    def no_option(self):
+        if self.panicked() is False:
+            return opposite(self.direction)
+        return self.direction
+
+    def move(self):
+        next_location = self.next_step(self.direction)
+        if ((self.panic_level % 2) == 0) and self.clear(next_location):
+            self.coordinates = (next_location)
+
+    def next_step(self, direction):
         return wrap(next_location(self.coordinates, direction),
                     self.width,
                     self.height)
