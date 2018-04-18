@@ -19,7 +19,6 @@ src/main/python/__pycache__/
 .scannerwork
 src/main/python/.coverage
 src/main/python/coverage.xml
-src/main/go/src/pacman/coverage.out
 src/main/node/coverage/
 pacman-game.log
 .m2
