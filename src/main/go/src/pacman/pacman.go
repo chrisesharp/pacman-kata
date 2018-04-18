@@ -93,6 +93,14 @@ func (p *pacmanStruct) Icon() rune {
 	return icon
 }
 
+// GetPacman returns a new Pacman if the icon is a pacman
+func GetPacman(icon rune, location Location) GameElement {
+	if IsPacman(icon) {
+		return NewPacman(nil, icon, location)
+	}
+	return nil
+}
+
 // IsPacman returns true if the icon represents pacman
 func IsPacman(thisIcon rune) bool {
 	if thisIcon == deadIcon {
@@ -142,4 +150,10 @@ func (p *pacmanStruct) Go(dir Direction) {
 		p.moving = true
 		p.SetDirection(dir)
 	}
+}
+
+// AddToGame adds a new type of this element to the game
+func (p *pacmanStruct) AddToGame(game Game) {
+	pacman := NewPacman(game, p.Icon(), p.Location())
+	game.SetPacman(pacman)
 }

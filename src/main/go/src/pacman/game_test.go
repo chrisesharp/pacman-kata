@@ -79,7 +79,7 @@ func wallsAtTheFollowingPlaces(wallSpec *gherkin.DataTable) error {
 		x, _ := strconv.Atoi(row.Cells[1].Value)
 		y, _ := strconv.Atoi(row.Cells[2].Value)
 		wall := NewWall(theGame, icon[0], Location{x, y})
-		theGame.AddWall(wall)
+		wall.AddToGame(theGame)
 	}
 	return nil
 }

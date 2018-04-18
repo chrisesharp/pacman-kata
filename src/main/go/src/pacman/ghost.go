@@ -175,6 +175,14 @@ func (g *ghostStruct) isClear(nextLoc Location) bool {
 	return clear
 }
 
+// GetGhost returns a new Ghost if the icon is a ghost
+func GetGhost(icon rune, location Location) GameElement {
+	if IsGhost(icon) {
+		return NewGhost(nil, icon, location)
+	}
+	return nil
+}
+
 // IsGhost returns true is the icon represents one
 func IsGhost(icon rune) bool {
 	_, ok := ghostIcon[icon]
@@ -193,4 +201,10 @@ func GhostIcon(panic bool) rune {
 		return panicGhost
 	}
 	return normalGhost
+}
+
+// AddToGame adds a new type of this element to the game
+func (g *ghostStruct) AddToGame(game Game) {
+	ghost := NewGhost(game, g.Icon(), g.Location())
+	game.AddGhost(ghost)
 }

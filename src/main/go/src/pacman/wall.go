@@ -16,21 +16,44 @@ var wallIcon = map[rune]int{
 	'━': 2,
 }
 
-// NewWall creates a new Pill game element
-func NewWall(game Game, icon rune, loc Location) GameElement {
+// Wall interface extends GameElement
+type Wall interface {
+	GameElement
+}
+
+type wallStruct struct {
+	GameElement
+}
+
+// NewWall returns a new Wall struct
+func NewWall(game Game, icon rune, loc Location) Wall {
 	colour := Colour{WHITE, BLACK}
 	wall := NewElement(game, icon, loc, 0, 0)
 	if IsForceField(icon) {
 		colour = Colour{BLACK, BLACK}
 	}
 	wall.SetColour(colour)
-	return wall
+	return &wallStruct{wall}
+}
+
+// GetWall returns a new Wall if the icon is a wall
+func GetWall(icon rune, location Location) GameElement {
+	if IsWall(icon) {
+		return NewWall(nil, icon, location)
+	}
+	return nil
 }
 
 // IsWall if this rune represents some kind of wall
 func IsWall(icon rune) bool {
 	_, ok := wallIcon[icon]
 	return ok
+}
+
+// AddToGame adds a new type of this element to the game
+func (w *wallStruct) AddToGame(game Game) {
+	wall := NewWall(game, w.Icon(), w.Location())
+	game.AddWall(wall)
 }
 
 // IsForceField if this rune represents a force field

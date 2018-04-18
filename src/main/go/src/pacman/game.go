@@ -104,33 +104,15 @@ func (game *gameState) parseTokens(rowData []string) {
 	for y := 0; y < rows; y++ {
 		runes := []rune(rowData[y])
 		for x := 0; x < columns; x++ {
-			icon := runes[x]
-			loc := Location{x: x, y: y}
-
-			if IsPacman(icon) {
-				game.pacman = NewPacman(game, icon, loc)
-				game.field.Set(loc, icon, game.pacman.Colour())
-			}
-			if IsGhost(icon) {
-				ghost := NewGhost(game, icon, loc)
-				game.ghosts = append(game.ghosts, ghost)
-				game.field.Set(loc, icon, ghost.Colour())
-			}
-			if IsPill(icon) {
-				game.usingPills = true
-				pill := NewPill(game, icon, loc)
-				game.pills = append(game.pills, pill)
-				game.field.Set(loc, icon, pill.Colour())
-			}
-			if IsWall(icon) {
-				wall := NewWall(game, icon, loc)
-				game.walls = append(game.walls, wall)
-				game.field.Set(loc, icon, wall.Colour())
+			element := GetElement(runes[x], Location{x: x, y: y})
+			if element != nil {
+				element.AddToGame(game)
 			}
 		}
 	}
 }
 
+// SetPlayfield for this game state
 func (game *gameState) SetPlayfield(field Playfield) {
 	game.field = field
 }
@@ -227,6 +209,13 @@ func (game *gameState) GetPacman() GameElement {
 
 func (game *gameState) SetPacman(pacman GameElement) {
 	game.pacman = pacman
+	game.field.Set(pacman.Location(), pacman.Icon(), pacman.Colour())
+}
+
+// AddGhost to list of ghosts in game state
+func (game *gameState) AddGhost(ghost GameElement) {
+	game.ghosts = append(game.ghosts, ghost)
+	game.field.Set(ghost.Location(), ghost.Icon(), ghost.Colour())
 }
 
 // GetGhosts list from game state
@@ -237,6 +226,13 @@ func (game *gameState) GetGhosts() []GameElement {
 // GetPills list from game state
 func (game *gameState) GetPills() []GameElement {
 	return game.pills
+}
+
+// AddPill to list of pills in game state
+func (game *gameState) AddPill(pill GameElement) {
+	game.usingPills = true
+	game.pills = append(game.pills, pill)
+	game.field.Set(pill.Location(), pill.Icon(), pill.Colour())
 }
 
 // RemovePill by element from game state
@@ -256,6 +252,7 @@ func (game *gameState) GetWalls() []GameElement {
 // AddWall to list
 func (game *gameState) AddWall(wall GameElement) {
 	game.walls = append(game.walls, wall)
+	game.field.Set(wall.Location(), wall.Icon(), wall.Colour())
 }
 
 // GetGate list from game state

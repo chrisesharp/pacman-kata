@@ -21,6 +21,11 @@ func NewElement(game Game, icon rune, loc Location, dir Direction, points int) G
 		start:     loc}
 }
 
+// AddToGame adds a new type of this element to the game
+func (el *gameStruct) AddToGame(game Game) {
+	el.game = game
+}
+
 // IsForceField checks if a wall is a force field
 func (el *gameStruct) IsForceField() bool {
 	return IsForceField(el.icon)

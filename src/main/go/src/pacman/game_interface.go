@@ -19,8 +19,10 @@ type Game interface {
 	Dimensions() (int, int)
 	GetPacman() GameElement
 	SetPacman(GameElement)
+	AddGhost(ghost GameElement)
 	GetGhosts() []GameElement
 	GetPills() []GameElement
+	AddPill(pill GameElement)
 	RemovePill(pill GameElement)
 	GetWalls() []GameElement
 	AddWall(GameElement)
@@ -36,6 +38,7 @@ type Game interface {
 
 // GameElement interface
 type GameElement interface {
+	AddToGame(game Game)
 	IsForceField() bool
 	IsGate() bool
 	Location() Location
