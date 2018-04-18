@@ -11,16 +11,29 @@ const (
 	DOWN
 )
 
+//Deltas for coordinates by Direction
+var Deltas = map[Direction]Delta{
+	LEFT:  {dx: -1, dy: 0},
+	UP:    {dx: 0, dy: -1},
+	RIGHT: {dx: 1, dy: 0},
+	DOWN:  {dx: 0, dy: 1},
+}
+
 // Location tuple
 type Location struct {
 	x, y int
 }
 
+// Delta tuple
+type Delta struct {
+	dx, dy int
+}
+
 // Next location by direction
 func (our Location) Next(dir Direction) Location {
-	dx, dy := dir.Move()
-	our.x += dx
-	our.y += dy
+	delta := Deltas[dir]
+	our.x += delta.dx
+	our.y += delta.dy
 	return our
 }
 
@@ -45,7 +58,6 @@ func (d Direction) Opposite() Direction {
 // Left direction to this
 func (d Direction) Left() Direction {
 	return (d + 3) % 4
-
 }
 
 // Right direction to this
@@ -65,23 +77,6 @@ func (d Direction) Equals(direction string) bool {
 		return true
 	}
 	return false
-}
-
-// Move returns the location deltas for a particular direction
-func (d Direction) Move() (int, int) {
-	dx := 0
-	dy := 0
-	switch d {
-	case LEFT:
-		dx = -1
-	case RIGHT:
-		dx = 1
-	case UP:
-		dy = -1
-	case DOWN:
-		dy = 1
-	}
-	return dx, dy
 }
 
 // Wrap a location toroidallly on a width/height field

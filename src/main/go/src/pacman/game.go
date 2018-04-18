@@ -70,12 +70,10 @@ func (game *gameState) SetLevelMaps(maps *levelStruct) {
 func (game *gameState) Parse() {
 	if game.levelMaps != nil {
 		game.SetInput(game.levelMaps.Get(game.level))
-	} else {
-		if strings.Contains(game.input, "SEPARATOR") {
-			gameLevel := &levelStruct{levelMaps: game.input}
-			game.SetLevelMaps(gameLevel)
-			game.SetInput(game.levelMaps.Get(game.level))
-		}
+	} else if strings.Contains(game.input, "SEPARATOR") {
+		gameLevel := &levelStruct{levelMaps: game.input}
+		game.SetLevelMaps(gameLevel)
+		game.SetInput(game.levelMaps.Get(game.level))
 	}
 	columns := strings.Index(game.input, "\n")
 	runes := []rune(game.input)
