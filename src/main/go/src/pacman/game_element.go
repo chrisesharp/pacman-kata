@@ -43,6 +43,7 @@ func (el *gameStruct) Location() Location {
 
 // SetLocation of this element
 func (el *gameStruct) SetLocation(loc Location) {
+	loc.Wrap(el.game.Dimensions())
 	el.location = loc
 }
 

@@ -44,17 +44,18 @@ func NewPacman(game Game, icon rune, loc Location) Pacman {
 func (p *pacmanStruct) Tick() {
 	if p.moving {
 		nextLoc := p.Location().Next(p.Direction())
-		if p.isClear(nextLoc, p.game.GetWalls()) {
-			nextLoc.Wrap(p.game.Dimensions())
+		if p.isClear(nextLoc) {
 			p.SetLocation(nextLoc)
-			if p.game.Animated() {
-				p.Animate()
-			}
+			p.Animate()
 		}
-		for _, element := range CollectElements(p.game.GetPills(), p.game.GetGhosts()) {
-			if element.Location() == p.Location() {
-				element.TriggerEffect(p)
-			}
+		p.checkCollisions()
+	}
+}
+
+func (p *pacmanStruct) checkCollisions() {
+	for _, element := range CollectElements(p.game.GetPills(), p.game.GetGhosts()) {
+		if element.Location() == p.Location() {
+			element.TriggerEffect(p)
 		}
 	}
 }
@@ -72,9 +73,9 @@ func (p *pacmanStruct) Alive() bool {
 	return p.alive
 }
 
-func (p *pacmanStruct) isClear(nextLoc Location, walls []GameElement) bool {
+func (p *pacmanStruct) isClear(nextLoc Location) bool {
 	clear := true
-	for _, wall := range walls {
+	for _, wall := range p.game.GetWalls() {
 		if (wall.Location() == nextLoc) && (!wall.IsForceField()) {
 			clear = false
 		}
@@ -133,7 +134,9 @@ func (p *pacmanStruct) pacmanIcon(dir Direction) rune {
 
 // Animate advances the current frame
 func (p *pacmanStruct) Animate() {
-	p.frame = (p.frame + 1) % 2
+	if p.game.Animated() {
+		p.frame = (p.frame + 1) % 2
+	}
 }
 
 // Restart the element in its initial placing
@@ -146,7 +149,7 @@ func (p *pacmanStruct) Restart() {
 // Go makes pacman start moving in a given direction
 func (p *pacmanStruct) Go(dir Direction) {
 	nextLoc := p.Location().Next(dir)
-	if p.isClear(nextLoc, p.game.GetWalls()) {
+	if p.isClear(nextLoc) {
 		p.moving = true
 		p.SetDirection(dir)
 	}
