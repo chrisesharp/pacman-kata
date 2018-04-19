@@ -81,8 +81,8 @@ clean-java:
 coverage-java:
 	mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
 	    -Dsonar.host.url=https://sonarcloud.io \
-	    -Dsonar.organization=chrisesharp-github \
-			-Dsonar.projectKey=org.chrisesharp.pacman-kata-java \
+	    -Dsonar.organization=pacman-kata \
+			-Dsonar.projectKey=org.pacman-kata.pacman-kata-java \
 			-Dsonar.projectName=pacman-kata-java \
 			-Dsonar.exclusions="**/*.xml" \
     	-Dsonar.login=$(SONAR_TOKEN)

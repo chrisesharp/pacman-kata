@@ -16,7 +16,7 @@ matrix:
       dist: trusty
       addons:
         sonarcloud:
-          organization: "chrisesharp-github"
+          organization: "pacman-kata"
     - language: go
       go:
         - "1.10"
@@ -27,7 +27,7 @@ matrix:
       dist: trusty
       addons:
         sonarcloud:
-          organization: "chrisesharp-github"
+          organization: "pacman-kata"
     - language: node_js
       node_js:
         - "9.3.0"
@@ -36,7 +36,7 @@ matrix:
       dist: trusty
       addons:
         sonarcloud:
-          organization: "chrisesharp-github"
+          organization: "pacman-kata"
     - language: python
       python:
         - "3.6"
@@ -49,5 +49,5 @@ matrix:
       dist: trusty
       addons:
         sonarcloud:
-          organization: "chrisesharp-github"
+          organization: "pacman-kata"
         
