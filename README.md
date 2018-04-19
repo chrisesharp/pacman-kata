@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/chrisesharp/pacman-kata.svg?branch=master)](https://travis-ci.org/chrisesharp/pacman-kata/)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/fe838ec1a0be418f95c8c258c418ad44)](https://www.codacy.com/app/chrisesharp/pacman-kata?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=chrisesharp/pacman-kata&amp;utm_campaign=Badge_Grade)
+[![Sonar Badge](https://sonarcloud.io/api/project_badges/measure?project=org.pacman-kata.pacman-kata-go&metric=alert_status)](https://sonarcloud.io/organizations/pacman-kata/projects)
 # pacman-kata
 
 This kata is designed to make some interesting game mechanics, parsing and
