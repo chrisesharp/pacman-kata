@@ -9,7 +9,7 @@ class Playfield {
     }
     this.columns = width;
     this.rows = height;
-    this.reset()
+    this.reset();
   }
   
   reset() {
