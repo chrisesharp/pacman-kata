@@ -20,7 +20,7 @@ public class PowerPillToken implements GameToken {
       game.addElement(p);
   }
 
-  public static boolean contains(String token) {
-    return tokens.contains(token);
+  public boolean valid() {
+    return tokens.contains(this.icon);
   }
 }

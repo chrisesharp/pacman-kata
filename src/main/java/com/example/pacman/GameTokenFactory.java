@@ -9,21 +9,22 @@ public final class GameTokenFactory {
 
   public static GameToken getToken(String cursor) {
     String token = cursor ;
-      if (PacmanToken.contains(token)) {
-         return new PacmanToken(token);
-      } else if (GhostToken.contains(token)) {
-         return new GhostToken(token);
-      } else if (PillToken.contains(token)) {
-          return new PillToken(token);
-      } else if (PowerPillToken.contains(token)) {
-          return new PowerPillToken(token);
-      } else if (WallToken.contains(token)){
-          return new WallToken(token);
-      } else if (GateToken.contains(token)){
-          return new GateToken(token);
-      } else if (ForceFieldToken.contains(token)){
-          return new ForceFieldToken(token);
-      } else return null;
+    GameToken[] tokenizers = {
+                              new PacmanToken(token),
+                              new GhostToken(token),
+                              new PillToken(token),
+                              new PowerPillToken(token),
+                              new WallToken(token),
+                              new GateToken(token),
+                              new ForceFieldToken(token)
+                              };
+                              
+    for (int i = 0; i < tokenizers.length; i++) {
+      if (tokenizers[i].valid()) {
+        return tokenizers[i];
+      }
+    }
+    return null;
   }
 
   public static void parseGameTokens(GameEngine game, String screen) {

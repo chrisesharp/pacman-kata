@@ -148,11 +148,16 @@ func (game *gameState) renderField() (string, []Colour) {
 			buffer += string(r)
 			colourBuf = append(colourBuf, c)
 		}
-		if y < lastline {
-			buffer += string('\n')
-		}
+		buffer += addNewLineIfNotFinished(y, lastline)
 	}
 	return buffer, colourBuf
+}
+
+func addNewLineIfNotFinished(current, last int) string {
+	if current < last {
+		return string('\n')
+	}
+	return ""
 }
 
 // Tick the game turn over
@@ -255,9 +260,9 @@ func (game *gameState) AddWall(wall GameElement) {
 // GetGate list from game state
 func (game *gameState) GetGate() GameElement {
 	var gate GameElement
-	for _, wall := range game.walls {
-		if wall.IsGate() {
-			gate = wall
+	for _, thisWall := range game.walls {
+		if thisWall.IsGate() {
+			gate = thisWall
 		}
 	}
 	return gate

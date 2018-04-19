@@ -19,7 +19,7 @@ public class PillToken implements GameToken {
       game.addElement(pill);
   }
 
-  public static boolean contains(String token) {
-    return tokens.contains(token);
+  public boolean valid() {
+    return tokens.contains(this.icon);
   }
 }

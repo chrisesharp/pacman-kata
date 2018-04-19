@@ -12,13 +12,15 @@ public class ForceFieldToken implements GameToken {
   public ForceFieldToken(String icon) {
       this.icon=icon;
   }
+  
   public void addGameElement(GameEngine game, Location location) {
       ForceField field = new ForceField(location);
       field.setGame(game);
       field.setIcon(icon);
       game.addElement(field);
   }
-  public static boolean contains(String token) {
-    return tokens.contains(token);
+
+  public boolean valid() {
+    return tokens.contains(this.icon);
   }
 }

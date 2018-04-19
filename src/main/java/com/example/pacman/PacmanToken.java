@@ -30,7 +30,6 @@ public class PacmanToken implements GameToken {
       this.icon=icon;
   }
 
-
   private Direction parseDirection() {
     return ourTokens.inverse().get(this.icon);
   }
@@ -43,13 +42,6 @@ public class PacmanToken implements GameToken {
     game.addElement(pacman);
   }
 
-  public static boolean contains(String token) {
-    if (token.equals(deadICON)) {
-      return true;
-    }
-    return ourTokens.containsValue(token);
-  }
-
   public static String getToken(Direction direction) {
     return ourTokens.get(direction);
   }
@@ -60,5 +52,11 @@ public class PacmanToken implements GameToken {
 
   public static String getDeadToken() {
     return deadICON;
+  }
+  public boolean valid() {
+    if (this.icon.equals(deadICON)) {
+      return true;
+    }
+    return ourTokens.containsValue(this.icon);
   }
 }

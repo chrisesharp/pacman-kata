@@ -24,6 +24,7 @@ public class WallToken implements GameToken {
   public WallToken(String icon) {
       this.icon=icon;
   }
+
   public void addGameElement(GameEngine game, Location location) {
       Wall wall = new Wall(location);
       wall.setGame(game);
@@ -31,7 +32,7 @@ public class WallToken implements GameToken {
       game.addElement(wall);
   }
 
-  public static boolean contains(String token) {
-    return tokens.contains(token);
+  public boolean valid() {
+    return tokens.contains(this.icon);
   }
 }

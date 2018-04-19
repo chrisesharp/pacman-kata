@@ -10,28 +10,25 @@ public class GhostToken implements GameToken {
                         .put(true,"W")
                         .build();
   private String icon;
-  private boolean panicked=false;
 
   public GhostToken(String icon) {
       this.icon=icon;
-      panicked = ourTokens.inverse().get(icon);
   }
 
   public void addGameElement(GameEngine game, Location location) {
       Ghost g = new Ghost(location);
       g.setIcon(icon);
       g.setGame(game);
-      if (panicked) {
+      if (ourTokens.inverse().get(icon)) {
         g.panic();
       }
       game.addElement(g);
   }
 
-  public static boolean contains(String token) {
-    return ourTokens.containsValue(token);
-  }
-
   public static String getToken(int panic) {
     return ourTokens.get(panic > 0);
+  }
+  public boolean valid() {
+    return ourTokens.containsValue(this.icon);
   }
 }

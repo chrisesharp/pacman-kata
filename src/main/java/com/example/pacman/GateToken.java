@@ -12,6 +12,7 @@ public class GateToken implements GameToken {
   public GateToken(String icon) {
       this.icon=icon;
   }
+
   public void addGameElement(GameEngine game, Location location) {
       Gate gate = new Gate(location);
       Wall wall = new Wall(location);
@@ -22,7 +23,8 @@ public class GateToken implements GameToken {
       game.addElement(gate);
       game.addElement(wall);
   }
-  public static boolean contains(String token) {
-    return tokens.contains(token);
+
+  public boolean valid() {
+    return tokens.contains(this.icon);
   }
 }
