@@ -27,10 +27,7 @@ type pacmanStruct struct {
 // NewPacman creates a clean populated pacmanStruct
 func NewPacman(game Game, icon rune, loc Location) Pacman {
 	colour := Colour{YELLOW, BLACK}
-	alive := true
-	if icon == deadIcon {
-		alive = false
-	}
+	alive := (icon != deadIcon)
 	element := NewElement(game, icon, loc, facing(icon), 0)
 	element.SetColour(colour)
 	return &pacmanStruct{GameElement: element,
