@@ -18,6 +18,11 @@ DOCKERTEST		= docker run --rm -t
 ifndef BDD
 	BDD="not @leave"
 endif
+
+ifndef TRAVIS_COMMIT
+  TRAVIS_COMMIT=$(shell git rev-parse HEAD)
+endif
+
 JAVA_TEST_CMD	= mvn test -Dcucumber.options="--glue com.example.pacman \
 																						--tags $(shell echo $(BDD)|sed "s/not /~/g") \
 																					  classpath:features"
@@ -108,7 +113,7 @@ clean-go:
 coverage-go: export GOPATH = $(CURDIR)/$(GOSRC)
 coverage-go: export GOBIN = $(CURDIR)/$(GOSRC)/bin
 coverage-go:
-	cd $(GOSRC)/src/pacman; $(GOBIN)/godacov -t $(CODACY_PROJECT_TOKEN) -r ./coverage.out 
+	cd $(GOSRC)/src/pacman; $(GOBIN)/godacov -t $(CODACY_PROJECT_TOKEN) -r ./coverage.out -c $(TRAVIS_COMMIT)
 
 .PHONY: build-go
 build-go: export GOPATH = $(CURDIR)/$(GOSRC)
