@@ -24,7 +24,7 @@ public final class GameTokenFactory {
         return tokenizers[i];
       }
     }
-    return null;
+    return new NullToken();
   }
 
   public static void parseGameTokens(GameEngine game, String screen) {
@@ -34,9 +34,7 @@ public final class GameTokenFactory {
           line.codePoints().forEach( i -> {
             StringBuilder codepoint = new StringBuilder().appendCodePoint(i);
             GameToken token = getToken(codepoint.toString());
-            if (token != null) {
-              token.addGameElement(game,new Location(x.get(),y.get()));
-            }
+            token.addGameElement(game,new Location(x.get(),y.get()));
             x.incrementAndGet();
           });
           y.incrementAndGet();

@@ -3,7 +3,7 @@ package com.example.pacman;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
 
-public class GhostToken implements GameToken {
+public class GhostToken extends NullToken {
   private static BiMap<Boolean, String> ourTokens =
                     new ImmutableBiMap.Builder<Boolean, String>()
                         .put(false,"M")
@@ -12,10 +12,13 @@ public class GhostToken implements GameToken {
   private String icon;
 
   public GhostToken(String icon) {
-      this.icon=icon;
+    super();
+    this.icon=icon;
   }
 
+  @Override
   public void addGameElement(GameEngine game, Location location) {
+    if (this.valid()) {
       Ghost g = new Ghost(location);
       g.setIcon(icon);
       g.setGame(game);
@@ -23,11 +26,14 @@ public class GhostToken implements GameToken {
         g.panic();
       }
       game.addElement(g);
+    }
   }
 
   public static String getToken(int panic) {
     return ourTokens.get(panic > 0);
   }
+  
+  @Override
   public boolean valid() {
     return ourTokens.containsValue(this.icon);
   }

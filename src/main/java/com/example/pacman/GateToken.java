@@ -2,7 +2,7 @@ package com.example.pacman;
 import java.util.List;
 import java.util.Arrays;
 
-public class GateToken implements GameToken {
+public class GateToken extends NullToken {
   private static List<String> tokens = Arrays.asList(
     "━",
     "="
@@ -10,10 +10,13 @@ public class GateToken implements GameToken {
   private String icon;
 
   public GateToken(String icon) {
-      this.icon=icon;
+    super();
+    this.icon=icon;
   }
 
+  @Override
   public void addGameElement(GameEngine game, Location location) {
+    if (this.valid()) {
       Gate gate = new Gate(location);
       Wall wall = new Wall(location);
       gate.setIcon(icon);
@@ -22,8 +25,10 @@ public class GateToken implements GameToken {
       wall.setGame(game);
       game.addElement(gate);
       game.addElement(wall);
+    }
   }
 
+  @Override
   public boolean valid() {
     return tokens.contains(this.icon);
   }
