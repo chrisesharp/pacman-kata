@@ -6,22 +6,16 @@ class Playfield {
     this.data = new Array(height);
     for (var y=0;y<height;y++) {
       this.data[y] = new Array(width);
-      for (var x=0;x<width;x++) {
-        this.data[y][x]={colour:() => {return 0;},
-                         icon:() => {return " ";}
-                        };
-      }
     }
     this.columns = width;
     this.rows = height;
+    this.reset()
   }
   
   reset() {
     for (var y=0;y<this.rows;y++) {
       for (var x=0;x<this.columns;x++) {
-        this.data[y][x]={colour:() => {return 0;},
-                         icon:() => {return " ";}
-                        };
+        this.setLocation({x, y}, " ");
       }
     }
   }
