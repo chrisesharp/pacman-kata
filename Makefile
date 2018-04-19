@@ -188,7 +188,8 @@ coverage-python:
 	cd $(PYTHONSRC) ; \
 		coverage run --source='.' -m behave; \
 		coverage xml -i ; \
-		sonar-scanner -Dsonar.login=$(SONAR_TOKEN)
+		sonar-scanner -Dsonar.login=$(SONAR_TOKEN) ; \
+		python-codacy-coverage -r coverage.xml
 
 
 .PHONY: build-python

@@ -1,2 +1,3 @@
 behave
 coverage
+codacy-coverage
