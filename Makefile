@@ -84,6 +84,7 @@ coverage-java:
 	    -Dsonar.organization=chrisesharp-github \
 			-Dsonar.projectKey=org.chrisesharp.pacman-kata-java \
 			-Dsonar.projectName=pacman-kata-java \
+			-Dsonar.exclusions="**/*.xml" \
     	-Dsonar.login=$(SONAR_TOKEN)
 	mvn com.gavinmogan:codacy-maven-plugin:coverage \
 			-DcoverageReportFile=target/site/jacoco-ut/jacoco.xml \
