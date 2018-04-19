@@ -105,7 +105,10 @@ clean-go:
 	cd $(GOSRC)/src/pacman
 
 .PHONY: coverage-go
+coverage-go: export GOPATH = $(CURDIR)/$(GOSRC)
+coverage-go: export GOBIN = $(CURDIR)/$(GOSRC)/bin
 coverage-go:
+	cd $(GOSRC)/src/pacman; $(GOBIN)/godacov -t $(CODACY_PROJECT_TOKEN) -r ./coverage.out 
 
 .PHONY: build-go
 build-go: export GOPATH = $(CURDIR)/$(GOSRC)
