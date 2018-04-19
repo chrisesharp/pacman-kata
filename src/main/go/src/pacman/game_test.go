@@ -155,6 +155,7 @@ func thisIsTheLastLevel() error {
 // When
 func iRunTheCommandWithTheArgs() error {
 	r, w, _ := os.Pipe()
+	defer w.Close()
 
 	f := flag.NewFlagSet("f", flag.ContinueOnError)
 	filePtr := f.String("file", "data/pacman.txt", "level txt file")
@@ -164,11 +165,10 @@ func iRunTheCommandWithTheArgs() error {
 	if err := f.Parse(commandArgs[1:]); err == nil {
 		fmt.Printf("Using file %s, colour=%v, animation=%v, debug=%v",
 			*filePtr, *colour, *animation, *debug)
-		Start(*filePtr, *colour, *animation, *debug, w)
 		go func() {
 			io.Copy(outputStream, r)
 		}()
-		w.Close()
+		Start(*filePtr, *colour, *animation, *debug, w)
 	}
 	return nil
 }
