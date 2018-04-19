@@ -20,6 +20,7 @@ src/main/python/__pycache__/
 src/main/python/.coverage
 src/main/python/coverage.xml
 src/main/node/coverage/
+src/main/go/src/pacman/coverage.out
 pacman-game.log
 .m2
 

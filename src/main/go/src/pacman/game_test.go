@@ -154,25 +154,24 @@ func thisIsTheLastLevel() error {
 
 // When
 func iRunTheCommandWithTheArgs() error {
-	originalStdOut := os.Stdout
-	originalArgs := os.Args
+	//originalArgs := os.Args
 	r, w, _ := os.Pipe()
 
-	os.Stdout = w
-	os.Args = commandArgs
-	filePtr := flag.String("file", "data/pacman.txt", "level txt file")
-	colour := flag.Bool("colour", false, "use colour display")
-	debug := flag.Bool("debug", false, "debug mode plays only one frame")
-	animation := flag.Bool("animation", false, "use animated icons")
-	flag.Parse()
-	Start(*filePtr, *colour, *animation, *debug)
-	go func() {
-		io.Copy(outputStream, r)
-	}()
-	w.Close()
+	f := flag.NewFlagSet("f", flag.ContinueOnError)
+	//os.Args = commandArgs
+	filePtr := f.String("file", "data/pacman.txt", "level txt file")
+	colour := f.Bool("colour", false, "use colour display")
+	debug := f.Bool("debug", false, "debug mode plays only one frame")
+	animation := f.Bool("animation", false, "use animated icons")
+	if err := f.Parse(commandArgs[1:]); err == nil {
+		Start(*filePtr, *colour, *animation, *debug, w)
+		go func() {
+			io.Copy(outputStream, r)
+		}()
+		w.Close()
+	}
 
-	os.Stdout = originalStdOut
-	os.Args = originalArgs
+	//os.Args = originalArgs
 	return nil
 }
 

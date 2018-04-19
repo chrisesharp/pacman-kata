@@ -31,6 +31,7 @@ type gameState struct {
 	animated     bool
 	display      Display
 	controller   Controller
+	outputStream *os.File
 }
 
 // New clears state
@@ -334,10 +335,10 @@ func (game *gameState) printGameOver() {
 // Play a game
 func (game *gameState) Play(debug bool) {
 	game.Parse()
-	game.display.Init(os.Stdout)
 	if !debug {
 		game.controller.Listen()
 	}
+	game.display.Init(game.outputStream)
 	pacman := game.GetPacman()
 	for pacman != nil && !game.gameOver {
 		game.Tick()
@@ -385,9 +386,15 @@ func (game *gameState) Quit() {
 	os.Exit(0)
 }
 
+// SetOutput stream for the display
+func (game *gameState) SetOutput(outstream *os.File) {
+	game.outputStream = outstream
+}
+
 // Start the game with correct flags
-func Start(filePtr string, colour bool, animation bool, debug bool) {
+func Start(filePtr string, colour bool, animation bool, debug bool, outstream *os.File) {
 	theGame = new(gameState).New()
+	theGame.SetOutput(outstream)
 	if colour {
 		theGame.SetDisplay(new(colourTerminal).New(theGame))
 	} else {
@@ -413,5 +420,5 @@ func main() {
 	debug := flag.Bool("debug", false, "debug mode plays only one frame")
 	animation := flag.Bool("animation", true, "use animated icons")
 	flag.Parse()
-	Start(*filePtr, *colour, *animation, *debug)
+	Start(*filePtr, *colour, *animation, *debug, os.Stdout)
 }

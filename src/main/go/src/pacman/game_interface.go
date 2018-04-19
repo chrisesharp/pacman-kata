@@ -1,5 +1,7 @@
 package main
 
+import "os"
+
 // Game state interface
 type Game interface {
 	New() Game
@@ -8,6 +10,7 @@ type Game interface {
 	SetDisplay(Display)
 	SetController(Controller)
 	SetInput(string)
+	SetOutput(outstream *os.File)
 	SetPlayfield(Playfield)
 	SetLevelMaps(*levelStruct)
 	Lives() int
