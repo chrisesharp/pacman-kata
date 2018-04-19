@@ -79,9 +79,9 @@ class Ghost(object):
         choices = [front, left(front), right(front)]
         options = self.find_options(choices)
         if len(options) > 0:
-            self.direction = self.random_choice(options)
+            self.random_choice(options)
         else:
-            self.direction = self.no_option()
+            self.no_option()
         self.move()
 
     def find_options(self, choices):
@@ -92,12 +92,11 @@ class Ghost(object):
         return options
 
     def random_choice(self, options):
-        return options[randint(0, len(options)-1)]
+        self.direction = options[randint(0, len(options)-1)]
 
     def no_option(self):
         if self.panicked() is False:
-            return opposite(self.direction)
-        return self.direction
+            self.direction = opposite(self.direction)
 
     def move(self):
         next_location = self.next_step(self.direction)
