@@ -59,9 +59,15 @@ class Pacman:
     def tick(self):
         if self.clear(self.next_move(self.facing)):
             self.coordinates = (self.next_move(self.facing))
-            if self.animated:
-                self.frame = (self.frame + 1) % 2
-            self.icon = Pacman.frame[self.facing][self.frame]
+            self.animate()
+        self.check_collisions()
+
+    def animate(self):
+        if self.animated:
+            self.frame = (self.frame + 1) % 2
+        self.icon = Pacman.frame[self.facing][self.frame]
+
+    def check_collisions(self):
         if self.game.is_pill(self.coordinates):
             self.game.eat_pill(self.coordinates)
         if self.game.is_ghost(self.coordinates):
