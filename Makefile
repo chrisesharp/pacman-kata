@@ -211,8 +211,8 @@ coverage-python:
 		sonar-scanner -Dsonar.login=$(SONAR_TOKEN) \
 							-Dsonar.host.url=$(SONAR_URL) \
 							-Dsonar.organization=$(SONAR_ORG) \
-							-Dsonar.projectKey=org.$(SONAR_ORG).pacman-kata-node \
-							-Dsonar.projectName=pacman-kata-node ;\
+							-Dsonar.projectKey=org.$(SONAR_ORG).pacman-kata-python \
+							-Dsonar.projectName=pacman-kata-python ;\
 		python-codacy-coverage -r coverage.xml
 
 
