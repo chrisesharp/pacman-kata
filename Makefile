@@ -24,12 +24,12 @@ ifndef TRAVIS_COMMIT
 endif
 
 JAVA_TEST_CMD	= mvn test -Dcucumber.options="--glue com.example.pacman \
+																						--plugin progress \
 																						--tags $(shell echo $(BDD)|sed "s/not /~/g") \
 																					  classpath:features"
 GO_TEST_CMD = go test -coverprofile=coverage.out -args $(shell echo $(BDD)|sed "s/not /~/g")
 NODE_TEST_CMD = npm test -- --tags $(BDD)
-NODE_COVERAGE_CMD = npm run coverage
-PYTHON_TEST_CMD = behave -t $(shell echo $(BDD)|sed "s/not /~/g") -k
+PYTHON_TEST_CMD = behave -f progress -t $(shell echo $(BDD)|sed "s/not /~/g") -k
 
 JAVA_IMG   = java-pacman
 JAVASRC    = src

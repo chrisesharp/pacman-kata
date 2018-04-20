@@ -27,7 +27,7 @@ func TestMain(m *testing.M) {
 	status := godog.RunWithOptions("godogs", func(s *godog.Suite) {
 		FeatureContext(s)
 	}, godog.Options{
-		Format:    "pretty",
+		Format:    "progress",
 		Paths:     []string{"features/"},
 		Tags:      tags,
 		Randomize: time.Now().UTC().UnixNano(), // randomize scenario execution order
