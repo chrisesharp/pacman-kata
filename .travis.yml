@@ -21,7 +21,7 @@ matrix:
       go:
         - "1.10"
       install: 
-        - go get github.com/schrej/godacov
+        - go get -v github.com/schrej/godacov
       script: make local-go
       sudo: false
       dist: trusty
