@@ -111,7 +111,10 @@ clean-go:
 	cd $(GOSRC)/src/pacman
 
 .PHONY: coverage-go
+coverage-go: export GOPATH = $(CURDIR)/$(GOSRC)
+coverage-go: export GOBIN = $(CURDIR)/$(GOSRC)/bin
 coverage-go:
+	cd $(GOSRC)/src/pacman; sonar-scanner -Dsonar.login=$(SONAR_TOKEN)
 	$(GOPATH)/bin/godacov -t $(CODACY_PROJECT_TOKEN) -r $(GOSRC)/src/pacman/coverage.out -c $(TRAVIS_COMMIT)
 
 .PHONY: build-go
@@ -124,7 +127,7 @@ build-go:
 test-go: export GOPATH = $(CURDIR)/$(GOSRC)
 test-go: export GOBIN = $(CURDIR)/$(GOSRC)/bin
 test-go:
-	cd $(GOSRC)/src/pacman; go get -t && $(GO_TEST_CMD) ;sonar-scanner -Dsonar.login=$(SONAR_TOKEN)
+	cd $(GOSRC)/src/pacman; go get -t && $(GO_TEST_CMD) 
 
 
 .PHONY: deploy-go
