@@ -45,6 +45,16 @@ PYTHONSRC  = src/main/python
 
 FEATURES   = src/test
 VOLUME		 = -v$(CURDIR)
+
+################################################################################
+# Sonar and Codacy hooks
+################################################################################
+# SONAR_TOKEN = ** should be passed via to env **
+SONAR_URL = https://sonarcloud.io
+SONAR_ORG = pacman-kata
+
+# CODACY_PROJECT_TOKEN = ** should be passed via to env **
+CODACY_API_TOKEN=7FnGdigREcGP8j88LxQz
 ################################################################################
 # Targets
 ################################################################################
@@ -80,15 +90,15 @@ clean-java:
 .PHONY: coverage-java
 coverage-java:
 	mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
-	    -Dsonar.host.url=https://sonarcloud.io \
-	    -Dsonar.organization=pacman-kata \
-			-Dsonar.projectKey=org.pacman-kata.pacman-kata-java \
+	    -Dsonar.host.url=$(SONAR_URL) \
+	    -Dsonar.organization=$(SONAR_ORG) \
+			-Dsonar.projectKey=org.$(SONAR_ORG).pacman-kata-java \
 			-Dsonar.projectName=pacman-kata-java \
 			-Dsonar.exclusions="**/*.xml" \
     	-Dsonar.login=$(SONAR_TOKEN)
 	mvn com.gavinmogan:codacy-maven-plugin:coverage \
 			-DcoverageReportFile=target/site/jacoco-ut/jacoco.xml \
-			-DprojectToken=$(CODACY_PROJECT_TOKEN) -DapiToken=7FnGdigREcGP8j88LxQz
+			-DprojectToken=$(CODACY_PROJECT_TOKEN) -DapiToken=$(CODACY_API_TOKEN)
 
 .PHONY: deploy-java
 deploy-java:
@@ -114,7 +124,11 @@ clean-go:
 coverage-go: export GOPATH = $(CURDIR)/$(GOSRC)
 coverage-go: export GOBIN = $(CURDIR)/$(GOSRC)/bin
 coverage-go:
-	cd $(GOSRC)/src/pacman; sonar-scanner -Dsonar.login=$(SONAR_TOKEN)
+	cd $(GOSRC)/src/pacman; sonar-scanner -Dsonar.login=$(SONAR_TOKEN) \
+																				-Dsonar.host.url=$(SONAR_URL) \
+																				-Dsonar.organization=$(SONAR_ORG) \
+																				-Dsonar.projectKey=org.$(SONAR_ORG).pacman-kata-go \
+																				-Dsonar.projectName=pacman-kata-go
 	$(GOPATH)/bin/godacov -t $(CODACY_PROJECT_TOKEN) -r $(GOSRC)/src/pacman/coverage.out -c $(TRAVIS_COMMIT)
 
 .PHONY: build-go
@@ -154,8 +168,12 @@ clean-node:
 	
 .PHONY: coverage-node
 coverage-node:
-	cd $(NODESRC) ; npm run coverage && sonar-scanner -Dsonar.login=$(SONAR_TOKEN)
-
+	cd $(NODESRC) ; npm run coverage && sonar-scanner \
+																			-Dsonar.login=$(SONAR_TOKEN) \
+																			-Dsonar.host.url=$(SONAR_URL) \
+																			-Dsonar.organization=$(SONAR_ORG) \
+																			-Dsonar.projectKey=org.$(SONAR_ORG).pacman-kata-node \
+																			-Dsonar.projectName=pacman-kata-node
 .PHONY: build-node
 build-node:
 	cd $(NODESRC) ; npm install
@@ -190,7 +208,11 @@ coverage-python:
 	cd $(PYTHONSRC) ; \
 		coverage run --source='.' -m behave; \
 		coverage xml -i ; \
-		sonar-scanner -Dsonar.login=$(SONAR_TOKEN) ; \
+		sonar-scanner -Dsonar.login=$(SONAR_TOKEN) \
+							-Dsonar.host.url=$(SONAR_URL) \
+							-Dsonar.organization=$(SONAR_ORG) \
+							-Dsonar.projectKey=org.$(SONAR_ORG).pacman-kata-node \
+							-Dsonar.projectName=pacman-kata-node ;\
 		python-codacy-coverage -r coverage.xml
 
 
