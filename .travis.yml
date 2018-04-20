@@ -20,7 +20,7 @@ matrix:
     - language: go
       go:
         - "1.10"
-      install: 
+      before_install: 
         - go get -v github.com/schrej/godacov
         - pwd; ls -l /home/travis/gopath/bin
         - env
