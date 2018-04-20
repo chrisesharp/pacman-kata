@@ -67,7 +67,7 @@ all: local-all
 docker-all: docker-java docker-go docker-node docker-python
 
 .PHONY: local-all
-local-all: local-java local-node local-python
+local-all: local-java local-go local-node local-python
 
 ################################################################################
 # Java
