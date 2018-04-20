@@ -121,8 +121,8 @@ clean-go:
 	cd $(GOSRC)/src/pacman
 
 .PHONY: coverage-go
-coverage-go: export GOPATH = $(CURDIR)/$(GOSRC)
-coverage-go: export GOBIN = $(CURDIR)/$(GOSRC)/bin
+#coverage-go: export GOPATH = $(CURDIR)/$(GOSRC)
+#coverage-go: export GOBIN = $(CURDIR)/$(GOSRC)/bin
 coverage-go:
 	cd $(GOSRC)/src/pacman; sonar-scanner -Dsonar.login=$(SONAR_TOKEN) \
 																				-Dsonar.host.url=$(SONAR_URL) \

@@ -22,8 +22,6 @@ matrix:
         - "1.10"
       before_install: 
         - go get -v github.com/schrej/godacov
-        - pwd; ls -l /home/travis/gopath/bin
-        - env
       script: make local-go
       sudo: false
       dist: trusty
