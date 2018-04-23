@@ -199,9 +199,10 @@ local-python: clean-python build-python test-python coverage-python deploy-pytho
 
 .PHONY: clean-python
 clean-python:
-	cd $(PYTHONSRC)
-	rm -rf ./__pycache__
-	coverage erase
+	cd $(PYTHONSRC) ;\
+	rm -rf ./__pycache__ ;\
+	coverage erase ; \
+	rm coverage.xml
 	
 .PHONY: coverage-python
 coverage-python:

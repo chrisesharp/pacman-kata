@@ -108,11 +108,17 @@ class Game(object):
         self.update_field()
 
     def render(self):
-        self.output = "{lives:1d}".format(lives=self.lives)
-        self.output += "{score:>{width}d}\n".format(score=self.score,
-                                                    width=self.field.width()
-                                                    - len(self.output))
+        self.output = Game.render_status(self.lives,
+                                         self.score,
+                                         self.field.width())
+        self.output += "\n"
         self.output += self.field.render()
+
+    def render_status(lives, score, columns):
+        output = "{lives:1d}".format(lives=lives)
+        output += "{score:>{width}d}".format(score=score,
+                                             width=columns - len(output))
+        return output
 
     def refresh(self):
         print("\u001B[H" + "\u001B[2J" + "\u001B[1m")
@@ -226,7 +232,7 @@ def start_game(file, colour, debug):
 
     game = Game(level_map)
     controller = Keyboard(game)
-    if (debug is None):
+    if (debug is False):
         controller.init()
         game.set_controller(controller)
         game.use_animation()

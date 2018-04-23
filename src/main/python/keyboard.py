@@ -40,4 +40,4 @@ class Keyboard(object):
         self.close()
 
     def close(self):
-        termios.tcsetattr(sys.stdin, termios.TCSANOW, self.orig_settings)
+        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, self.orig_settings)
