@@ -50,16 +50,19 @@ public class GameStats {
   }
 
   public String toString() {
+    return renderStatus(lives, score, columns);
+  }
+  
+  public static String renderStatus(int lives, int score, int cols) {
     StringBuilder output = new StringBuilder();
     final String LIVES = ""+lives;
     final String SCORE = ""+score;
     output.append(LIVES);
-    int padding= columns - LIVES.length() - SCORE.length();
+    int padding= cols - LIVES.length() - SCORE.length();
     for (int i=0; i < padding; i++) {
         output.append(" ");
     }
     output.append(SCORE);
-    output.append("\n");
     return output.toString();
   }
   

@@ -16,7 +16,7 @@ And the game uses animation
 When we parse the state
 And we play 1 turn
 And we render the game
-Then the game screen is
+Then the game screen should be
 """
 3  0
 +--+
@@ -36,7 +36,7 @@ And the game uses animation
 When we parse the state
 And we play 1 turn
 And we render the game
-Then the game screen is
+Then the game screen should be
 """
 3  0
 +--+
@@ -57,7 +57,7 @@ And the game uses animation
 When we parse the state
 And we play 1 turn
 And we render the game
-Then the game screen is
+Then the game screen should be
 """
 3  0
 +--+
@@ -78,7 +78,7 @@ And the game uses animation
 When we parse the state
 And we play 1 turn
 And we render the game
-Then the game screen is
+Then the game screen should be
 """
 3  0
 +--+
@@ -99,7 +99,7 @@ And the game uses animation
 When we parse the state
 And we play 2 turn
 And we render the game
-Then the game screen is
+Then the game screen should be
 """
 3   0
 +---+

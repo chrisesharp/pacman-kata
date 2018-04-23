@@ -20,11 +20,11 @@ Given the game state is
 +---+
 """
 When we parse the state
-Then pacman is at 2 , 2
-And the player has 2 lives
-And the player score is 10
-And there is a 10 point pill at 2 , 1
-And pacman is facing "DOWN"
+Then pacman should be at 2 , 2
+And the player should have 2 lives
+And the score should be 10
+And there should be a 10 point pill at 2 , 1
+And pacman should be facing "DOWN"
 
 Scenario: pacman facing down at 2,2 on a 5x5 game field and there is a 10 point pill at 1,1
 Given the game state is
@@ -37,11 +37,11 @@ Given the game state is
 +---+
 """
 When we parse the state
-Then pacman is at 2 , 2
-And the player has 2 lives
-And the player score is 10
-And there is a 10 point pill at 1 , 1
-And pacman is facing "DOWN"
+Then pacman should be at 2 , 2
+And the player should have 2 lives
+And the score should be 10
+And there should be a 10 point pill at 1 , 1
+And pacman should be facing "DOWN"
 
 Scenario: pacman facing down at 2,2 on a 5x5 game field and there is a 50 point pill at 2,1
 Given the game state is
@@ -54,11 +54,11 @@ Given the game state is
 +---+
 """
 When we parse the state
-Then pacman is at 2 , 2
-And the player has 2 lives
-And the player score is 10
-And there is a 50 point pill at 2 , 1
-And pacman is facing "DOWN"
+Then pacman should be at 2 , 2
+And the player should have 2 lives
+And the score should be 10
+And there should be a 50 point pill at 2 , 1
+And pacman should be facing "DOWN"
 
 Scenario: pacman facing up at 2,2 on a 5x5 game field and there is a 50 point pill at 1,1
 Given the game state is
@@ -71,11 +71,11 @@ Given the game state is
 +---+
 """
 When we parse the state
-Then pacman is at 2 , 2
-And the player has 2 lives
-And the player score is 10
-And there is a 50 point pill at 1 , 1
-And pacman is facing "UP"
+Then pacman should be at 2 , 2
+And the player should have 2 lives
+And the score should be 10
+And there should be a 50 point pill at 1 , 1
+And pacman should be facing "UP"
 
 Scenario: pacman facing up at 2,2 on a 5x5 game field and there is a 10 point pill at 1,1 and another at 2,1
 Given the game state is
@@ -88,12 +88,12 @@ Given the game state is
 +---+
 """
 When we parse the state
-Then pacman is at 2 , 2
-And the player has 2 lives
-And the player score is 10
-And there is a 10 point pill at 1 , 1
-And there is a 10 point pill at 2 , 1
-And pacman is facing "UP"
+Then pacman should be at 2 , 2
+And the player should have 2 lives
+And the score should be 10
+And there should be a 10 point pill at 1 , 1
+And there should be a 10 point pill at 2 , 1
+And pacman should be facing "UP"
 
 Scenario: pacman facing up at 2,2 on a 5x5 game field and there is a 50 point pill at 1,1 and another at 2,1
 Given the game state is
@@ -106,9 +106,9 @@ Given the game state is
 +---+
 """
 When we parse the state
-Then pacman is at 2 , 2
-And the player has 2 lives
-And the player score is 10
-And there is a 50 point pill at 1 , 1
-And there is a 50 point pill at 2 , 1
-And pacman is facing "UP"
+Then pacman should be at 2 , 2
+And the player should have 2 lives
+And the score should be 10
+And there should be a 50 point pill at 1 , 1
+And there should be a 50 point pill at 2 , 1
+And pacman should be facing "UP"

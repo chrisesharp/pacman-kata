@@ -21,6 +21,9 @@ var testDisplay Display
 var game Game
 var outputStream *bytes.Buffer
 var commandArgs []string
+var columns int
+var score int
+var lives int
 
 func TestMain(m *testing.M) {
 	tags := os.Getenv("BDD")
@@ -43,6 +46,24 @@ func TestMain(m *testing.M) {
 // Given
 func theCommandArg(arg string) error {
 	commandArgs = append(commandArgs, arg)
+	return nil
+}
+
+// Given
+func theScreenColumnWidthIs(cols int) error {
+	columns = cols
+	return nil
+}
+
+// Given
+func thePlayerScoreIs(thisScore int) error {
+	score = thisScore
+	return nil
+}
+
+// Given
+func thePlayerHasLives(theLives int) error {
+	lives = theLives
 	return nil
 }
 
@@ -174,6 +195,13 @@ func iRunTheCommandWithTheArgs() error {
 }
 
 // When
+func weRenderTheStatusLine() error {
+	output, _ := renderStatus(lives, score, columns)
+	outputStream.WriteString(output)
+	return nil
+}
+
+// When
 func weParseTheState() error {
 	theGame.Parse()
 	return nil
@@ -252,7 +280,7 @@ func theGameFieldShouldBeX(x, y int) error {
 }
 
 // Then
-func thePlayerHasLives(lives int) error {
+func thePlayerShouldHaveLives(lives int) error {
 	if theGame.Lives() != lives {
 		return fmt.Errorf("expected lives to be %v, but it is %v", lives, theGame.Lives())
 	}
@@ -260,15 +288,7 @@ func thePlayerHasLives(lives int) error {
 }
 
 // Then
-func thePlayerScoreIs(score int) error {
-	if theGame.Score() != score {
-		return fmt.Errorf("expected score to be %v, but it is %v", score, theGame.Score())
-	}
-	return nil
-}
-
-// Then
-func pacmanIsAt(x, y int) error {
+func pacmanShouldBeAt(x, y int) error {
 	pacman := theGame.GetPacman()
 	loc := pacman.Location()
 	if (loc.x != x) && (loc.y != y) {
@@ -278,7 +298,7 @@ func pacmanIsAt(x, y int) error {
 }
 
 // Then
-func pacmanIsFacing(direction string) error {
+func pacmanShouldBeFacing(direction string) error {
 	pacman := theGame.GetPacman()
 
 	if !pacman.Direction().Equals(direction) {
@@ -288,7 +308,7 @@ func pacmanIsFacing(direction string) error {
 }
 
 // Then
-func ghostIsAt(x, y int) error {
+func ghostShouldBeAt(x, y int) error {
 	for _, ghost := range theGame.GetGhosts() {
 		loc := ghost.Location()
 		if loc.x == x && loc.y == y {
@@ -299,7 +319,7 @@ func ghostIsAt(x, y int) error {
 }
 
 // Then
-func thenPacmanGoes(direction string) error {
+func thenPacmanShouldGo(direction string) error {
 	pacman := theGame.GetPacman()
 
 	if !pacman.Direction().Equals(direction) {
@@ -309,7 +329,7 @@ func thenPacmanGoes(direction string) error {
 }
 
 // Then
-func thereIsAPointPillAt(points, x, y int) error {
+func thereShouldBeAPointPillAt(points, x, y int) error {
 	for _, pill := range theGame.GetPills() {
 		loc := pill.Location()
 		if loc.x == x && loc.y == y {
@@ -320,7 +340,7 @@ func thereIsAPointPillAt(points, x, y int) error {
 }
 
 // Then
-func thereIsAWallAt(x, y int) error {
+func thereShouldBeAWallAt(x, y int) error {
 	for _, wall := range theGame.GetWalls() {
 		loc := wall.Location()
 		if loc.x == x && loc.y == y {
@@ -331,7 +351,7 @@ func thereIsAWallAt(x, y int) error {
 }
 
 // Then
-func thereIsAForceFieldAt(x, y int) error {
+func thereShouldBeAForceFieldAt(x, y int) error {
 	for _, wall := range theGame.GetWalls() {
 		loc := wall.Location()
 		if loc.x == x && loc.y == y && wall.IsForceField() {
@@ -342,7 +362,7 @@ func thereIsAForceFieldAt(x, y int) error {
 }
 
 // Then
-func thereIsAGateAt(x, y int) error {
+func thereShouldBeAGateAt(x, y int) error {
 	gate := theGame.GetGate()
 	loc := gate.Location()
 	if loc.x == x && loc.y == y {
@@ -352,7 +372,7 @@ func thereIsAGateAt(x, y int) error {
 }
 
 // Then
-func theGameScreenIs(expected *gherkin.DocString) error {
+func theGameScreenShouldBe(expected *gherkin.DocString) error {
 	output, _ := theGame.GetOutput()
 	if output == expected.Content {
 		return nil
@@ -385,7 +405,7 @@ func theGameLivesShouldBe(lives int) error {
 }
 
 // Then
-func theGameScoreShouldBe(score int) error {
+func theScoreShouldBe(score int) error {
 	if theGame.Score() != score {
 		return fmt.Errorf("expected score to be %v, but it is %v", score, theGame.Score())
 	}
@@ -393,7 +413,7 @@ func theGameScoreShouldBe(score int) error {
 }
 
 // Then
-func pacmanIsDead() error {
+func pacmanShouldBeDead() error {
 	pacman := theGame.GetPacman()
 	if pacman != nil {
 		if pacman.(Pacman).Alive() != false {
@@ -404,7 +424,7 @@ func pacmanIsDead() error {
 }
 
 // Then
-func pacmanIsAlive() error {
+func pacmanShouldBeAlive() error {
 	pacman := theGame.GetPacman()
 	if pacman != nil {
 		if pacman.(Pacman).Alive() == false {
@@ -452,25 +472,26 @@ func ghostAtShouldBePanicked(x, y int) error {
 
 // Feature matchers
 func FeatureContext(s *godog.Suite) {
+	s.Step(`^the player score is (\d+)$`, thePlayerScoreIs)
+	s.Step(`^the player has (\d+) lives$`, thePlayerHasLives)
+	s.Step(`^the player should have (\d+) lives$`, thePlayerShouldHaveLives)
+	s.Step(`^the score should be (\d+)$`, theScoreShouldBe)
 	s.Step(`^the game state is$`, theGameStateIs)
 	s.Step(`^we parse the state$`, weParseTheState)
-	s.Step(`^there is a gate at (\d+) , (\d+)$`, thereIsAGateAt)
-	s.Step(`^pacman is at (\d+) , (\d+)$`, pacmanIsAt)
-	s.Step(`^the player has (\d+) lives$`, thePlayerHasLives)
-	s.Step(`^the player score is (\d+)$`, thePlayerScoreIs)
-	s.Step(`^there is a (\d+) point pill at (\d+) , (\d+)$`, thereIsAPointPillAt)
-	s.Step(`^pacman is facing "([^"]*)"$`, pacmanIsFacing)
-	s.Step(`^ghost is at (\d+) , (\d+)$`, ghostIsAt)
-	s.Step(`^there is a wall at (\d+) , (\d+)$`, thereIsAWallAt)
+	s.Step(`^there should be a gate at (\d+) , (\d+)$`, thereShouldBeAGateAt)
+	s.Step(`^pacman should be at (\d+) , (\d+)$`, pacmanShouldBeAt)
+	s.Step(`^there should be a (\d+) point pill at (\d+) , (\d+)$`, thereShouldBeAPointPillAt)
+	s.Step(`^pacman should be facing "([^"]*)"$`, pacmanShouldBeFacing)
+	s.Step(`^ghost should be at (\d+) , (\d+)$`, ghostShouldBeAt)
+	s.Step(`^there should be a wall at (\d+) , (\d+)$`, thereShouldBeAWallAt)
 	s.Step(`^the game lives should be (\d+)$`, theGameLivesShouldBe)
-	s.Step(`^the game score should be (\d+)$`, theGameScoreShouldBe)
-	s.Step(`^there is a force field at (\d+) , (\d+)$`, thereIsAForceFieldAt)
+	s.Step(`^there should be a force field at (\d+) , (\d+)$`, thereShouldBeAForceFieldAt)
 	s.Step(`^the game field should be (\d+) x (\d+)$`, theGameFieldShouldBeX)
 	s.Step(`^the score is (\d+)$`, theScoreIs)
 	s.Step(`^the lives are (\d+)$`, theLivesAre)
 	s.Step(`^we play (\d+) turn(.*)$`, wePlayTurns)
 	s.Step(`^we render the game$`, weRenderTheGame)
-	s.Step(`^the game screen is$`, theGameScreenIs)
+	s.Step(`^the game screen should be$`, theGameScreenShouldBe)
 	s.Step(`^a colour display$`, aColourDisplay)
 	s.Step(`^the ANSI "([^"]*)" sequence is "([^"]*)"$`, theANSISequenceIs)
 	s.Step(`^the display byte stream should be$`, theDisplayByteStreamShouldBe)
@@ -481,20 +502,22 @@ func FeatureContext(s *godog.Suite) {
 	s.Step(`^the max level  is (\d+)$`, theMaxLevelIs)
 	s.Step(`^the game uses animation$`, theGameUsesAnimation)
 	s.Step(`^the player presses "([^"]*)"$`, thePlayerPresses)
-	s.Step(`^then pacman goes "([^"]*)"$`, thenPacmanGoes)
+	s.Step(`^then pacman should go "([^"]*)"$`, thenPacmanShouldGo)
 	s.Step(`^this is the last level$`, thisIsTheLastLevel)
-	s.Step(`^pacman is dead$`, pacmanIsDead)
+	s.Step(`^pacman should be dead$`, pacmanShouldBeDead)
 	s.Step(`^initialize the display$`, initializeTheDisplay)
 	s.Step(`^the game dimensions should equal the display dimensions$`, theGameDimensionsShouldEqualTheDisplayDimensions)
 	s.Step(`^the game field of (\d+) x (\d+)$`, theGameFieldOfX)
 	s.Step(`^a pacman at (\d+) , (\d+) facing "([^"]*)"$`, aPacmanAtFacing)
 	s.Step(`^walls at the following places:$`, wallsAtTheFollowingPlaces)
-	s.Step(`^pacman is alive$`, pacmanIsAlive)
+	s.Step(`^pacman should be alive$`, pacmanShouldBeAlive)
 	s.Step(`^ghost at (\d+) , (\d+) should be calm$`, ghostAtShouldBeCalm)
 	s.Step(`^ghost at (\d+) , (\d+) should be panicked$`, ghostAtShouldBePanicked)
 	s.Step(`^the command arg "([^"]*)"$`, theCommandArg)
 	s.Step(`^I run the command with the args$`, iRunTheCommandWithTheArgs)
 	s.Step(`^I should get the following output:$`, iShouldGetTheFollowingOutput)
+	s.Step(`^the screen column width is (\d+)$`, theScreenColumnWidthIs)
+	s.Step(`^we render the status line$`, weRenderTheStatusLine)
 	s.BeforeScenario(func(interface{}) {
 		commandArgs = append(commandArgs, "game.go")
 		outputStream = new(bytes.Buffer)

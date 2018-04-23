@@ -18,7 +18,7 @@ Given the game state is
 """
 When we parse the state
 When the player presses "j"
-Then then pacman goes "LEFT"
+Then then pacman should go "LEFT"
 
 Scenario: Pacman direction is RIGHT when player presses 'l'
 Given the game state is
@@ -30,7 +30,7 @@ Given the game state is
 """
 When we parse the state
 When the player presses "l"
-Then then pacman goes "RIGHT"
+Then then pacman should go "RIGHT"
 
 Scenario: Pacman direction is UP when player presses 'i'
 Given the game state is
@@ -43,7 +43,7 @@ Given the game state is
 """
 When we parse the state
 When the player presses "i"
-Then then pacman goes "UP"
+Then then pacman should go "UP"
 
 Scenario: Pacman direction is DOWN when player presses 'k'
 Given the game state is
@@ -56,4 +56,4 @@ Given the game state is
 """
 When we parse the state
 When the player presses "m"
-Then then pacman goes "DOWN"
+Then then pacman should go "DOWN"

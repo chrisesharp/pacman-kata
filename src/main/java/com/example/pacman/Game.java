@@ -55,7 +55,7 @@ public class Game implements GameEngine {
     public DisplayStream render() {
       gameField.generateDisplayStream();
       DisplayStream stream = new DisplayStream();
-      stream.writeVideo(status.toString());
+      stream.writeVideo(status.toString() + "\n");
       stream.writeColour(status.getColourStream());
       stream.writeVideo(gameField.getVideoStream());
       stream.writeColour(gameField.getColourStream());

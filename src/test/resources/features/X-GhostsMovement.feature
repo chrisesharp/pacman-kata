@@ -19,7 +19,7 @@ Feature: ghosts movement
   When we parse the state
   And we play 4 turns
   And we render the game
-  Then the game screen is
+  Then the game screen should be
   """
   3     160
   +-+-+---+
@@ -46,7 +46,7 @@ Feature: ghosts movement
   When we parse the state
   And we play 11 turns
   And we render the game
-  Then the game screen is
+  Then the game screen should be
   """
   3     160
   +---+---+
@@ -73,7 +73,7 @@ Feature: ghosts movement
   When we parse the state
   And we play 20 turns
   And we render the game
-  Then the game screen is
+  Then the game screen should be
   """
   3     160
   +---+---+

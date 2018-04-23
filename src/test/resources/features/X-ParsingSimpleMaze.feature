@@ -20,8 +20,8 @@ Given the game state is
 """
 When we parse the state
 Then the game field should be 6 x 5
-And the player has 3 lives
-And the player score is 10
+And the player should have 3 lives
+And the score should be 10
 
 Scenario: a 6x4 game field
 Given the game state is
@@ -34,8 +34,8 @@ Given the game state is
 """
 When we parse the state
 Then the game field should be 6 x 4
-And the player has 2 lives
-And the player score is 100
+And the player should have 2 lives
+And the score should be 100
 
 Scenario: a pacman facing right
 Given the game state is
@@ -47,6 +47,6 @@ Given the game state is
 +----+
 """
 When we parse the state
-Then pacman is at 1 , 1
-And pacman is facing "RIGHT"
+Then pacman should be at 1 , 1
+And pacman should be facing "RIGHT"
 

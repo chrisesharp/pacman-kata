@@ -19,7 +19,7 @@ And this is the last level
 When we parse the state
 And we play 5 turns
 And we render the game
-Then the game screen is
+Then the game screen should be
 """
 3    70
 +-----+
@@ -46,7 +46,7 @@ And the max level  is 2
 When we parse the state
 And we play 3 turns
 And we render the game
-Then the game screen is
+Then the game screen should be
 """
 3    70
 +-----+

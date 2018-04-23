@@ -25,7 +25,7 @@ And the score is 0
 And the lives are 3
 When we play 1 turn
 And we render the game
-Then the game screen is
+Then the game screen should be
 """
 3 0
 +-+
@@ -43,7 +43,7 @@ Given the game state is
 """
 When we parse the state
 And we render the game
-Then the game screen is
+Then the game screen should be
 """
 3 0
 +-+
@@ -61,14 +61,14 @@ Given the game state is
 """
 When we parse the state
 And we render the game
-Then the game screen is
+Then the game screen should be
 """
 3 0
 +-+
 |<|
 +-+
 """
-And pacman is alive
+And pacman should be alive
 
 Scenario: pacman is dead
 Given the game state is
@@ -79,6 +79,6 @@ Given the game state is
 +-+
 """
 When we parse the state
-Then pacman is at 1 , 1
-And pacman is dead
+Then pacman should be at 1 , 1
+And pacman should be dead
 

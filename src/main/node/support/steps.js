@@ -9,6 +9,15 @@ let World = require('./world.js').World;
 Given('the command arg {string}', function (string) {
   this.addCommandArg(string);
   });
+Given('the screen column width is {int}', function (cols) {
+  this.setColumns(cols);
+});
+Given('the player has {int} lives', function (lives) {
+  this.setPlayerLives(lives);
+});
+Given('the player score is {int}', function (score) {
+  this.setPlayerScore(score);
+});
 Given('the game state is', function (docString) {
   this.setGame(docString);
   });
@@ -65,6 +74,10 @@ Given('this is level {int}', function (level, callback) {
 When('I run the command with the args', function () {
    this.runCommand();
   });
+  
+When('we render the status line', function () {
+    this.renderStatus();
+  });
 
 When('we parse the state', function (callback) {
   this.parse();
@@ -118,15 +131,15 @@ Then('the game field should be {int} x {int}', function (x, y) {
   assert.equal(y, this.game.playfield.height());
   });
 
-Then('the player has {int} lives', function (lives) {
+Then('the player should have {int} lives', function (lives) {
   assert.equal(lives, this.game.lives);
   });
 
-Then('the player score is {int}', function (score) {
+Then('the score should be {int}', function (score) {
   assert.equal(score, this.game.score);
   });
 
-Then('pacman is at {int} , {int}', function (x, y) {
+Then('pacman should be at {int} , {int}', function (x, y) {
   this.pacman = this.getPacman();
   assert.equal(x, this.pacman.x);
   assert.equal(y, this.pacman.y);
@@ -140,31 +153,31 @@ Then('the game score should be {int}', function (score) {
   assert.equal(score, this.game.score)
   });
 
-Then('the game screen is', function (docString) {
+Then('the game screen should be', function (docString) {
   assert.equal(docString, this.game.output)
   });
 
-Then('pacman is facing {string}', function (direction) {
+Then('pacman should be facing {string}', function (direction) {
   this.pacman = this.getPacman();
   assert.equal(this.facing(direction), this.pacman.direction());
   });
 
-Then('then pacman goes {string}', function (direction) {
+Then('then pacman should go {string}', function (direction) {
   this.pacman = this.getPacman();
   assert.equal(this.facing(direction), this.pacman.direction());
   });
 
-Then('pacman is dead', function (callback) {
+Then('pacman should be dead', function (callback) {
   assert.equal(false, this.getPacman().isAlive());
   callback();
  });
  
-Then('pacman is alive', function (callback) {
+Then('pacman should be alive', function (callback) {
   assert.equal(true, this.getPacman().isAlive());
   callback();
  });
 
-Then('ghost is at {int} , {int}', function (x, y, callback) {
+Then('ghost should be at {int} , {int}', function (x, y, callback) {
   assert.equal(true, this.isGhostAtLocation({x,y}));
   callback();
   });
@@ -191,23 +204,23 @@ Then('the display byte stream should be', function (dataTable, callback) {
   callback();
   });
 
-Then('there is a force field at {int} , {int}', function (x, y, callback) {
+Then('there should be a force field at {int} , {int}', function (x, y, callback) {
   let ff = this.game.walls.filter((wall)=> wall.x==x && wall.y==y && wall.forcefield==true);
   assert(ff)
   callback();
   });
   
-Then('there is a gate at {int} , {int}', function (x, y, callback) {
+Then('there should be a gate at {int} , {int}', function (x, y, callback) {
   let gate = this.game.walls.filter((wall)=> wall.x==x && wall.y==y && wall.gate==true);
   assert(gate)
   callback();
   });
-Then('there is a wall at {int} , {int}', function (x, y, callback) {
+Then('there should be a wall at {int} , {int}', function (x, y, callback) {
   let wall = this.game.walls.filter((wall)=> wall.x==x && wall.y==y);
   assert(wall);
   callback();
   });
-Then('there is a {int} point pill at {int} , {int}', function (points, x, y, callback) {
+Then('there should be a {int} point pill at {int} , {int}', function (points, x, y, callback) {
   let pill = this.game.pills.filter((pill)=> pill.x==x && pill.y==y && pill.points==points);
   assert(pill)
   callback();

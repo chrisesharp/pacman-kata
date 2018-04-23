@@ -18,7 +18,7 @@ Given the game state is
 """
 When we parse the state
 Then the game lives should be 3
-And the game score should be 0
+And the score should be 0
 
 Scenario: wildcard lives and scores should not change existing values
 Given the game state is
@@ -32,4 +32,4 @@ And the score is 100
 And the lives are 2
 When we parse the state
 Then the game lives should be 2
-And the game score should be 100
+And the score should be 100

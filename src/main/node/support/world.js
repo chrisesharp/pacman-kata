@@ -25,6 +25,10 @@ CustomWorld.prototype.addCommandArg = function(arg) {
   this.commandArgs.add(arg.toString());
 }
 
+CustomWorld.prototype.setColumns = function(cols) {
+  this.columns = cols;
+}
+
 CustomWorld.prototype.runCommand = function() {
   const
     { spawnSync } = require( "child_process" ),
@@ -89,8 +93,16 @@ CustomWorld.prototype.setScore = function(score) {
   this.game.setScore(score);
 }
 
+CustomWorld.prototype.setPlayerScore = function(score) {
+  this.score = score;
+}
+
 CustomWorld.prototype.setLives = function(lives) {
   this.game.setLives(lives);
+}
+
+CustomWorld.prototype.setPlayerLives = function(lives) {
+  this.lives = lives;
 }
 
 CustomWorld.prototype.setLevel = function(level) {
@@ -142,6 +154,12 @@ CustomWorld.prototype.facing = function(facing) {
 
 CustomWorld.prototype.keyPressed = function(key) {
   this.keyboard.keyPressed({name:key});
+}
+
+CustomWorld.prototype.renderStatus = function() {
+  this.commandOutput = this.game.renderStatus(this.lives,
+                                              this.score,
+                                              this.columns).chars;
 }
 
 CustomWorld.prototype.gameDimensionsMatchDisplay = function() {

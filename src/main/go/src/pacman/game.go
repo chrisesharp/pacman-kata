@@ -117,17 +117,17 @@ func (game *gameState) SetPlayfield(field Playfield) {
 
 // Render the game state as a string
 func (game *gameState) Render() {
-	game.output, game.colour = game.renderStatus()
+	columns, _ := game.field.Dimensions()
+	game.output, game.colour = renderStatus(game.lives, game.score, columns)
 	buf, colbuf := game.renderField()
 	game.output += buf
 	game.colour = append(game.colour, colbuf...)
 }
 
-func (game *gameState) renderStatus() (string, []Colour) {
+func renderStatus(theLives int, theScore int, columns int) (string, []Colour) {
 	var colourBuf []Colour
-	columns, _ := game.field.Dimensions()
-	lives := strconv.Itoa(game.lives)
-	score := strconv.Itoa(game.score)
+	lives := strconv.Itoa(theLives)
+	score := strconv.Itoa(theScore)
 	padding := columns - len(lives) - len(score)
 	buffer := fmt.Sprintf("%s", lives)
 	buffer += strings.Repeat(" ", padding)

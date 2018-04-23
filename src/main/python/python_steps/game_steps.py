@@ -7,6 +7,19 @@ import subprocess
 #
 # Givens
 #
+@given(u'the screen column width is {cols:d}')
+def step_impl(context, cols):
+    context.columns = cols
+
+
+@given(u'the player has {lives:d} lives')
+def step_impl(context, lives):
+    context.lives = lives
+
+
+@given(u'the player score is {score:d}')
+def step_impl(context, score):
+    context.score = score
 
 
 @given(u'the command arg "{arg}"')
@@ -120,8 +133,13 @@ def step_impl(context):
     received = received.replace(Display.REV, "")
     received = received.replace(Display.BLINK, "")
     received = received.lstrip("\n")
-    context.command_output = received.rstrip("\n")
+    context.output = received.rstrip("\n")
 
+@when(u'we render the status line')
+def step_impl(context):
+    context.output = Game.render_status(context.lives,
+                                        context.score,
+                                        context.columns)
 
 @when(u'we parse the state')
 def step_impl(context):
@@ -184,12 +202,12 @@ def step_impl(context, string):
 @then(u'I should get the following output')
 def step_impl(context):
     print("===")
-    print(context.command_output)
+    print(context.output)
     print("===")
-    assert context.text == context.command_output
+    assert context.text == context.output
 
 
-@then(u'the game screen is')
+@then(u'the game screen should be')
 def step_impl(context):
     assert context.text == context.game.output
 
@@ -201,28 +219,28 @@ def step_impl(context, x, y):
     assert gamefield.height() == y
 
 
-@then(u'the player has {lives:d} lives')
+@then(u'the player should have {lives:d} lives')
 def step_impl(context, lives):
     assert context.game.lives == lives
 
 
-@then(u'the player score is {score:d}')
+@then(u'the score should be {score:d}')
 def step_impl(context, score):
     assert context.game.score == score
 
 
-@then(u'pacman is at {x:d} , {y:d}')
+@then(u'pacman should be at {x:d} , {y:d}')
 def step_impl(context, x, y):
     assert context.game.pacman.coordinates[0] is x
     assert context.game.pacman.coordinates[1] is y
 
 
-@then(u'pacman is facing "{direction}"')
+@then(u'pacman should be facing "{direction}"')
 def step_impl(context, direction):
     assert context.game.pacman.facing.name == direction
 
 
-@then(u'ghost is at {x:d} , {y:d}')
+@then(u'ghost should be at {x:d} , {y:d}')
 def step_impl(context, x, y):
     is_ghost = False
     for ghost in context.game.ghosts:
@@ -231,23 +249,23 @@ def step_impl(context, x, y):
     assert is_ghost is True
 
 
-@then(u'there is a {points:d} point pill at {x:d} , {y:d}')
+@then(u'there should be a {points:d} point pill at {x:d} , {y:d}')
 def step_impl(context, points, x, y):
     pill = context.game.get_element((x, y))
     assert context.game.is_pill((x, y)) and pill.score() == points
 
 
-@then(u'there is a wall at {x:d} , {y:d}')
+@then(u'there should be a wall at {x:d} , {y:d}')
 def step_impl(context, x, y):
     assert context.game.is_wall((x, y))
 
 
-@then(u'there is a gate at {x:d} , {y:d}')
+@then(u'there should be a gate at {x:d} , {y:d}')
 def step_impl(context, x, y):
     assert context.game.is_gate((x, y))
 
 
-@then(u'there is a force field at {x:d} , {y:d}')
+@then(u'there should be a force field at {x:d} , {y:d}')
 def step_impl(context, x, y):
     assert context.game.is_field((x, y))
 
@@ -278,17 +296,17 @@ def step_impl(context):
     assert bytestream == received
 
 
-@then(u'then pacman goes "{direction}"')
+@then(u'then pacman should go "{direction}"')
 def step_impl(context, direction):
     assert context.game.pacman.facing.name == direction
 
 
-@then(u'pacman is alive')
+@then(u'pacman should be alive')
 def step_impl(context):
     assert context.game.pacman.alive is True
 
 
-@then(u'pacman is dead')
+@then(u'pacman should be dead')
 def step_impl(context):
     assert context.game.pacman.alive is False
 

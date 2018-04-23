@@ -13,6 +13,9 @@ import java.util.HashMap;
 
 public class PacmanStepDef {
     Game game;
+    int lives;
+    int score;
+    int columns;
     GameField gameField;
     Level level;
     String output;
@@ -27,6 +30,21 @@ public class PacmanStepDef {
     @Given("^the command arg \"([^\"]*)\"$")
     public void the_command(String arg) {
         this.commandArgs.add(arg);
+    }
+    
+    @Given("^the screen column width is (\\d+)$")
+    public void the_screen_column_width_is(int cols) {
+        this.columns = cols;
+    }
+
+    @Given("^the player has (\\d+) lives$")
+    public void the_player_has_lives(int lives) {
+        this.lives = lives;
+    }
+
+    @Given("^the player score is (\\d+)$")
+    public void the_player_score_is(int score) {
+        this.score = score;
     }
 
     @Given("^walls at the following places:$")
@@ -142,6 +160,17 @@ public class PacmanStepDef {
       System.setOut(System.out);
     }
     
+    @When("^we render the status line$")
+    public void we_render_the_status_line() {
+      try {
+        result.write(GameStats.renderStatus(this.lives,
+                                            this.score,
+                                            this.columns).getBytes());
+      } catch (Exception e) {
+        System.out.println("Something weird happened here!");
+      }
+    }
+    
     @When("^we parse the state$")
     public void weParseTheState() throws Throwable {
         game.parse();
@@ -235,76 +264,76 @@ public class PacmanStepDef {
         assertEquals(y,gameField.height());
     }
 
-    @Then("^pacman is at (\\d+) , (\\d+)$")
+    @Then("^pacman should be at (\\d+) , (\\d+)$")
     public void pacmanIsAt(int x, int y) throws Throwable {
         GameElement pacman = game.getGameElementByType(Pacman.class);
         Location thisLocation = new Location(x,y);
         assertEquals(thisLocation, pacman.location());
     }
 
-    @Then("^ghost is at (\\d+) , (\\d+)$")
+    @Then("^ghost should be at (\\d+) , (\\d+)$")
     public void ghostIsAt(int x, int y) throws Throwable {
         Location thisLocation = new Location(x,y);
         GameElement aGhost = new Ghost(thisLocation);
         assertTrue(game.getGameElement(thisLocation).equals(aGhost));
     }
 
-    @Then("^there is a 50 point pill at (\\d+) , (\\d+)$")
+    @Then("^there should be a 50 point pill at (\\d+) , (\\d+)$")
     public void powerPillIsAt(int x, int y) throws Throwable {
         Location thisLocation = new Location(x,y);
         PowerPill aPowerPill = new PowerPill(thisLocation);
         assertTrue(game.getGameElement(thisLocation).equals(aPowerPill));
     }
 
-    @Then("^there is a 10 point pill at (\\d+) , (\\d+)$")
+    @Then("^there should be a 10 point pill at (\\d+) , (\\d+)$")
     public void tenPointPillIsAt(int x, int y) throws Throwable {
         Location thisLocation = new Location(x,y);
         Pill aPill = new Pill(thisLocation);
         assertTrue(game.getGameElement(thisLocation).equals(aPill));
     }
 
-    @Then("^there is a wall at (\\d+) , (\\d+)$")
+    @Then("^there should be a wall at (\\d+) , (\\d+)$")
     public void wallIsAt(int x, int y) throws Throwable {
         Location thisLocation = new Location(x,y);
         Wall aWall = new Wall(thisLocation);
         assertTrue(game.getGameElement(thisLocation).equals(aWall));
     }
 
-    @Then("^the player has (\\d+) lives$")
+    @Then("^the player should have (\\d+) lives$")
     public void thePlayerHasLives(int lives) throws Throwable {
         assertEquals(lives, game.getLives());
     }
 
-    @Then("^the player score is (\\d+)$")
+    @Then("^the score should be (\\d+)$")
     public void thePlayerScoreIs(int score) throws Throwable {
         assertEquals(score, game.getScore());
     }
 
-    @Then("^pacman is facing \"([^\"]*)\"$")
+    @Then("^pacman should be facing \"([^\"]*)\"$")
     public void pacmanIsFacing(String direction) throws Throwable {
       Pacman pacman = (Pacman)game.getGameElementByType(Pacman.class);
         assertEquals(direction.toUpperCase(), pacman.direction().toString());
     }
 
-    @Then("^the game screen is$")
+    @Then("^the game screen should be$")
     public void theGameScreenIs(String expected) throws Throwable {
         assertEquals(expected, output);
     }
 
-    @Then("^then pacman goes \"([^\"]*)\"$")
+    @Then("^then pacman should go \"([^\"]*)\"$")
     public void thenPacmanGoes(String direction) throws Throwable {
       Pacman pacman = (Pacman)game.getGameElementByType(Pacman.class);
         assertEquals(direction.toUpperCase(), pacman.direction().toString());
     }
 
-    @Then("^there is a gate at (\\d+) , (\\d+)$")
+    @Then("^there should be a gate at (\\d+) , (\\d+)$")
     public void there_is_a_gate_at(int x, int y) throws Throwable {
         Location thisLocation = new Location(x,y);
         Gate theGate = new Gate(thisLocation);
         assertEquals(theGate,game.getGameElementByType(Gate.class));
     }
 
-    @Then("^there is a force field at (\\d+) , (\\d+)$")
+    @Then("^there should be a force field at (\\d+) , (\\d+)$")
     public void there_is_a_force_field_at(int x, int y) throws Throwable {
         Location thisLocation = new Location(x,y);
         ForceField field = new ForceField(thisLocation);
@@ -325,12 +354,12 @@ public class PacmanStepDef {
         assertArrayEquals(expectedBytes, resultingBytes);
     }
     
-    @Then("^pacman is dead$")
+    @Then("^pacman should be dead$")
     public void pacman_is_dead() throws Throwable {
         assertTrue(game.getGameElementByType(Pacman.class).isDead());
     }  
     
-    @Then("^pacman is alive$")
+    @Then("^pacman should be alive$")
     public void pacman_is_alive() throws Throwable {
         assertFalse(game.getGameElementByType(Pacman.class).isDead());
     }  

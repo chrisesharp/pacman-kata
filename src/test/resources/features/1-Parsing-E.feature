@@ -17,17 +17,17 @@ Given the game state is
 +-+
 """
 When we parse the state
-Then pacman is at 1 , 1
-And the player has 3 lives
-And the player score is 0
-And there is a wall at 0 , 1
-And there is a wall at 1 , 0
-And there is a wall at 1 , 2
-And there is a wall at 2 , 1
-And there is a wall at 0 , 0
-And there is a wall at 2 , 0
-And there is a wall at 0 , 2
-And there is a wall at 2 , 2
+Then pacman should be at 1 , 1
+And the player should have 3 lives
+And the score should be 0
+And there should be a wall at 0 , 1
+And there should be a wall at 1 , 0
+And there should be a wall at 1 , 2
+And there should be a wall at 2 , 1
+And there should be a wall at 0 , 0
+And there should be a wall at 2 , 0
+And there should be a wall at 0 , 2
+And there should be a wall at 2 , 2
 
 Scenario: gate at 1 , 1
 Given the game state is
@@ -38,7 +38,7 @@ Given the game state is
 +-+
 """
 When we parse the state
-Then there is a gate at 1 , 1
+Then there should be a gate at 1 , 1
 
 Scenario: force field at 1 , 1
 Given the game state is
@@ -49,4 +49,4 @@ Given the game state is
 +-+
 """
 When we parse the state
-Then there is a force field at 1 , 1
+Then there should be a force field at 1 , 1

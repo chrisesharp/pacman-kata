@@ -15,7 +15,7 @@ Given the game state is
 +---+
 """
 When we parse the state
-Then ghost is at 3 , 1
+Then ghost should be at 3 , 1
 
 Scenario: there is a ghost at 1,1
 Given the game state is
@@ -28,7 +28,7 @@ Given the game state is
 +---+
 """
 When we parse the state
-Then ghost is at 1 , 1
+Then ghost should be at 1 , 1
 
 Scenario: there is a ghost at 1,1 and another at 2,1
 Given the game state is
@@ -41,8 +41,8 @@ Given the game state is
 +---+
 """
 When we parse the state
-Then ghost is at 1 , 1
-And ghost is at 2 , 1
+Then ghost should be at 1 , 1
+And ghost should be at 2 , 1
 
 Scenario: 2 ghosts are rendered
 Given the game state is
@@ -54,7 +54,7 @@ Given the game state is
 """
 When we parse the state
 And we render the game
-Then the game screen is
+Then the game screen should be
 """
 3   0
 +---+

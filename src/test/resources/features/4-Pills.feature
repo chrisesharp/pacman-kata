@@ -15,7 +15,7 @@ Given the game state is
 When we parse the state
 And we play 1 turns
 And we render the game
-Then the game screen is
+Then the game screen should be
 """
 3   10
 +----+
@@ -34,7 +34,7 @@ Given the game state is
 When we parse the state
 And we play 2 turns
 And we render the game
-Then the game screen is
+Then the game screen should be
 """
 3   20
 +----+
@@ -53,7 +53,7 @@ Given the game state is
 When we parse the state
 And we play 2 turns
 And we render the game
-Then the game screen is
+Then the game screen should be
 """
 3   50
 +----+
@@ -73,7 +73,7 @@ Given the game state is
 When we parse the state
 And we play 4 turns
 And we render the game
-Then the game screen is
+Then the game screen should be
 """
 3    70
 +-----+
@@ -95,7 +95,7 @@ Given the game state is
 When we parse the state
 And we play 1 turns
 And we render the game
-Then the game screen is
+Then the game screen should be
 """
 3   10
 +----+
@@ -118,7 +118,7 @@ Given the game state is
 When we parse the state
 And we play 1 turns
 And we render the game
-Then the game screen is
+Then the game screen should be
 """
 3   50
 +----+

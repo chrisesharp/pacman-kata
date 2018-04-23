@@ -45,5 +45,5 @@ Given the game state is
 """
 When we parse the state
 Then the game field should be 5 x 5
-And the player has 2 lives
-And the player score is 10
+And the player should have 2 lives
+And the score should be 10
