@@ -119,7 +119,7 @@ local-go: clean-go build-go test-go coverage-go deploy-go
 .PHONY: clean-go
 clean-go:
 	cd $(GOSRC)/src/pacman ; \
-	rm coverage.out
+	rm -f coverage.out
 
 .PHONY: coverage-go
 coverage-go:
@@ -201,7 +201,7 @@ clean-python:
 	cd $(PYTHONSRC) ;\
 	rm -rf ./__pycache__ ;\
 	coverage erase ; \
-	rm coverage.xml
+	rm -f coverage.xml
 	
 .PHONY: coverage-python
 coverage-python:
