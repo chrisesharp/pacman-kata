@@ -23,13 +23,21 @@ ifndef TRAVIS_COMMIT
   TRAVIS_COMMIT=$(shell git rev-parse HEAD)
 endif
 
+NODE_FORMAT = progress
+#NODE_FORMAT = node_modules/cucumber-pretty
+JAVA_FORMAT = progress
+PYTHON_FORMAT = progress
+GO_FORMAT = progress
+
 JAVA_TEST_CMD	= mvn test -Dcucumber.options="--glue com.example.pacman \
-																						--plugin progress \
+																						--plugin $(JAVA_FORMAT) \
 																						--tags $(shell echo $(BDD)|sed "s/not /~/g") \
 																					  classpath:features"
-GO_TEST_CMD = go test -coverprofile=coverage.out -args $(shell echo $(BDD)|sed "s/not /~/g")
-NODE_TEST_CMD = npm test -- --tags $(BDD)
-PYTHON_TEST_CMD = behave -f progress -t $(shell echo $(BDD)|sed "s/not /~/g") -k
+GO_TEST_CMD = go test  -coverprofile=coverage.out \
+											--godog.format=$(GO_FORMAT) \
+											--godog.tags=$(shell echo $(BDD)|sed "s/not /~/g")
+NODE_TEST_CMD = npm test -- -f $(NODE_FORMAT) --tags $(BDD)
+PYTHON_TEST_CMD = behave -f $(PYTHON_FORMAT) -t $(shell echo $(BDD)|sed "s/not /~/g") -k
 
 JAVA_IMG   = java-pacman
 JAVASRC    = src
@@ -134,7 +142,7 @@ coverage-go:
 build-go: export GOPATH = $(CURDIR)/$(GOSRC)
 build-go: export GOBIN = $(CURDIR)/$(GOSRC)/bin
 build-go:
-	cd $(GOSRC)/src/pacman; go get && go build 
+	cd $(GOSRC)/src/pacman; go get -u && go build 
 
 .PHONY: test-go
 test-go: export GOPATH = $(CURDIR)/$(GOSRC)

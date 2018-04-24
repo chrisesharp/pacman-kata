@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/DATA-DOG/godog"
+	"github.com/DATA-DOG/godog/colors"
 	"github.com/DATA-DOG/godog/gherkin"
 )
 
@@ -25,16 +26,20 @@ var columns int
 var score int
 var lives int
 
+var opt = godog.Options{Output: colors.Colored(os.Stdout)}
+
+func init() {
+	godog.BindFlags("godog.", flag.CommandLine, &opt)
+	opt.Paths = []string{"features/"}
+	opt.Randomize = time.Now().UTC().UnixNano() // randomize scenario order
+}
+
 func TestMain(m *testing.M) {
-	tags := os.Getenv("BDD")
+	opt.Tags = os.Getenv("BDD")
+	flag.Parse()
 	status := godog.RunWithOptions("godogs", func(s *godog.Suite) {
 		FeatureContext(s)
-	}, godog.Options{
-		Format:    "progress",
-		Paths:     []string{"features/"},
-		Tags:      tags,
-		Randomize: time.Now().UTC().UnixNano(), // randomize scenario execution order
-	})
+	}, opt)
 
 	if st := m.Run(); st > status {
 		status = st
