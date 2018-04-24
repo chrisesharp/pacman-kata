@@ -93,6 +93,13 @@ func aPacmanAtFacing(x, y int, facing string) error {
 	return nil
 }
 
+// Given
+func aGhostAt(x, y int) error {
+	ghost := NewGhost(theGame, normalGhost, Location{x, y})
+	theGame.AddGhost(ghost)
+	return nil
+}
+
 //Given
 func wallsAtTheFollowingPlaces(wallSpec *gherkin.DataTable) error {
 	for _, row := range wallSpec.Rows {
@@ -197,6 +204,12 @@ func iRunTheCommandWithTheArgs() error {
 // When
 func weRenderTheStatusLine() error {
 	output, _ := renderStatus(lives, score, columns)
+	outputStream.WriteString(output)
+	return nil
+}
+
+func weRenderTheGameField() error {
+	output, _ := theGame.GetPlayfield().RenderField()
 	outputStream.WriteString(output)
 	return nil
 }
@@ -518,6 +531,8 @@ func FeatureContext(s *godog.Suite) {
 	s.Step(`^I should get the following output:$`, iShouldGetTheFollowingOutput)
 	s.Step(`^the screen column width is (\d+)$`, theScreenColumnWidthIs)
 	s.Step(`^we render the status line$`, weRenderTheStatusLine)
+	s.Step(`^we render the game field$`, weRenderTheGameField)
+	s.Step(`^a ghost at (\d+) , (\d+)$`, aGhostAt)
 	s.BeforeScenario(func(interface{}) {
 		commandArgs = append(commandArgs, "game.go")
 		outputStream = new(bytes.Buffer)

@@ -87,6 +87,12 @@ public class PacmanStepDef {
       pacmanTok.addGameElement(game, new Location(x,y));
     }
     
+    @Given("^a ghost at (\\d+) , (\\d+)$")
+    public void a_ghost_at(int x, int y) {
+        GhostToken ghostToken = new GhostToken("M");
+        ghostToken.addGameElement(game, new Location(x,y));
+    }
+    
     @Given("^the game state is$")
     public void theGameStateIs(String state) throws Throwable {
         level = new Level(state);
@@ -166,6 +172,17 @@ public class PacmanStepDef {
         result.write(GameStats.renderStatus(this.lives,
                                             this.score,
                                             this.columns).getBytes());
+      } catch (Exception e) {
+        System.out.println("Something weird happened here!");
+      }
+    }
+    
+    @When("^we render the game field$")
+    public void we_render_the_game_field() {
+      GameField field = game.getGameField();
+      field.generateDisplayStream();
+      try {
+        result.write(field.getVideoStream().getBytes());
       } catch (Exception e) {
         System.out.println("Something weird happened here!");
       }

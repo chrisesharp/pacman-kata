@@ -12,6 +12,7 @@ type Game interface {
 	SetInput(string)
 	SetOutput(outstream *os.File)
 	SetPlayfield(Playfield)
+	GetPlayfield() Playfield
 	SetLevelMaps(*levelStruct)
 	Lives() int
 	SetLives(lives int)

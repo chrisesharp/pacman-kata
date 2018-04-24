@@ -27,9 +27,12 @@ Given('the game field of {int} x {int}', function (x, y) {
 Given('a pacman at {int} , {int} facing {string}', function (x, y, facing) {
   this.setPacman(x,y,facing);
   });
+Given('a ghost at {int} , {int}', function (x, y) {
+  this.addGhost(x,y);
+  });
 Given('walls at the following places:', function (dataTable) {
   this.addWalls(dataTable);
-});
+  });
 Given('the score is {int}', function (score) {
   this.setScore(score);
   });
@@ -74,9 +77,13 @@ Given('this is level {int}', function (level, callback) {
 When('I run the command with the args', function () {
    this.runCommand();
   });
-  
+
 When('we render the status line', function () {
     this.renderStatus();
+  });
+
+When('we render the game field', function () {
+   this.renderGameField();
   });
 
 When('we parse the state', function (callback) {

@@ -80,12 +80,15 @@ CustomWorld.prototype.isGhostPanicked = function(loc) {
   return element.isPanicked(); 
 }
 
+CustomWorld.prototype.addGhost = function(x, y) {
+  this.game.addGhost(new Ghost({coords:{x, y}, icon:"M"}));
+}
 CustomWorld.prototype.addWalls = function(dataTable) {
   dataTable.rows().forEach((entry) => {
     let icon = entry[0];
     let x = entry[1];
     let y = entry[2];
-    this.game.addWall(new Wall({coords:{x,y},icon:icon}));
+    this.game.addWall(new Wall({coords:{x, y},icon:icon}));
   });
 }
 
@@ -148,6 +151,16 @@ CustomWorld.prototype.render = function() {
   this.game.render();
 }
 
+CustomWorld.prototype.renderStatus = function() {
+  this.commandOutput = this.game.renderStatus(this.lives,
+                                              this.score,
+                                              this.columns).chars;
+}
+
+CustomWorld.prototype.renderGameField = function() {
+  this.commandOutput = this.game.renderField().chars;
+}
+
 CustomWorld.prototype.facing = function(facing) {
   return Direction.facing(facing);
 }
@@ -156,11 +169,6 @@ CustomWorld.prototype.keyPressed = function(key) {
   this.keyboard.keyPressed({name:key});
 }
 
-CustomWorld.prototype.renderStatus = function() {
-  this.commandOutput = this.game.renderStatus(this.lives,
-                                              this.score,
-                                              this.columns).chars;
-}
 
 CustomWorld.prototype.gameDimensionsMatchDisplay = function() {
   let playfield = this.game.getPlayfield();

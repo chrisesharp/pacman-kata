@@ -115,11 +115,16 @@ func (game *gameState) SetPlayfield(field Playfield) {
 	game.field = field
 }
 
+// GetPlayfield for this game state
+func (game *gameState) GetPlayfield() Playfield {
+	return game.field
+}
+
 // Render the game state as a string
 func (game *gameState) Render() {
 	columns, _ := game.field.Dimensions()
 	game.output, game.colour = renderStatus(game.lives, game.score, columns)
-	buf, colbuf := game.renderField()
+	buf, colbuf := game.field.RenderField()
 	game.output += buf
 	game.colour = append(game.colour, colbuf...)
 }
@@ -136,29 +141,6 @@ func renderStatus(theLives int, theScore int, columns int) (string, []Colour) {
 		colourBuf = append(colourBuf, DefaultColour)
 	}
 	return buffer, colourBuf
-}
-
-func (game *gameState) renderField() (string, []Colour) {
-	var buffer string
-	var colourBuf []Colour
-	columns, rows := game.field.Dimensions()
-	lastline := rows - 1
-	for y := 0; y < rows; y++ {
-		for x := 0; x < columns; x++ {
-			r, c := game.field.Get(Location{x, y})
-			buffer += string(r)
-			colourBuf = append(colourBuf, c)
-		}
-		buffer += addNewLineIfNotFinished(y, lastline)
-	}
-	return buffer, colourBuf
-}
-
-func addNewLineIfNotFinished(current, last int) string {
-	if current < last {
-		return string('\n')
-	}
-	return ""
 }
 
 // Tick the game turn over
