@@ -38,7 +38,7 @@ JAVA_TEST_CMD	= mvn test -Dcucumber.options="--glue com.example.pacman \
 GO_TEST_CMD = go test  -coverprofile=coverage.out \
 											--godog.format=$(GO_FORMAT) \
 											--godog.tags="$(shell $(TAG_FIXER))"
-NODE_TEST_CMD = npm test -- -f $(NODE_FORMAT) --tags "$(BDD)"
+NODE_TEST_CMD = npm test -- -f $(NODE_FORMAT) --tags '$(BDD)'
 PYTHON_TEST_CMD = behave -f $(PYTHON_FORMAT) -t "$(shell $(TAG_FIXER))" -k
 
 JAVA_IMG   = java-pacman
