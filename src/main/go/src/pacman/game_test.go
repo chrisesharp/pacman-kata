@@ -35,8 +35,10 @@ func init() {
 }
 
 func TestMain(m *testing.M) {
-	opt.Tags = os.Getenv("BDD")
 	flag.Parse()
+	if opt.Tags == "" {
+		opt.Tags = os.Getenv("BDD")
+	}
 	status := godog.RunWithOptions("godogs", func(s *godog.Suite) {
 		FeatureContext(s)
 	}, opt)
