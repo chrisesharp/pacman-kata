@@ -373,9 +373,14 @@ func (game *gameState) SetOutput(outstream *os.File) {
 	game.outputStream = outstream
 }
 
+// NewGame creates a new gameState
+func NewGame() Game {
+	return new(gameState).New()
+}
+
 // Start the game with correct flags
 func Start(filePtr string, colour bool, animation bool, debug bool, outstream *os.File) {
-	theGame = new(gameState).New()
+	theGame = NewGame()
 	theGame.SetOutput(outstream)
 	if colour {
 		theGame.SetDisplay(new(colourTerminal).New(theGame))
