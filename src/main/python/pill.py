@@ -1,4 +1,7 @@
-class Pill(object):
+from game_element import GameElement
+
+
+class Pill(GameElement):
     icons = {".": 10,
              "o": 50}
 
@@ -12,12 +15,8 @@ class Pill(object):
             return Pill(coords, icon)
 
     def __init__(self, coordinates, icon):
-        self.coordinates = coordinates
-        self.icon = icon
+        super(Pill, self).__init__(coordinates, icon)
         self.points = Pill.icons[icon]
-
-    def __str__(self):
-        return self.icon
 
     def score(self):
         return self.points

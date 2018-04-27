@@ -49,9 +49,11 @@ def step_impl(context, width, height):
 def step_impl(context, x, y, direction):
     context.game.set_pacman((x, y), direction)
 
+
 @given(u'a ghost at {x:d} , {y:d}')
 def step_impl(context, x, y):
     context.game.add_ghost(Ghost((x, y), "M"))
+
 
 @given(u'walls at the following places')
 def step_impl(context):

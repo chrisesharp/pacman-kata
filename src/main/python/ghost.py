@@ -1,9 +1,10 @@
 from direction import avoid, next_location, wrap, left, right, opposite
 from direction import Direction
 from random import randint
+from game_element import GameElement
 
 
-class Ghost(object):
+class Ghost(GameElement):
     icons = {
             "M": False,
             "W": True
@@ -23,7 +24,7 @@ class Ghost(object):
             return Ghost(coords, icon)
 
     def __init__(self, coordinates, icon=""):
-        self.coordinates = coordinates
+        super(Ghost, self).__init__(coordinates, icon)
         self.start = coordinates
         self.passed_gate = False
         if icon in Ghost.icons:
@@ -122,6 +123,3 @@ class Ghost(object):
 
     def score(self):
         return 200
-
-    def __str__(self):
-        return self.icon

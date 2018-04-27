@@ -1,3 +1,6 @@
+from game_element import GameElement
+
+
 class GameField:
     def __init__(self, width, height):
         self.columns = width
@@ -5,7 +8,7 @@ class GameField:
         self.field = {}
         for y in range(self.rows):
             for x in range(self.columns):
-                self.add((x, y), " ")
+                self.add((x, y), GameElement((x, y), " "))
 
     def add(self, coordinates, element):
         self.field[coordinates[0], coordinates[1]] = element
@@ -24,8 +27,12 @@ class GameField:
         video = ""
         for y in range(self.rows):
             for x in range(self.columns):
-                video += str(self.field[(x, y)])
-                colour.append(0)
+                element = self.field[(x, y)]
+                video += str(element)
+                if isinstance(element, GameElement):
+                    colour.append(element.get_colour())
+                else:
+                    colour.append(0)
             if y < self.rows-1:
                 video += "\n"
                 colour.append(0)

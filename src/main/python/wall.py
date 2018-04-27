@@ -1,4 +1,7 @@
-class Wall(object):
+from game_element import GameElement
+
+
+class Wall(GameElement):
     gates = {"=": 0}
     field = {"#": 0}
     walls = {"|": 1,
@@ -26,13 +29,6 @@ class Wall(object):
     def get_element(coords, icon):
         if (Wall.is_wall(icon)):
             return Wall(coords, icon)
-
-    def __init__(self, coordinates, icon):
-        self.coordinates = coordinates
-        self.icon = icon
-
-    def __str__(self):
-        return self.icon
 
     def add_to_game(self, game):
         game.add_wall(self.coordinates, self.icon)

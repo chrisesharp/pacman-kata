@@ -1,8 +1,10 @@
 from direction import next_location, wrap
 from direction import Direction
+from game_element import GameElement
+from colour import Colour
 
 
-class Pacman:
+class Pacman(GameElement):
     icons = {
             "<": Direction.RIGHT,
             ">": Direction.LEFT,
@@ -35,7 +37,7 @@ class Pacman:
         game.add_pacman(self)
 
     def __init__(self, coordinates, icon=""):
-        self.coordinates = coordinates
+        super(Pacman, self).__init__(coordinates, icon)
         self.start = coordinates
         self.facing = None
         if icon in Pacman.icons:
@@ -46,6 +48,7 @@ class Pacman:
                 self.alive = True
         self.icon = icon
         self.frame = 0
+        self.colour = Colour.YELLOW
 
     def set_direction(self, facing):
         if isinstance(facing, str):
@@ -102,6 +105,3 @@ class Pacman:
 
     def use_animation(self, animated):
         self.animated = animated
-
-    def __str__(self):
-        return self.icon
