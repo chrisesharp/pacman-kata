@@ -403,7 +403,7 @@ func Start(filePtr string, colour bool, animation bool, debug bool, outstream *o
 
 func main() {
 	filePtr := flag.String("file", "data/pacman.txt", "level txt file")
-	colour := flag.Bool("colour", true, "use colour display")
+	colour := flag.Bool("colour", false, "use colour display")
 	debug := flag.Bool("debug", false, "debug mode plays only one frame")
 	animation := flag.Bool("animation", true, "use animated icons")
 	flag.Parse()
