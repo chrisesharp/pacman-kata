@@ -104,19 +104,19 @@ class Game {
     
     render() {
       let status = this.renderStatus(this.lives, this.score, this.playfield.width());
-      this.output = status.chars;
-      this.colour = status.colour;
-      let field = this.renderField();
-      this.output += "\n" + field.chars;
-      this.colour = this.colour.concat(field.colour);
+      this.output = status.chars + "\n";
+      this.colour = status.colour.concat(0);
+      let screen = this.renderField();
+      this.output += screen.chars;
+      this.colour = this.colour.concat(screen.colour);
     }
     
-    renderStatus(theLives, theScore, cols) {
+    renderStatus(theLives, theScore, columns) {
       let score = String(theScore);
       let lives = String(theLives);
-      let padding = cols - lives.length - score.length;
+      let padding = columns - lives.length - score.length;
       let buffer = lives + " ".repeat(padding) + score;
-      let colourbuf = Array(buffer.length).fill(0);
+      let colourbuf = Array(columns).fill(0);
       return {chars:buffer,colour:colourbuf};
     }
     

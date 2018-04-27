@@ -48,7 +48,7 @@ if (require.main === module) {
   game.setDebug(debug);
   let keyboard = new Keyboard(game);
   var display;
-  if (colour==="true") {
+  if (colour) {
     display = new ColourDisplay(game);
   } else {
     display = new Display(game);
