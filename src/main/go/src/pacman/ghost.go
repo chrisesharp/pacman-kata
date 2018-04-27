@@ -32,7 +32,7 @@ type ghostStruct struct {
 	game       Game
 }
 
-var ghostColours = []ColourAtt{RED, YELLOW, GREEN, PURPLE}
+var ghostColours = []ColourAtt{RED, CYAN, GREEN, PURPLE}
 var ghostColour = 0
 
 // NewGhost creates a clean populated ghostStruct
