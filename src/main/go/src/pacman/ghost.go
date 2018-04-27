@@ -37,8 +37,11 @@ var ghostColour = 0
 
 // NewGhost creates a clean populated ghostStruct
 func NewGhost(game Game, icon rune, loc Location) Ghost {
-	colour := Colour{ghostColours[ghostColour], BLACK}
-	ghostColour = (ghostColour + 1) % len(ghostColours)
+	var colour Colour
+	if game != nil {
+		colour = Colour{ghostColours[ghostColour], BLACK}
+		ghostColour = (ghostColour + 1) % len(ghostColours)
+	}
 	var panic int
 	element := NewElement(game, icon, loc, LEFT, ghostPoints)
 	if GhostPanic(icon) {
