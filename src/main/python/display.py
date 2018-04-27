@@ -26,7 +26,7 @@ class Display(object):
     def height(self):
         return self.rows
 
-    def refresh(self, video_output, colour_out):
+    def refresh(self, video_output, colour_out=None):
         self.write_stream(Display.CLR)
         self.write_stream(video_output)
         self.write_stream(Display.RST)

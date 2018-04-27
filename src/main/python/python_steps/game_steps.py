@@ -141,13 +141,15 @@ def step_impl(context):
 
 @when(u'we render the status line')
 def step_impl(context):
-    context.output = Game.render_status(context.lives,
-                                        context.score,
-                                        context.columns)
+    composite = Game.render_status(context.lives,
+                                   context.score,
+                                   context.columns)
+    context.output = composite["video"]
 
 @when(u'we render the game field')
 def step_impl(context):
-    context.output = context.game.field.render()
+    composite = context.game.field.render()
+    context.output = composite["video"]
 
 @when(u'we parse the state')
 def step_impl(context):
