@@ -46,6 +46,9 @@ JAVASRC    = src
 
 GO_IMG     = go-pacman
 GOSRC      = src/main/go
+ifndef GOPATH
+	GOPATH = $(CURDIR)/$(GOSRC)
+endif
 
 NODE_IMG   = node-pacman
 NODESRC    = src/main/node
