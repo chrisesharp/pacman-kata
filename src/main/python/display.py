@@ -11,10 +11,11 @@ class Display(object):
         self.game = game
         self.rows = None
         self.cols = None
-        self.output = None
+        self.output = ""
+        self.outstream = None
 
     def init(self, stream):
-        self.output = stream
+        self.outstream = stream
         if self.game.field:
             self.rows = self.game.field.height()
             self.cols = self.game.field.width()
@@ -26,8 +27,11 @@ class Display(object):
         return self.rows
 
     def refresh(self, output):
-        self.output = Display.CLR
-        self.output += output
-        self.output += Display.RST
-        self.output += "\n"
+        self.write_stream(Display.CLR)
+        self.write_stream(output)
+        self.write_stream(Display.RST)
+        self.write_stream("\n")
         print(self.output)
+
+    def write_stream(self, data):
+        self.output += data

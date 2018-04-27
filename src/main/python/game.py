@@ -3,6 +3,7 @@ from time import sleep
 from math import floor
 from gamefield import GameField
 from keyboard import Keyboard
+from display import Display
 from pacman import Pacman
 from ghost import Ghost
 from wall import Wall
@@ -24,6 +25,7 @@ class Game(object):
         self.walls = []
         self.game_over = False
         self.controller = None
+        self.display = None
         self.gate = None
         self.level = 1
         self.last_level = 1
@@ -32,6 +34,7 @@ class Game(object):
 
     def play(self, debug):
         self.parse()
+        self.display.init(None)
         while (self.game_over is False):
             self.tick()
             self.render()
@@ -121,8 +124,7 @@ class Game(object):
         return output
 
     def refresh(self):
-        print("\u001B[H" + "\u001B[2J" + "\u001B[1m")
-        print(self.output)
+        self.display.refresh(self.output)
 
     def update_field(self):
         new_field = GameField(self.field.width(), self.field.height())
@@ -184,6 +186,9 @@ class Game(object):
     def set_controller(self, controller):
         self.controller = controller
 
+    def set_display(self, display):
+        self.display = display
+
     def move(self, direction):
         self.pacman.move(direction)
 
@@ -232,10 +237,12 @@ def start_game(file, colour, debug):
 
     game = Game(level_map)
     controller = Keyboard(game)
+    display = Display(game)
     if (debug is False):
         controller.init()
         game.set_controller(controller)
         game.use_animation()
+    game.set_display(display)
     game.play(debug)
     controller.close()
 
