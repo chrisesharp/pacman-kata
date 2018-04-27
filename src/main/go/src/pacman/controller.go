@@ -45,7 +45,6 @@ func (t *keyboard) listen() {
 		case termbox.EventKey:
 			switch ev.Key {
 			case termbox.KeyEsc:
-				termbox.Close()
 				t.game.Quit()
 			case termbox.KeyArrowUp:
 				t.game.KeyPress("i")

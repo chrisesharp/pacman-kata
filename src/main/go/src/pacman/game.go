@@ -336,7 +336,7 @@ func (game *gameState) Play(debug bool) {
 		}
 	}
 	if !debug {
-		time.Sleep(time.Second * 5)
+		time.Sleep(time.Second * 1)
 		game.controller.Close()
 	}
 	game.display.Close()
@@ -364,8 +364,7 @@ func (game *gameState) Animated() bool {
 }
 
 func (game *gameState) Quit() {
-	game.display.Close()
-	os.Exit(0)
+	game.gameOver = true
 }
 
 // SetOutput stream for the display
