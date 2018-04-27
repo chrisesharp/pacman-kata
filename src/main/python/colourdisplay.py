@@ -1,12 +1,11 @@
-class Display(object):
-    ESC = "\u001B["
-    CLR = "\u001B[H" + "\u001B[2J" + "\u001B[1m"
-    RST = "\u001B[0m"
-    REVON = "\u001B[?5h"
-    REVOFF = "\u001B[?5l"
-    BLINK = "\u001B[5m"
-    REV = "\u001B[7m"
+from display import Display
+from colour import Colour
 
+DEFAULT = Display.ESC + str(Colour.WHITE) + "m"
+DEFAULT += Display.ESC + str(Colour.BLACK_BG) + "m"
+
+
+class ColourDisplay(Display):
     def __init__(self, game):
         self.game = game
         self.rows = None
@@ -28,7 +27,13 @@ class Display(object):
 
     def refresh(self, video_output, colour_out):
         self.write_stream(Display.CLR)
-        self.write_stream(video_output)
+        self.write_stream(DEFAULT)
+        for i in range(len(video_output)):
+            if colour_out[i] > 0:
+                self.write_stream(Display.ESC + str(colour_out[i]) + "m")
+            self.write_stream(video_output[i])
+        self.write_stream(Display.RST)
+        self.write_stream(DEFAULT)
         self.write_stream(Display.RST)
         self.write_stream("\n")
         print(self.output)

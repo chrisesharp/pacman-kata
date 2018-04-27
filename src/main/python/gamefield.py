@@ -20,10 +20,13 @@ class GameField:
         return self.rows
 
     def render(self):
-        screen = ""
+        colour = []
+        video = ""
         for y in range(self.rows):
             for x in range(self.columns):
-                screen += str(self.field[(x, y)])
+                video += str(self.field[(x, y)])
+                colour.append(0)
             if y < self.rows-1:
-                screen += "\n"
-        return screen
+                video += "\n"
+                colour.append(0)
+        return {"video": video, "colour": colour}

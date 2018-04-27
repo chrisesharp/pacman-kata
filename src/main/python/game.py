@@ -4,6 +4,7 @@ from math import floor
 from gamefield import GameField
 from keyboard import Keyboard
 from display import Display
+from colourdisplay import ColourDisplay
 from pacman import Pacman
 from ghost import Ghost
 from wall import Wall
@@ -111,20 +112,29 @@ class Game(object):
         self.update_field()
 
     def render(self):
-        self.output = Game.render_status(self.lives,
-                                         self.score,
-                                         self.field.width())
+        composite = Game.render_status(self.lives,
+                                       self.score,
+                                       self.field.width())
+        self.output = composite["video"]
+        self.colour = composite["colour"]
         self.output += "\n"
-        self.output += self.field.render()
+        self.colour.append(0)
+        composite = self.field.render()
+        self.output += composite["video"]
+        self.colour.extend(composite["colour"])
+        self.colour.append(0)
 
     def render_status(lives, score, columns):
-        output = "{lives:1d}".format(lives=lives)
-        output += "{score:>{width}d}".format(score=score,
-                                             width=columns - len(output))
-        return output
+        colour = []
+        video = "{lives:1d}".format(lives=lives)
+        video += "{score:>{width}d}".format(score=score,
+                                            width=columns - len(video))
+        for i in range(len(video)):
+            colour.append(0)
+        return {"video": video, "colour": colour}
 
     def refresh(self):
-        self.display.refresh(self.output)
+        self.display.refresh(self.output, self.colour)
 
     def update_field(self):
         new_field = GameField(self.field.width(), self.field.height())
@@ -237,7 +247,10 @@ def start_game(file, colour, debug):
 
     game = Game(level_map)
     controller = Keyboard(game)
-    display = Display(game)
+    if (colour is True):
+        display = ColourDisplay(game)
+    else:
+        display = Display(game)
     if (debug is False):
         controller.init()
         game.set_controller(controller)

@@ -26,7 +26,7 @@ endif
 NODE_FORMAT = progress
 #NODE_FORMAT = node_modules/cucumber-pretty
 JAVA_FORMAT = progress
-PYTHON_FORMAT = progress
+PYTHON_FORMAT = pretty
 GO_FORMAT = progress
 
 TAG_FIXER = echo $(BDD)|sed "s/not /~/g" |sed "s/ or /,/g"
