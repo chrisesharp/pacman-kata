@@ -1,5 +1,5 @@
 #!/bin/bash
 
-pushd src/main/go/bin
-./pacman $@
+pushd src/main/go/src/pacman
+../../bin/pacman $@
 popd
