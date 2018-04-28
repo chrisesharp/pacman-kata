@@ -1,15 +1,28 @@
 from game_element import GameElement
+from colour import Colour
 
 
 class Wall(GameElement):
-    gates = {"=": 0}
-    field = {"#": 0}
-    walls = {"|": 1,
-             "-": 1,
-             "+": 1}
+    gates = {"=": Colour.WHITE,
+             "━": Colour.WHITE}
+    field = {"#": Colour.BLACK,
+             "┃": Colour.BLACK}
+    walls = {"|": Colour.WHITE,
+             "-": Colour.WHITE,
+             "+": Colour.WHITE,
+             "║": Colour.WHITE,
+             "═": Colour.WHITE,
+             "╚": Colour.WHITE,
+             "╝": Colour.WHITE,
+             "╔": Colour.WHITE,
+             "╗": Colour.WHITE}
     icons = dict(walls)
     icons.update(gates)
     icons.update(field)
+
+    def __init__(self, coordinates, icon):
+        super(Wall, self).__init__(coordinates, icon)
+        self.colour = Wall.icons[icon]
 
     def is_wall(icon):
         if isinstance(icon, Wall) or icon in Wall.icons:
