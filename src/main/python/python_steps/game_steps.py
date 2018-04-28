@@ -3,7 +3,7 @@ from game import Game
 from ghost import Ghost
 from display import Display
 import subprocess
-import sys
+import io
 
 
 #
@@ -77,7 +77,9 @@ def step_impl(context, lives):
 
 @given(u'a display')
 def step_impl(context):
-    context.display = Display(sys.stdout)
+    buffer = io.BufferedWriter(io.BytesIO())
+    context.stream = io.TextIOWrapper(buffer)
+    context.display = Display(context.stream)
 
 
 @given(u'a colour display')
