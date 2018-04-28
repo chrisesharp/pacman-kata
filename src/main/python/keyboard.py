@@ -6,6 +6,11 @@ import threading
 
 
 class Keyboard(object):
+    keymap = {"j": Direction.LEFT,
+              "i": Direction.UP,
+              "l": Direction.RIGHT,
+              "m": Direction.DOWN}
+
     def __init__(self, game):
         self.game = game
         self.orig_settings = termios.tcgetattr(sys.stdin)
@@ -15,14 +20,7 @@ class Keyboard(object):
         threading.Thread(group=None, target=self.listen).start()
 
     def key_pressed(self, key):
-        if (key == 'j'):
-            self.game.move(Direction.LEFT)
-        if (key == 'i'):
-            self.game.move(Direction.UP)
-        if (key == 'l'):
-            self.game.move(Direction.RIGHT)
-        if (key == 'm'):
-            self.game.move(Direction.DOWN)
+        self.game.move(self.keymap[key])
 
     def listen(self):
         key = None
