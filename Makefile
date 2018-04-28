@@ -86,7 +86,7 @@ local-all: local-java local-go local-node local-python
 # Java
 ################################################################################
 .PHONY: local-java
-local-java: clean-java build-java test-java coverage-java deploy-java
+local-java: clean-java build-java test-java deploy-java
 
 .PHONY: build-java
 build-java:
@@ -127,7 +127,7 @@ docker-java:
 ################################################################################
 
 .PHONY: local-go
-local-go: clean-go build-go test-go coverage-go deploy-go
+local-go: clean-go build-go test-go deploy-go
 
 .PHONY: clean-go
 clean-go:
@@ -173,7 +173,7 @@ docker-go:
 # Node
 ################################################################################
 .PHONY: local-node
-local-node: clean-node build-node test-node coverage-node deploy-node 
+local-node: clean-node build-node test-node deploy-node 
 
 .PHONY: clean-node
 clean-node:
@@ -208,7 +208,7 @@ docker-node:
 # Python
 ################################################################################
 .PHONY: local-python
-local-python: clean-python build-python test-python coverage-python deploy-python
+local-python: clean-python build-python test-python deploy-python
 
 .PHONY: clean-python
 clean-python:
