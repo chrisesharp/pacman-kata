@@ -8,7 +8,7 @@ class GameField:
         self.field = {}
         for y in range(self.rows):
             for x in range(self.columns):
-                self.add((x, y), GameElement((x, y), " "))
+                self.add((x, y), " ")
 
     def add(self, coordinates, element):
         self.field[coordinates[0], coordinates[1]] = element
@@ -28,10 +28,11 @@ class GameField:
         for y in range(self.rows):
             for x in range(self.columns):
                 element = self.field[(x, y)]
-                video += str(element)
                 if isinstance(element, GameElement):
+                    video += str(element)
                     colour.append(element.get_colour())
                 else:
+                    video += element
                     colour.append(0)
             if y < self.rows-1:
                 video += "\n"

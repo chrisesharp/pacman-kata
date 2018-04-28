@@ -11,6 +11,7 @@ from wall import Wall
 from pill import Pill
 from levels import LevelMaps
 import tokenizer
+import sys
 
 
 class Game(object):
@@ -35,13 +36,14 @@ class Game(object):
 
     def play(self, debug):
         self.parse()
-        self.display.init(None)
+        self.display.init(self)
         while (self.game_over is False):
             self.tick()
             self.render()
             self.refresh()
             sleep(0.1)
             if (self.pacman.alive is False):
+                self.display.flash()
                 self.pacman.restart()
             if (debug is True):
                 self.game_over = True
@@ -122,7 +124,6 @@ class Game(object):
         composite = self.field.render()
         self.output += composite["video"]
         self.colour.extend(composite["colour"])
-        self.colour.append(0)
 
     def render_status(lives, score, columns):
         colour = []
@@ -211,7 +212,7 @@ class Game(object):
     def next_level(self):
         if self.level < self.last_level:
             self.level += 1
-            self.pills = []
+            self.pills[:] = []
             self.walls = []
             self.ghosts = []
             self.parse()
@@ -248,9 +249,9 @@ def start_game(file, colour, debug):
     game = Game(level_map)
     controller = Keyboard(game)
     if (colour is True):
-        display = ColourDisplay(game)
+        display = ColourDisplay(sys.stdout)
     else:
-        display = Display(game)
+        display = Display(sys.stdout)
     if (debug is False):
         controller.init()
         game.set_controller(controller)

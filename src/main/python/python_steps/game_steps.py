@@ -3,6 +3,7 @@ from game import Game
 from ghost import Ghost
 from display import Display
 import subprocess
+import sys
 
 
 #
@@ -76,7 +77,7 @@ def step_impl(context, lives):
 
 @given(u'a display')
 def step_impl(context):
-    context.display = Display(context.game)
+    context.display = Display(sys.stdout)
 
 
 @given(u'a colour display')
@@ -120,7 +121,7 @@ def step_impl(context):
 
 @given(u'initialize the display')
 def step_impl(context):
-    context.display.init(None)
+    context.display.init(context.game)
 
 #
 # Whens
@@ -194,7 +195,7 @@ def step_impl(context, key):
 
 @when(u'initialize the display')
 def step_impl(context):
-    context.display.init(None)
+    context.display.init(context.game)
 
 
 @when(u'we refresh the display with the buffer "{string}"')

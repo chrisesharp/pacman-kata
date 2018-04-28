@@ -2,6 +2,7 @@ from direction import avoid, next_location, wrap, left, right, opposite
 from direction import Direction
 from random import randint
 from game_element import GameElement
+from colour import Colour
 
 
 class Ghost(GameElement):
@@ -10,9 +11,16 @@ class Ghost(GameElement):
             "W": True
             }
     icon_state = {
-            False: "M",
-            True: "W"
+            False: {"icon": "M", "colour": None},
+            True: {"icon": "W", "colour": Colour.BLUE}
             }
+
+    colours = [Colour.RED,
+               Colour.GREEN,
+               Colour.PURPLE,
+               Colour.CYAN]
+
+    colour = 0
 
     def is_ghost(icon):
         if isinstance(icon, Ghost) or icon in Ghost.icons:
@@ -27,12 +35,12 @@ class Ghost(GameElement):
         super(Ghost, self).__init__(coordinates, icon)
         self.start = coordinates
         self.passed_gate = False
+        self.orig_colour = Ghost.colours[Ghost.colour]
+        Ghost.colour = (Ghost.colour + 1) % len(Ghost.colours)
+
         if icon in Ghost.icons:
             self.icon = icon
-        if Ghost.icons[icon] is False:
-            self.panic_level = 0
-        else:
-            self.panic_level = 50
+        self.panic_level = 0 if Ghost.icons[icon] is False else 50
         self.direction = Direction.UP
 
     def add_to_game(self, game):
@@ -64,7 +72,10 @@ class Ghost(GameElement):
                 self.game.kill_pacman()
         if (self.game.is_gate(self.coordinates)):
             self.passed_gate = True
-        self.icon = Ghost.icon_state[self.panic_level > 0]
+        image = Ghost.icon_state[self.panic_level > 0]
+        self.icon = image["icon"]
+        this_colour = image["colour"]
+        self.colour = self.orig_colour if this_colour is None else this_colour
 
     def manage_panic(self):
         if (self.panicked() is True):
