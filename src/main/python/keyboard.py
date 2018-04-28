@@ -24,16 +24,10 @@ class Keyboard(object):
 
     def listen(self):
         key = None
-        while ((self.game.game_over is False) and (key != chr(27))):
-            key = sys.stdin.read(1)[0]
-            if (key == chr(106)):
-                self.key_pressed("j")
-            if (key == chr(105)):
-                self.key_pressed("i")
-            if (key == chr(108)):
-                self.key_pressed("l")
-            if (key == chr(109)):
-                self.key_pressed("m")
+        while (self.game.game_over is False and key != chr(27)):
+            key = sys.stdin.read(1)
+            if key in self.keymap:
+                self.key_pressed(key)
         self.game.game_over = True
         self.close()
 
