@@ -266,7 +266,7 @@ func initializeTheDisplay() error {
 
 // Then
 func iShouldGetTheFollowingOutput(expected *gherkin.DocString) error {
-	received := strings.TrimSpace(cleanupAnsi(outputStream.String()))
+	received := strings.TrimSuffix(cleanupAnsi(outputStream.String()), "\n")
 	if expected.Content == received {
 		return nil
 	}
