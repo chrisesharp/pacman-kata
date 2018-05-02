@@ -7,11 +7,25 @@ import org.jline.terminal.TerminalBuilder;
 import org.jline.terminal.Terminal;
 import org.jline.utils.NonBlockingReader;
 import org.apache.log4j.Logger;
+import java.util.Collections;
+import java.util.Map;
+import java.util.HashMap;
 
 public class Keyboard implements InputController {
   private NonBlockingReader keybrd;
   private Moveable element;
   private static final Logger log = Logger.getLogger(Keyboard.class);
+  private static final int TIME_INTERVAL_MS = 100;
+  private static final Map<Character, Direction> keyMap = 
+    Collections.unmodifiableMap(new HashMap<Character, Direction>() {
+      private static final long serialVersionUID = 42L;
+      {
+          put('j', LEFT);
+          put('i', UP);
+          put('l', RIGHT);
+          put('m', DOWN);
+      }
+    });
 
   public Keyboard() {
     try {
@@ -24,12 +38,8 @@ public class Keyboard implements InputController {
   }
 
   private int read() {
-    int key;
     try {
-        key = keybrd.read(125);
-        if (key != -1 || key != -2) {
-          return  key;
-        }
+        return keybrd.read(TIME_INTERVAL_MS);
     } catch (Exception e) {
       log.error(e.getMessage());
     }
@@ -42,26 +52,12 @@ public class Keyboard implements InputController {
 
   public void tick() {
     int key = read();
-    if (key != -1 ) {
-      Direction dir = mapKeyDirection((char)key);
-      if (dir != null) {
-        element.move(dir);
-      }
+    if (key >= 0) {
+        element.move(Keyboard.mapKeyDirection((char)key));
     }
   }
 
   public static Direction mapKeyDirection(char key) {
-    switch (key) {
-        case 'j':
-            return LEFT;
-        case 'l':
-            return RIGHT;
-        case 'i':
-            return UP;
-        case 'm':
-            return DOWN;
-        default:
-            return null;
-    }
+    return keyMap.get(new Character((char)key));
   }
 }

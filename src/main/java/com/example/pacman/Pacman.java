@@ -57,7 +57,7 @@ public class Pacman extends GameElement implements Moveable {
 
     @Override
     public void move(Direction direction) {
-      if (isClear(direction)) {
+      if (direction != null && isClear(direction)) {
         setDirection(direction);
         go();
       }
