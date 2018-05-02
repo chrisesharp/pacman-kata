@@ -16,6 +16,13 @@ type keyboard struct {
 	game Game
 }
 
+var keyMap = map[termbox.Key]string{
+	termbox.KeyArrowUp:    "i",
+	termbox.KeyArrowDown:  "m",
+	termbox.KeyArrowLeft:  "j",
+	termbox.KeyArrowRight: "l",
+}
+
 func (t *keyboard) New(game Game) Controller {
 	return &keyboard{game: game}
 }
@@ -43,17 +50,10 @@ func (t *keyboard) listen() {
 	for {
 		switch ev := termbox.PollEvent(); ev.Type {
 		case termbox.EventKey:
-			switch ev.Key {
-			case termbox.KeyEsc:
+			if ev.Key == termbox.KeyEsc {
 				t.game.Quit()
-			case termbox.KeyArrowUp:
-				t.game.KeyPress("i")
-			case termbox.KeyArrowDown:
-				t.game.KeyPress("m")
-			case termbox.KeyArrowLeft:
-				t.game.KeyPress("j")
-			case termbox.KeyArrowRight:
-				t.game.KeyPress("l")
+			} else {
+				t.game.KeyPress(keyMap[ev.Key])
 			}
 		case termbox.EventError:
 			termbox.Close()

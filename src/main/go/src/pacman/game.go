@@ -34,6 +34,13 @@ type gameState struct {
 	outputStream *os.File
 }
 
+var keyDirectionMap = map[string]Direction{
+	"i": UP,
+	"m": DOWN,
+	"j": LEFT,
+	"l": RIGHT,
+}
+
 // New clears state
 func (game *gameState) New() Game {
 	return &gameState{input: "",
@@ -343,16 +350,7 @@ func (game *gameState) Play(debug bool) {
 }
 
 func (game *gameState) KeyPress(key string) {
-	switch key {
-	case "i":
-		game.pacman.(Pacman).Go(UP)
-	case "l":
-		game.pacman.(Pacman).Go(RIGHT)
-	case "m":
-		game.pacman.(Pacman).Go(DOWN)
-	case "j":
-		game.pacman.(Pacman).Go(LEFT)
-	}
+	game.pacman.(Pacman).Go(keyDirectionMap[key])
 }
 
 func (game *gameState) UseAnimation() {
