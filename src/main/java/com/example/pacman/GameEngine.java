@@ -10,7 +10,6 @@ public abstract interface GameEngine {
   public boolean animatedIcons();
   public void animateIcons();
   public List<GameElement> getElements();
-  public void addElement(GameElement element);
   public GameElement getGameElement(Location loc);
   public GameElement getGameElementByType(Class<? extends GameElement> type);
   public int getLives();

@@ -16,15 +16,16 @@ public class GateToken extends NullToken {
 
   @Override
   public void addGameElement(GameEngine game, Location location) {
+    PacmanGame theGame = (PacmanGame) game;
     if (this.valid()) {
       Gate gate = new Gate(location);
       Wall wall = new Wall(location);
       gate.setIcon(icon);
-      gate.setGame(game);
+      gate.setGame(theGame);
       wall.setIcon(icon);
-      wall.setGame(game);
-      game.addElement(gate);
-      game.addElement(wall);
+      wall.setGame(theGame);
+      theGame.setGate(gate);
+      theGame.addWall(wall);
     }
   }
 

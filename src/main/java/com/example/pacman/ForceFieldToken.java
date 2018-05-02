@@ -16,11 +16,12 @@ public class ForceFieldToken extends NullToken {
   
   @Override
   public void addGameElement(GameEngine game, Location location) {
+    PacmanGame theGame = (PacmanGame) game;
     if (this.valid()) {
       ForceField field = new ForceField(location);
-      field.setGame(game);
+      field.setGame(theGame);
       field.setIcon(icon);
-      game.addElement(field);
+      theGame.addForceField(field);
     }
   }
 

@@ -18,14 +18,15 @@ public class GhostToken extends NullToken {
 
   @Override
   public void addGameElement(GameEngine game, Location location) {
+    PacmanGame theGame = (PacmanGame) game;
     if (this.valid()) {
       Ghost g = new Ghost(location);
       g.setIcon(icon);
-      g.setGame(game);
+      g.setGame(theGame);
       if (ourTokens.inverse().get(icon)) {
         g.panic();
       }
-      game.addElement(g);
+      theGame.addGhost(g);
     }
   }
 

@@ -15,11 +15,12 @@ public class PillToken extends NullToken {
 
   @Override
   public void addGameElement(GameEngine game, Location location) {
+    PacmanGame theGame = (PacmanGame) game;
     if (this.valid()) {
       Pill pill = new Pill(location);
       pill.setIcon(icon);
-      pill.setGame(game);
-      game.addElement(pill);
+      pill.setGame(theGame);
+      theGame.addPill(pill);
     }
   }
 

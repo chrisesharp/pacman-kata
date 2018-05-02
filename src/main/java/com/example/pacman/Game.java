@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.stream.*;
 import java.util.Objects;
 
-public class Game implements GameEngine {
+public class Game implements PacmanGame {
     private boolean gameOver=false;
     private boolean usingPills=false;
     private boolean usingPowerPills=false;
@@ -96,7 +96,7 @@ public class Game implements GameEngine {
       return (level.last());
     }
 
-    private void setPacman(GameElement pacman) {
+    public void setPacman(GameElement pacman) {
       this.pacman = pacman;
       if (controller != null) {
         controller.control((Moveable)pacman);
@@ -104,34 +104,34 @@ public class Game implements GameEngine {
       gameField.setLocation(pacman);
     }
 
-    private void setGate(GameElement gate) {
+    public void setGate(GameElement gate) {
       this.gate = gate;
       gameField.setLocation(gate);
     }
 
-    private void addForceField(GameElement field) {
+    public void addForceField(GameElement field) {
       forceFields.add(field);
       gameField.setLocation(field);
     }
 
-    private void addGhost(GameElement ghost) {
+    public void addGhost(GameElement ghost) {
       ghosts.add(ghost);
       gameField.setLocation(ghost);
     }
 
-    private void addPill(GameElement pill) {
+    public void addPill(GameElement pill) {
         usingPills=true;
         pills.add(pill);
         gameField.setLocation(pill);
     }
 
-    private void addPowerPill(GameElement pill) {
+    public void addPowerPill(GameElement pill) {
         usingPowerPills=true;
         powerPills.add(pill);
         gameField.setLocation(pill);
     }
 
-    private void addWall(GameElement wall) {
+    public void addWall(GameElement wall) {
         walls.add(wall);
         gameField.setLocation(wall);
     }
@@ -182,24 +182,6 @@ public class Game implements GameEngine {
         return gate;
       }
       return null;
-    }
-
-    public void addElement(GameElement element) {
-      if (element instanceof Pacman) {
-        setPacman(element);
-      } else if (element instanceof Ghost) {
-        addGhost(element);
-      } else if (element instanceof Pill) {
-        addPill(element);
-      } else if (element instanceof PowerPill) {
-        addPowerPill(element);
-      } else if (element instanceof Wall) {
-        addWall(element);
-      } else if (element instanceof Gate) {
-        setGate(element);
-      } else if (element instanceof ForceField) {
-        addForceField(element);
-      }
     }
 
     public void loseLife() {

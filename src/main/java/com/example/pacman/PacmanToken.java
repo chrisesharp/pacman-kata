@@ -37,12 +37,13 @@ public class PacmanToken extends NullToken {
 
   @Override
   public void addGameElement(GameEngine game, Location location) {
+    PacmanGame theGame = (PacmanGame) game;
     if (this.valid()) {
       Pacman pacman = new Pacman(location);
-      pacman.setGame(game);
+      pacman.setGame(theGame);
       pacman.setDirection(parseDirection());
       pacman.setIcon(icon);
-      game.addElement(pacman);
+      theGame.setPacman(pacman);
     }
   }
 

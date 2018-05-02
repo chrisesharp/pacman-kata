@@ -28,11 +28,12 @@ public class WallToken extends NullToken {
 
   @Override
   public void addGameElement(GameEngine game, Location location) {
+    PacmanGame theGame = (PacmanGame) game;
     if (this.valid()) {
       Wall wall = new Wall(location);
-      wall.setGame(game);
+      wall.setGame(theGame);
       wall.setIcon(icon);
-      game.addElement(wall);
+      theGame.addWall(wall);
     }
   }
 

@@ -16,11 +16,12 @@ public class PowerPillToken extends NullToken {
 
   @Override
   public void addGameElement(GameEngine game, Location location) {
+    PacmanGame theGame = (PacmanGame) game;
     if (this.valid()) {
       PowerPill p = new PowerPill(location);
-      p.setGame(game);
+      p.setGame(theGame);
       p.setIcon(this.icon);
-      game.addElement(p);
+      theGame.addPowerPill(p);
     }
   }
 
