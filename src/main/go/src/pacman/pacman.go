@@ -1,18 +1,20 @@
 package main
 
+import "pacman/dir"
+
 const deadIcon rune = '*'
 
-var pacmanDirs = map[Direction][]rune{
-	LEFT:  {'>', '}'},
-	RIGHT: {'<', '{'},
-	UP:    {'V', 'v'},
-	DOWN:  {'Λ', '^'},
+var pacmanDirs = map[dir.Direction][]rune{
+	dir.LEFT:  {'>', '}'},
+	dir.RIGHT: {'<', '{'},
+	dir.UP:    {'V', 'v'},
+	dir.DOWN:  {'Λ', '^'},
 }
 
 // Pacman interface extending GameElement
 type Pacman interface {
 	GameElement
-	Go(dir Direction)
+	Go(dir dir.Direction)
 	Alive() bool
 }
 
@@ -25,7 +27,7 @@ type pacmanStruct struct {
 }
 
 // NewPacman creates a clean populated pacmanStruct
-func NewPacman(game Game, icon rune, loc Location) Pacman {
+func NewPacman(game Game, icon rune, loc dir.Location) Pacman {
 	colour := Colour{YELLOW, BLACK}
 	alive := (icon != deadIcon)
 	element := NewElement(game, icon, loc, facing(icon), 0)
@@ -70,7 +72,7 @@ func (p *pacmanStruct) Alive() bool {
 	return p.alive
 }
 
-func (p *pacmanStruct) isClear(nextLoc Location) bool {
+func (p *pacmanStruct) isClear(nextLoc dir.Location) bool {
 	clear := true
 	for _, wall := range p.game.GetWalls() {
 		if (wall.Location() == nextLoc) && (!wall.IsForceField()) {
@@ -92,7 +94,7 @@ func (p *pacmanStruct) Icon() rune {
 }
 
 // GetPacman returns a new Pacman if the icon is a pacman
-func GetPacman(icon rune, location Location) GameElement {
+func GetPacman(icon rune, location dir.Location) GameElement {
 	if IsPacman(icon) {
 		return NewPacman(nil, icon, location)
 	}
@@ -114,7 +116,7 @@ func IsPacman(thisIcon rune) bool {
 	return false
 }
 
-func facing(thisIcon rune) Direction {
+func facing(thisIcon rune) dir.Direction {
 	for direction, icons := range pacmanDirs {
 		for _, icon := range icons {
 			if icon == thisIcon {
@@ -125,7 +127,7 @@ func facing(thisIcon rune) Direction {
 	return -1
 }
 
-func (p *pacmanStruct) pacmanIcon(dir Direction) rune {
+func (p *pacmanStruct) pacmanIcon(dir dir.Direction) rune {
 	return pacmanDirs[dir][p.frame]
 }
 
@@ -144,7 +146,7 @@ func (p *pacmanStruct) Restart() {
 }
 
 // Go makes pacman start moving in a given direction
-func (p *pacmanStruct) Go(dir Direction) {
+func (p *pacmanStruct) Go(dir dir.Direction) {
 	nextLoc := p.Location().Next(dir)
 	if p.isClear(nextLoc) {
 		p.moving = true

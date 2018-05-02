@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	. "pacman/dir"
 	"strconv"
 	"strings"
 	"testing"
@@ -94,7 +95,7 @@ func aPacmanAtFacing(x, y int, facing string) error {
 	case "DOWN":
 		dir = DOWN
 	}
-	pacman := NewPacman(theGame, pacmanDirs[dir][0], Location{x, y})
+	pacman := NewPacman(theGame, pacmanDirs[dir][0], Location{X: x, Y: y})
 
 	theGame.SetPacman(pacman)
 	return nil
@@ -102,7 +103,7 @@ func aPacmanAtFacing(x, y int, facing string) error {
 
 // Given
 func aGhostAt(x, y int) error {
-	ghost := NewGhost(theGame, normalGhost, Location{x, y})
+	ghost := NewGhost(theGame, normalGhost, Location{X: x, Y: y})
 	theGame.AddGhost(ghost)
 	return nil
 }
@@ -113,7 +114,7 @@ func wallsAtTheFollowingPlaces(wallSpec *gherkin.DataTable) error {
 		icon := []rune(row.Cells[0].Value)
 		x, _ := strconv.Atoi(row.Cells[1].Value)
 		y, _ := strconv.Atoi(row.Cells[2].Value)
-		wall := NewWall(theGame, icon[0], Location{x, y})
+		wall := NewWall(theGame, icon[0], Location{X: x, Y: y})
 		wall.AddToGame(theGame)
 	}
 	return nil
@@ -311,8 +312,8 @@ func thePlayerShouldHaveLives(lives int) error {
 func pacmanShouldBeAt(x, y int) error {
 	pacman := theGame.GetPacman()
 	loc := pacman.Location()
-	if (loc.x != x) && (loc.y != y) {
-		return fmt.Errorf("expected pacman to be at %v,%v but it is at %v,%v", x, y, loc.x, loc.y)
+	if (loc.X != x) && (loc.Y != y) {
+		return fmt.Errorf("expected pacman to be at %v,%v but it is at %v,%v", x, y, loc.X, loc.Y)
 	}
 	return nil
 }
@@ -331,7 +332,7 @@ func pacmanShouldBeFacing(direction string) error {
 func ghostShouldBeAt(x, y int) error {
 	for _, ghost := range theGame.GetGhosts() {
 		loc := ghost.Location()
-		if loc.x == x && loc.y == y {
+		if loc.X == x && loc.Y == y {
 			return nil
 		}
 	}
@@ -352,7 +353,7 @@ func thenPacmanShouldGo(direction string) error {
 func thereShouldBeAPointPillAt(points, x, y int) error {
 	for _, pill := range theGame.GetPills() {
 		loc := pill.Location()
-		if loc.x == x && loc.y == y {
+		if loc.X == x && loc.Y == y {
 			return nil
 		}
 	}
@@ -363,7 +364,7 @@ func thereShouldBeAPointPillAt(points, x, y int) error {
 func thereShouldBeAWallAt(x, y int) error {
 	for _, wall := range theGame.GetWalls() {
 		loc := wall.Location()
-		if loc.x == x && loc.y == y {
+		if loc.X == x && loc.Y == y {
 			return nil
 		}
 	}
@@ -374,7 +375,7 @@ func thereShouldBeAWallAt(x, y int) error {
 func thereShouldBeAForceFieldAt(x, y int) error {
 	for _, wall := range theGame.GetWalls() {
 		loc := wall.Location()
-		if loc.x == x && loc.y == y && wall.IsForceField() {
+		if loc.X == x && loc.Y == y && wall.IsForceField() {
 			return nil
 		}
 	}
@@ -385,7 +386,7 @@ func thereShouldBeAForceFieldAt(x, y int) error {
 func thereShouldBeAGateAt(x, y int) error {
 	gate := theGame.GetGate()
 	loc := gate.Location()
-	if loc.x == x && loc.y == y {
+	if loc.X == x && loc.Y == y {
 		return nil
 	}
 	return fmt.Errorf("expected gate at %v,%v but didn't find one", x, y)
@@ -468,7 +469,7 @@ func theGameDimensionsShouldEqualTheDisplayDimensions() error {
 func ghostAtShouldBeCalm(x, y int) error {
 	for _, ghost := range theGame.GetGhosts() {
 		loc := ghost.Location()
-		if loc.x == x && loc.y == y {
+		if loc.X == x && loc.Y == y {
 			if !ghost.(Ghost).IsPanicked() {
 				return nil
 			}
@@ -481,7 +482,7 @@ func ghostAtShouldBeCalm(x, y int) error {
 func ghostAtShouldBePanicked(x, y int) error {
 	for _, ghost := range theGame.GetGhosts() {
 		loc := ghost.Location()
-		if loc.x == x && loc.y == y {
+		if loc.X == x && loc.Y == y {
 			if ghost.(Ghost).IsPanicked() {
 				return nil
 			}

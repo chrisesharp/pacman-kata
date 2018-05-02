@@ -1,6 +1,9 @@
 package main
 
-import "os"
+import (
+	"os"
+	"pacman/dir"
+)
 
 // Game state interface
 type Game interface {
@@ -45,10 +48,10 @@ type GameElement interface {
 	AddToGame(game Game)
 	IsForceField() bool
 	IsGate() bool
-	Location() Location
-	SetLocation(loc Location)
-	Direction() Direction
-	SetDirection(dir Direction)
+	Location() dir.Location
+	SetLocation(loc dir.Location)
+	Direction() dir.Direction
+	SetDirection(dir dir.Direction)
 	Icon() rune
 	Colour() Colour
 	SetIcon(icon rune)

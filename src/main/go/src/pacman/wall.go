@@ -1,5 +1,7 @@
 package main
 
+import "pacman/dir"
+
 var wallIcon = map[rune]int{
 	'╔': 0,
 	'║': 0,
@@ -26,7 +28,7 @@ type wallStruct struct {
 }
 
 // NewWall returns a new Wall struct
-func NewWall(game Game, icon rune, loc Location) Wall {
+func NewWall(game Game, icon rune, loc dir.Location) Wall {
 	colour := Colour{WHITE, BLACK}
 	wall := NewElement(game, icon, loc, 0, 0)
 	if IsForceField(icon) {
@@ -37,7 +39,7 @@ func NewWall(game Game, icon rune, loc Location) Wall {
 }
 
 // GetWall returns a new Wall if the icon is a wall
-func GetWall(icon rune, location Location) GameElement {
+func GetWall(icon rune, location dir.Location) GameElement {
 	if IsWall(icon) {
 		return NewWall(nil, icon, location)
 	}

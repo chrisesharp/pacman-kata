@@ -1,9 +1,10 @@
-package main
+package dir
 
 //Direction enumeration type
 type Direction int
 
 //Direction enumeration values
+//go:generate stringer -type=Direction
 const (
 	LEFT Direction = iota
 	UP
@@ -21,7 +22,7 @@ var Deltas = map[Direction]Delta{
 
 // Location tuple
 type Location struct {
-	x, y int
+	X, Y int
 }
 
 // Delta tuple
@@ -32,18 +33,18 @@ type Delta struct {
 // Next location by direction
 func (our Location) Next(dir Direction) Location {
 	delta := Deltas[dir]
-	our.x += delta.dx
-	our.y += delta.dy
+	our.X += delta.dx
+	our.Y += delta.dy
 	return our
 }
 
 // Avoid direction to a given location
 func (our Location) Avoid(their Location) Direction {
-	if our.x < their.x {
+	if our.X < their.X {
 		return LEFT
-	} else if our.x > their.x {
+	} else if our.X > their.X {
 		return RIGHT
-	} else if our.y < their.y {
+	} else if our.Y < their.Y {
 		return UP
 	}
 	return DOWN
@@ -67,20 +68,11 @@ func (d Direction) Right() Direction {
 
 // Equals checks with the string is semantically equivalent to the Direction
 func (d Direction) Equals(direction string) bool {
-	if direction == "LEFT" && d == LEFT {
-		return true
-	} else if direction == "RIGHT" && d == RIGHT {
-		return true
-	} else if direction == "UP" && d == UP {
-		return true
-	} else if direction == "DOWN" && d == DOWN {
-		return true
-	}
-	return false
+	return direction == d.String()
 }
 
 // Wrap a location toroidallly on a width/height field
 func (our *Location) Wrap(width, height int) {
-	our.x = (our.x + width) % width
-	our.y = (our.y + height) % height
+	our.X = (our.X + width) % width
+	our.Y = (our.Y + height) % height
 }

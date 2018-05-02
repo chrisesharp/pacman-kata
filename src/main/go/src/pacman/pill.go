@@ -1,5 +1,7 @@
 package main
 
+import "pacman/dir"
+
 // Pill interface extends base GameElement with pill effects
 type Pill interface {
 	GameElement
@@ -19,7 +21,7 @@ var pillIcon = map[rune]int{
 }
 
 // NewPill creates a new Pill game element
-func NewPill(game Game, icon rune, loc Location) Pill {
+func NewPill(game Game, icon rune, loc dir.Location) Pill {
 	colour := Colour{WHITE, BLACK}
 	pill := NewElement(game, icon, loc, 0, PillScore(icon))
 	if PillScore(icon) == 50 {
@@ -47,7 +49,7 @@ func (p *pillStruct) TriggerEffect(el GameElement) {
 }
 
 // GetPill returns a new Pill if the icon is a pill
-func GetPill(icon rune, location Location) GameElement {
+func GetPill(icon rune, location dir.Location) GameElement {
 	if IsPill(icon) {
 		return NewPill(nil, icon, location)
 	}

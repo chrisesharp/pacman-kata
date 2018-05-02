@@ -1,12 +1,14 @@
 package main
 
+import "pacman/dir"
+
 // Playfield interface
 type Playfield interface {
 	New(rows, columns int) Playfield
 	ClearField()
 	RenderField() (string, []Colour)
-	Get(loc Location) (rune, Colour)
-	Set(loc Location, icon rune, colour Colour)
+	Get(loc dir.Location) (rune, Colour)
+	Set(loc dir.Location, icon rune, colour Colour)
 	Dimensions() (int, int)
 }
 
@@ -50,7 +52,7 @@ func (f *playField) RenderField() (string, []Colour) {
 	lastline := rows - 1
 	for y := 0; y < rows; y++ {
 		for x := 0; x < columns; x++ {
-			r, c := f.Get(Location{x, y})
+			r, c := f.Get(dir.Location{X: x, Y: y})
 			buffer += string(r)
 			colourBuf = append(colourBuf, c)
 		}
@@ -67,16 +69,16 @@ func addNewLineIfNotFinished(current, last int) string {
 }
 
 // Set the location of the field to this string value
-func (f *playField) Set(loc Location, icon rune, colour Colour) {
-	x := loc.x
-	y := loc.y
+func (f *playField) Set(loc dir.Location, icon rune, colour Colour) {
+	x := loc.X
+	y := loc.Y
 	f.icon[y][x] = icon
 	f.colour[y][x] = colour
 }
 
 // Get the icon for this location
-func (f *playField) Get(loc Location) (rune, Colour) {
-	return f.icon[loc.y][loc.x], f.colour[loc.y][loc.x]
+func (f *playField) Get(loc dir.Location) (rune, Colour) {
+	return f.icon[loc.Y][loc.X], f.colour[loc.Y][loc.X]
 }
 
 // Dimensions of the playfield

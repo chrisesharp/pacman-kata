@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"pacman/dir"
 	"strconv"
 	"strings"
 	"time"
@@ -34,11 +35,11 @@ type gameState struct {
 	outputStream *os.File
 }
 
-var keyDirectionMap = map[string]Direction{
-	"i": UP,
-	"m": DOWN,
-	"j": LEFT,
-	"l": RIGHT,
+var keyDirectionMap = map[string]dir.Direction{
+	"i": dir.UP,
+	"m": dir.DOWN,
+	"j": dir.LEFT,
+	"l": dir.RIGHT,
 }
 
 // New clears state
@@ -112,7 +113,7 @@ func (game *gameState) parseTokens(rowData []string) {
 	for y := 0; y < rows; y++ {
 		runes := []rune(rowData[y])
 		for x := 0; x < columns; x++ {
-			GetElement(runes[x], Location{x: x, y: y}).AddToGame(game)
+			GetElement(runes[x], dir.Location{X: x, Y: y}).AddToGame(game)
 		}
 	}
 }
@@ -314,10 +315,10 @@ func (game *gameState) printGameOver() {
 	y := (rows / 2) - 2
 	padding := ((columns - 2) - len(GAME)) / 2
 	for i, r := range GAME {
-		game.field.Set(Location{y: y, x: padding + i + 1}, r, DefaultColour)
+		game.field.Set(dir.Location{Y: y, X: padding + i + 1}, r, DefaultColour)
 	}
 	for i, r := range OVER {
-		game.field.Set(Location{y: y + 1, x: padding + i + 1}, r, DefaultColour)
+		game.field.Set(dir.Location{Y: y + 1, X: padding + i + 1}, r, DefaultColour)
 	}
 }
 

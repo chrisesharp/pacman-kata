@@ -1,17 +1,21 @@
 package main
 
+import (
+	"pacman/dir"
+)
+
 type gameStruct struct {
 	game      Game
 	icon      rune
 	colour    Colour
-	location  Location
-	direction Direction
+	location  dir.Location
+	direction dir.Direction
 	points    int
-	start     Location
+	start     dir.Location
 }
 
 // NewElement gameStruct instance
-func NewElement(game Game, icon rune, loc Location, dir Direction, points int) GameElement {
+func NewElement(game Game, icon rune, loc dir.Location, dir dir.Direction, points int) GameElement {
 	return &gameStruct{game: game,
 		icon:      icon,
 		colour:    DefaultColour,
@@ -37,23 +41,23 @@ func (el *gameStruct) IsGate() bool {
 }
 
 // Location of this element
-func (el *gameStruct) Location() Location {
+func (el *gameStruct) Location() dir.Location {
 	return el.location
 }
 
 // SetLocation of this element
-func (el *gameStruct) SetLocation(loc Location) {
+func (el *gameStruct) SetLocation(loc dir.Location) {
 	loc.Wrap(el.game.Dimensions())
 	el.location = loc
 }
 
 // Direction of this element
-func (el *gameStruct) Direction() Direction {
+func (el *gameStruct) Direction() dir.Direction {
 	return el.direction
 }
 
 // SetDirection of this element
-func (el *gameStruct) SetDirection(dir Direction) {
+func (el *gameStruct) SetDirection(dir dir.Direction) {
 	el.direction = dir
 }
 

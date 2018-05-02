@@ -2,6 +2,7 @@ package main
 
 import (
 	"math/rand"
+	"pacman/dir"
 )
 
 // Ghost interface extending GameElement
@@ -36,14 +37,14 @@ var ghostColours = []ColourAtt{RED, CYAN, GREEN, PURPLE}
 var ghostColour = 0
 
 // NewGhost creates a clean populated ghostStruct
-func NewGhost(game Game, icon rune, loc Location) Ghost {
+func NewGhost(game Game, icon rune, loc dir.Location) Ghost {
 	var colour Colour
 	if game != nil {
 		colour = Colour{ghostColours[ghostColour], BLACK}
 		ghostColour = (ghostColour + 1) % len(ghostColours)
 	}
 	var panic int
-	element := NewElement(game, icon, loc, LEFT, ghostPoints)
+	element := NewElement(game, icon, loc, dir.LEFT, ghostPoints)
 	if GhostPanic(icon) {
 		panic = panicLevel
 		element.SetColour(panicColour)
@@ -81,7 +82,7 @@ func (g *ghostStruct) managePanic() {
 
 func (g *ghostStruct) chooseDirection() {
 	ahead := g.Direction()
-	choices := []Direction{ahead, ahead.Left(), ahead.Right()}
+	choices := []dir.Direction{ahead, ahead.Left(), ahead.Right()}
 	options := g.findOptions(choices)
 	if options != nil {
 		g.SetDirection(randomChoice(options))
@@ -91,8 +92,8 @@ func (g *ghostStruct) chooseDirection() {
 	g.move()
 }
 
-func (g *ghostStruct) findOptions(choices []Direction) []Direction {
-	var options []Direction
+func (g *ghostStruct) findOptions(choices []dir.Direction) []dir.Direction {
+	var options []dir.Direction
 	for _, nextDir := range choices {
 		if g.isClear(g.Location().Next(nextDir)) {
 			options = append(options, nextDir)
@@ -101,12 +102,12 @@ func (g *ghostStruct) findOptions(choices []Direction) []Direction {
 	return options
 }
 
-func randomChoice(options []Direction) Direction {
+func randomChoice(options []dir.Direction) dir.Direction {
 	index := rand.Intn(len(options))
 	return options[index]
 }
 
-func (g *ghostStruct) noChoice() Direction {
+func (g *ghostStruct) noChoice() dir.Direction {
 	direction := g.Direction()
 	if g.panic == 0 {
 		direction = direction.Opposite()
@@ -161,7 +162,7 @@ func (g *ghostStruct) TriggerEffect(pacman GameElement) {
 	}
 }
 
-func (g *ghostStruct) isClear(nextLoc Location) bool {
+func (g *ghostStruct) isClear(nextLoc dir.Location) bool {
 	clear := true
 	walls := g.game.GetWalls()
 	for _, wall := range walls {
@@ -179,7 +180,7 @@ func (g *ghostStruct) isClear(nextLoc Location) bool {
 }
 
 // GetGhost returns a new Ghost if the icon is a ghost
-func GetGhost(icon rune, location Location) GameElement {
+func GetGhost(icon rune, location dir.Location) GameElement {
 	if IsGhost(icon) {
 		return NewGhost(nil, icon, location)
 	}
