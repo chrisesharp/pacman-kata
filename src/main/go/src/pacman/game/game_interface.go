@@ -1,4 +1,4 @@
-package main
+package game
 
 import (
 	"os"
@@ -24,16 +24,16 @@ type Game interface {
 	SetLevel(max int)
 	SetMaxLevel(max int)
 	Dimensions() (int, int)
-	GetPacman() GameElement
-	SetPacman(GameElement)
-	AddGhost(ghost GameElement)
-	GetGhosts() []GameElement
-	GetPills() []GameElement
-	AddPill(pill GameElement)
-	RemovePill(pill GameElement)
-	GetWalls() []GameElement
-	AddWall(GameElement)
-	GetGate() GameElement
+	GetPacman() Element
+	SetPacman(Element)
+	AddGhost(ghost Element)
+	GetGhosts() []Element
+	GetPills() []Element
+	AddPill(pill Element)
+	RemovePill(pill Element)
+	GetWalls() []Element
+	AddWall(Element)
+	GetGate() Element
 	GetOutput() (string, []Colour)
 	Tick()
 	Play(debug bool)
@@ -43,8 +43,8 @@ type Game interface {
 	Quit()
 }
 
-// GameElement interface
-type GameElement interface {
+// Element interface
+type Element interface {
 	AddToGame(game Game)
 	IsForceField() bool
 	IsGate() bool
@@ -58,6 +58,6 @@ type GameElement interface {
 	SetColour(colour Colour)
 	Tick()
 	Score() int
-	TriggerEffect(el GameElement)
+	TriggerEffect(el Element)
 	Restart()
 }

@@ -1,14 +1,14 @@
-package main
+package game
 
 import "pacman/dir"
 
-// Pill interface extends base GameElement with pill effects
+// Pill interface extends base Element with pill effects
 type Pill interface {
-	GameElement
+	Element
 }
 
 type pillStruct struct {
-	GameElement
+	Element
 }
 
 const normalPill = 10
@@ -38,7 +38,7 @@ func (p *pillStruct) AddToGame(game Game) {
 }
 
 // TriggerEffect to model what happens when a Power pill is eaten
-func (p *pillStruct) TriggerEffect(el GameElement) {
+func (p *pillStruct) TriggerEffect(el Element) {
 	theGame.SetScore(theGame.Score() + p.Score())
 	if PillScore(p.Icon()) == powerPill {
 		for _, ghost := range theGame.GetGhosts() {
@@ -49,7 +49,7 @@ func (p *pillStruct) TriggerEffect(el GameElement) {
 }
 
 // GetPill returns a new Pill if the icon is a pill
-func GetPill(icon rune, location dir.Location) GameElement {
+func GetPill(icon rune, location dir.Location) Element {
 	if IsPill(icon) {
 		return NewPill(nil, icon, location)
 	}

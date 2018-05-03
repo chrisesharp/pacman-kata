@@ -1,13 +1,13 @@
-package main
+package game
 
 import (
 	"math/rand"
 	"pacman/dir"
 )
 
-// Ghost interface extending GameElement
+// Ghost interface extending Element
 type Ghost interface {
-	GameElement
+	Element
 	Panic()
 	IsPanicked() bool
 }
@@ -26,7 +26,7 @@ const panicLevel int = 50
 const ghostPoints int = 200
 
 type ghostStruct struct {
-	GameElement
+	Element
 	panic      int
 	origColour Colour
 	gatePassed bool
@@ -52,7 +52,7 @@ func NewGhost(game Game, icon rune, loc dir.Location) Ghost {
 		element.SetColour(colour)
 	}
 
-	return &ghostStruct{GameElement: element,
+	return &ghostStruct{Element: element,
 		panic:      panic,
 		origColour: colour,
 		gatePassed: false,
@@ -151,7 +151,7 @@ func (g *ghostStruct) IsPanicked() bool {
 }
 
 // TriggerEffect of colliding with this element
-func (g *ghostStruct) TriggerEffect(pacman GameElement) {
+func (g *ghostStruct) TriggerEffect(pacman Element) {
 	if g.panic > 0 {
 		g.game.SetScore(g.game.Score() + ghostPoints)
 		g.panic = 0
@@ -180,7 +180,7 @@ func (g *ghostStruct) isClear(nextLoc dir.Location) bool {
 }
 
 // GetGhost returns a new Ghost if the icon is a ghost
-func GetGhost(icon rune, location dir.Location) GameElement {
+func GetGhost(icon rune, location dir.Location) Element {
 	if IsGhost(icon) {
 		return NewGhost(nil, icon, location)
 	}

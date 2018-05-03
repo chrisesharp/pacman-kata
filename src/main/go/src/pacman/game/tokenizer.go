@@ -1,10 +1,10 @@
-package main
+package game
 
 import "pacman/dir"
 
 // GetElement prototype of the relevant type
-func GetElement(icon rune, location dir.Location) GameElement {
-	funcs := []func(icon rune, loc dir.Location) GameElement{
+func GetElement(icon rune, location dir.Location) Element {
+	funcs := []func(icon rune, loc dir.Location) Element{
 		GetPacman,
 		GetGhost,
 		GetPill,

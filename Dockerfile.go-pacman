@@ -3,9 +3,11 @@ FROM golang:1.10
 WORKDIR /go/src/pacman
 COPY src/main/go/src/pacman .
 COPY src/test/resources .
+WORKDIR /go/src/pacman/game
 RUN go get -d -v ./...
 RUN go get -t ./...
+WORKDIR /go/src/pacman
 RUN go install -v ./...
 RUN go build
 
-CMD ["pacman-kata"]
+CMD ["pacman"]

@@ -1,4 +1,4 @@
-package main
+package game
 
 // DefaultColour combination
 var DefaultColour = Colour{WHITE, BLACK}

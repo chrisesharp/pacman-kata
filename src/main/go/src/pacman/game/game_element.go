@@ -1,4 +1,4 @@
-package main
+package game
 
 import (
 	"pacman/dir"
@@ -15,7 +15,7 @@ type gameStruct struct {
 }
 
 // NewElement gameStruct instance
-func NewElement(game Game, icon rune, loc dir.Location, dir dir.Direction, points int) GameElement {
+func NewElement(game Game, icon rune, loc dir.Location, dir dir.Direction, points int) Element {
 	return &gameStruct{game: game,
 		icon:      icon,
 		colour:    DefaultColour,
@@ -95,7 +95,7 @@ func (el *gameStruct) Restart() {
 }
 
 // TriggerEffect for this element colliding with the other
-func (el *gameStruct) TriggerEffect(element GameElement) {}
+func (el *gameStruct) TriggerEffect(element Element) {}
 
 // GetGame for accessing Game context
 func (el *gameStruct) GetGame() Game {
@@ -103,8 +103,8 @@ func (el *gameStruct) GetGame() Game {
 }
 
 // CollectElements from lists or lists into a flattened list
-func CollectElements(lists ...[]GameElement) []GameElement {
-	var elements []GameElement
+func CollectElements(lists ...[]Element) []Element {
+	var elements []Element
 	for _, slice := range lists {
 		for _, piece := range slice {
 			if piece != nil {

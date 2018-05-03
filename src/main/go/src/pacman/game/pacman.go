@@ -1,4 +1,4 @@
-package main
+package game
 
 import "pacman/dir"
 
@@ -11,15 +11,15 @@ var pacmanDirs = map[dir.Direction][]rune{
 	dir.DOWN:  {'Λ', '^'},
 }
 
-// Pacman interface extending GameElement
+// Pacman interface extending Element
 type Pacman interface {
-	GameElement
+	Element
 	Go(dir dir.Direction)
 	Alive() bool
 }
 
 type pacmanStruct struct {
-	GameElement
+	Element
 	moving bool
 	alive  bool
 	frame  int
@@ -32,7 +32,7 @@ func NewPacman(game Game, icon rune, loc dir.Location) Pacman {
 	alive := (icon != deadIcon)
 	element := NewElement(game, icon, loc, facing(icon), 0)
 	element.SetColour(colour)
-	return &pacmanStruct{GameElement: element,
+	return &pacmanStruct{Element: element,
 		moving: true,
 		alive:  alive,
 		frame:  0,
@@ -60,7 +60,7 @@ func (p *pacmanStruct) checkCollisions() {
 }
 
 // TriggerEffect of colliding with this element
-func (p *pacmanStruct) TriggerEffect(el GameElement) {
+func (p *pacmanStruct) TriggerEffect(el Element) {
 	p.alive = false
 	p.moving = false
 	p.game.SetLives(p.game.Lives() - 1)
@@ -94,7 +94,7 @@ func (p *pacmanStruct) Icon() rune {
 }
 
 // GetPacman returns a new Pacman if the icon is a pacman
-func GetPacman(icon rune, location dir.Location) GameElement {
+func GetPacman(icon rune, location dir.Location) Element {
 	if IsPacman(icon) {
 		return NewPacman(nil, icon, location)
 	}
@@ -142,7 +142,7 @@ func (p *pacmanStruct) Animate() {
 func (p *pacmanStruct) Restart() {
 	p.alive = true
 	p.moving = false
-	p.GameElement.Restart()
+	p.Element.Restart()
 }
 
 // Go makes pacman start moving in a given direction

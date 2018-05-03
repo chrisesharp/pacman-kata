@@ -131,35 +131,35 @@ local-go: clean-go build-go test-go deploy-go
 
 .PHONY: clean-go
 clean-go:
-	cd $(GOSRC)/src/pacman ; \
+	cd $(GOSRC)/src/pacman/game ; \
 	rm -f coverage.out
 
 .PHONY: coverage-go
 coverage-go: export GOPATH = $(CURDIR)/$(GOSRC)
 coverage-go: export GOBIN = $(CURDIR)/$(GOSRC)/bin
 coverage-go:
-	cd $(GOSRC)/src/pacman; sonar-scanner -Dsonar.login=$(SONAR_TOKEN) \
+	cd $(GOSRC)/src/pacman/game; sonar-scanner -Dsonar.login=$(SONAR_TOKEN) \
 																				-Dsonar.host.url=$(SONAR_URL) \
 																				-Dsonar.organization=$(SONAR_ORG) \
 																				-Dsonar.projectKey=org.$(SONAR_ORG).pacman-kata-go \
 																				-Dsonar.projectName=pacman-kata-go
-	$(GOPATH)/bin/godacov -t $(CODACY_PROJECT_TOKEN) -r $(GOSRC)/src/pacman/coverage.out -c $(TRAVIS_COMMIT)
+	$(GOPATH)/bin/godacov -t $(CODACY_PROJECT_TOKEN) -r $(GOSRC)/src/pacman/game/coverage.out -c $(TRAVIS_COMMIT)
 
 .PHONY: build-go
 build-go: export GOPATH = $(CURDIR)/$(GOSRC)
 build-go: export GOBIN = $(CURDIR)/$(GOSRC)/bin
 build-go:
-	cd $(GOSRC)/src/pacman; go get -u github.com/DATA-DOG/godog/cmd/godog ; \
+	cd $(GOSRC)/src/pacman/game; go get -u github.com/DATA-DOG/godog/cmd/godog ; \
 													go get -u github.com/schrej/godacov ; \
 													go get -u golang.org/x/tools/cmd/stringer; \
 													go get && go build
-	cd $(GOSRC)/src/pacman/dir; PATH=$(PATH):$(GOBIN) go generate
+	cd $(GOSRC)/src/pacman/dir; PATH="$(PATH):$(GOBIN)" go generate
 
 .PHONY: test-go
 test-go: export GOPATH = $(CURDIR)/$(GOSRC)
 test-go: export GOBIN = $(CURDIR)/$(GOSRC)/bin
 test-go:
-	cd $(GOSRC)/src/pacman; go get -t && $(GO_TEST_CMD) 
+	cd $(GOSRC)/src/pacman/game; go get -t && $(GO_TEST_CMD) 
 
 
 .PHONY: deploy-go
@@ -171,8 +171,8 @@ deploy-go:
 .PHONY: docker-go
 docker-go:
 	$(DOCKERBUILD) $(GO_IMG) . -f Dockerfile.$(GO_IMG)
-	$(DOCKERTEST)  $(VOLUME)/$(FEATURES):/go/src/pacman/features \
-	 															-e BDD $(GO_IMG) $(GO_TEST_CMD)
+	$(DOCKERTEST)  $(VOLUME)/$(FEATURES):/test \
+	 										-e BDD $(GO_IMG) /bin/bash -c "cd game && $(GO_TEST_CMD)"
 
 ################################################################################
 # Node

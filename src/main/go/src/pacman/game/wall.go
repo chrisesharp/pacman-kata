@@ -1,4 +1,4 @@
-package main
+package game
 
 import "pacman/dir"
 
@@ -18,13 +18,13 @@ var wallIcon = map[rune]int{
 	'━': 2,
 }
 
-// Wall interface extends GameElement
+// Wall interface extends Element
 type Wall interface {
-	GameElement
+	Element
 }
 
 type wallStruct struct {
-	GameElement
+	Element
 }
 
 // NewWall returns a new Wall struct
@@ -39,7 +39,7 @@ func NewWall(game Game, icon rune, loc dir.Location) Wall {
 }
 
 // GetWall returns a new Wall if the icon is a wall
-func GetWall(icon rune, location dir.Location) GameElement {
+func GetWall(icon rune, location dir.Location) Element {
 	if IsWall(icon) {
 		return NewWall(nil, icon, location)
 	}

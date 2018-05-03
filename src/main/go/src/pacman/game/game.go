@@ -1,4 +1,4 @@
-package main
+package game
 
 import (
 	"flag"
@@ -21,10 +21,10 @@ type gameState struct {
 	levelMaps    LevelMap
 	field        Playfield
 	lives, score int
-	pacman       GameElement
-	ghosts       []GameElement
-	pills        []GameElement
-	walls        []GameElement
+	pacman       Element
+	ghosts       []Element
+	pills        []Element
+	walls        []Element
 	gameOver     bool
 	level        int
 	maxLevel     int
@@ -168,7 +168,7 @@ func (game *gameState) Tick() {
 
 func (game *gameState) updateField() {
 	game.field.ClearField()
-	for _, el := range CollectElements(game.pills, game.walls, game.ghosts, []GameElement{game.pacman}) {
+	for _, el := range CollectElements(game.pills, game.walls, game.ghosts, []Element{game.pacman}) {
 		loc := el.Location()
 		game.field.Set(loc, el.Icon(), el.Colour())
 	}
@@ -196,40 +196,40 @@ func (game *gameState) Score() int {
 }
 
 // GetPacman object from game state
-func (game *gameState) GetPacman() GameElement {
+func (game *gameState) GetPacman() Element {
 	return game.pacman
 }
 
-func (game *gameState) SetPacman(pacman GameElement) {
+func (game *gameState) SetPacman(pacman Element) {
 	game.pacman = pacman
 	game.field.Set(pacman.Location(), pacman.Icon(), pacman.Colour())
 }
 
 // AddGhost to list of ghosts in game state
-func (game *gameState) AddGhost(ghost GameElement) {
+func (game *gameState) AddGhost(ghost Element) {
 	game.ghosts = append(game.ghosts, ghost)
 	game.field.Set(ghost.Location(), ghost.Icon(), ghost.Colour())
 }
 
 // GetGhosts list from game state
-func (game *gameState) GetGhosts() []GameElement {
+func (game *gameState) GetGhosts() []Element {
 	return game.ghosts
 }
 
 // GetPills list from game state
-func (game *gameState) GetPills() []GameElement {
+func (game *gameState) GetPills() []Element {
 	return game.pills
 }
 
 // AddPill to list of pills in game state
-func (game *gameState) AddPill(pill GameElement) {
+func (game *gameState) AddPill(pill Element) {
 	game.usingPills = true
 	game.pills = append(game.pills, pill)
 	game.field.Set(pill.Location(), pill.Icon(), pill.Colour())
 }
 
 // RemovePill by element from game state
-func (game *gameState) RemovePill(thePill GameElement) {
+func (game *gameState) RemovePill(thePill Element) {
 	for i, pill := range game.pills {
 		if pill == thePill {
 			game.pills = append(game.pills[:i], game.pills[i+1:]...)
@@ -238,19 +238,19 @@ func (game *gameState) RemovePill(thePill GameElement) {
 }
 
 // GetWalls list from game state
-func (game *gameState) GetWalls() []GameElement {
+func (game *gameState) GetWalls() []Element {
 	return game.walls
 }
 
 // AddWall to list
-func (game *gameState) AddWall(wall GameElement) {
+func (game *gameState) AddWall(wall Element) {
 	game.walls = append(game.walls, wall)
 	game.field.Set(wall.Location(), wall.Icon(), wall.Colour())
 }
 
 // GetGate list from game state
-func (game *gameState) GetGate() GameElement {
-	var gate GameElement
+func (game *gameState) GetGate() Element {
+	var gate Element
 	for _, thisWall := range game.walls {
 		if thisWall.IsGate() {
 			gate = thisWall
