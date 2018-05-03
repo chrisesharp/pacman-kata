@@ -169,7 +169,8 @@ deploy-go:
 .PHONY: docker-go
 docker-go:
 	$(DOCKERBUILD) $(GO_IMG) . -f Dockerfile.$(GO_IMG)
-	$(DOCKERTEST)  $(VOLUME)/$(FEATURES):/go/src/pacman/features  -e BDD $(GO_IMG) $(GO_TEST_CMD)
+	$(DOCKERTEST)  $(VOLUME)/$(FEATURES):/go/src/pacman/features \
+	 															-e BDD $(GO_IMG) $(GO_TEST_CMD)
 
 ################################################################################
 # Node
