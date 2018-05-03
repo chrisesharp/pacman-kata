@@ -11,7 +11,6 @@ import java.util.Arrays;
 
 
 public class Ghost extends GameElement implements Moveable {
-    private GameEngine game;
     private Direction direction;
     private boolean moving;
     private static final Colour[] COLOURS = {
@@ -36,11 +35,6 @@ public class Ghost extends GameElement implements Moveable {
         colour++;
         setDirection(UP);
     }
-    
-    @Override
-    public void setGame(GameEngine game) {
-      this.game = game;
-    }
 
     @Override
     public void tick() {
@@ -52,7 +46,7 @@ public class Ghost extends GameElement implements Moveable {
     
     private void managePanic() {
       if (panicked()) {
-        GameElement pacman = game.getGameElementByType(Pacman.class);
+        GameElement pacman = super.getGame().getGameElementByType(Pacman.class);
         Location pacmanLocation;
         pacmanLocation = (pacman!=null) ? pacman.location() : this.location();
         setDirection(location().avoid(pacmanLocation));
@@ -89,11 +83,11 @@ public class Ghost extends GameElement implements Moveable {
     }
     
     private void checkCollisions() {
-      GameElement pacman = game.getGameElementByType(Pacman.class);
+      GameElement pacman = super.getGame().getGameElementByType(Pacman.class);
       if (pacman != null && location().equals(pacman.location())) {
           triggerEffect(pacman);
       }
-      GameElement gate = game.getGameElementByType(Gate.class);
+      GameElement gate = super.getGame().getGameElementByType(Gate.class);
       if (gate != null && location().equals(gate.location()))  {
         passedGate = true;
       }
@@ -150,7 +144,7 @@ public class Ghost extends GameElement implements Moveable {
       panic=CALM_LEVEL;
       setIcon(GhostToken.getToken(panic));
       restart();
-      game.addScore(SCORE);
+      super.getGame().addScore(SCORE);
     }
 
     @Override
@@ -160,7 +154,7 @@ public class Ghost extends GameElement implements Moveable {
     }
     
     public boolean isClear(Direction direction) {
-      GameElement el = game.getGameElement(location().next(direction));
+      GameElement el = super.getGame().getGameElement(location().next(direction));
       return !(el instanceof Wall || 
                el instanceof ForceField || 
                (el instanceof Gate && passedGate)

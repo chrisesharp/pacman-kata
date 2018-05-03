@@ -4,7 +4,6 @@ import static com.example.pacman.Colours.Colour.*;
 import static com.example.pacman.Location.Direction;
 
 public class Pacman extends GameElement implements Moveable {
-    private GameEngine game;
     private boolean alive=true;
     private boolean iconState=true;
     private static final Colour colour = YELLOW;
@@ -25,7 +24,7 @@ public class Pacman extends GameElement implements Moveable {
     public void kill() {
       alive=false;
       stop();
-      game.loseLife();
+      super.getGame().loseLife();
     }
 
     @Override
@@ -48,7 +47,7 @@ public class Pacman extends GameElement implements Moveable {
                 setLocation(location().next(direction()));
                 iconState=!iconState;
             }
-            GameElement e = game.getGameElement(location());
+            GameElement e = super.getGame().getGameElement(location());
             if (e !=null) {
               e.triggerEffect(this);
             }
@@ -64,15 +63,10 @@ public class Pacman extends GameElement implements Moveable {
     }
 
     @Override
-    public void setGame(GameEngine game) {
-      this.game = game;
-    }
-
-    @Override
     public String render() {
       String icon;
       if (alive) {
-        if (game.animatedIcons()) {
+        if (super.getGame().animatedIcons()) {
           icon = (iconState) ? PacmanToken.getToken(direction()) :  PacmanToken.getAltToken(direction());
         } else {
           icon = PacmanToken.getToken(direction());
@@ -89,7 +83,7 @@ public class Pacman extends GameElement implements Moveable {
     }
 
     public boolean isClear(Direction direction) {
-      GameElement e = game.getGameElement(location().next(direction));
+      GameElement e = super.getGame().getGameElement(location().next(direction));
       return !(e instanceof Wall || e instanceof Gate);
     }
 
