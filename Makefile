@@ -148,13 +148,12 @@ coverage-go:
 .PHONY: build-go
 build-go: export GOPATH = $(CURDIR)/$(GOSRC)
 build-go: export GOBIN = $(CURDIR)/$(GOSRC)/bin
-build-go: export PATH = $(PATH):$(GOBIN)
 build-go:
 	cd $(GOSRC)/src/pacman; go get -u github.com/DATA-DOG/godog/cmd/godog ; \
 													go get -u github.com/schrej/godacov ; \
 													go get -u golang.org/x/tools/cmd/stringer; \
 													go get && go build
-	cd $(GOSRC)/src/pacman/dir; go generate
+	cd $(GOSRC)/src/pacman/dir; PATH=$(PATH):$(GOBIN) go generate
 
 .PHONY: test-go
 test-go: export GOPATH = $(CURDIR)/$(GOSRC)
