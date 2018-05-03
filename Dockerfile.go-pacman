@@ -1,6 +1,6 @@
 FROM golang:1.10
 
-WORKDIR /go/src/pacman-kata
+WORKDIR /go/src/pacman
 COPY src/main/go/src/pacman .
 COPY src/test/resources .
 RUN go get -d -v ./...
