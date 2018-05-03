@@ -26,7 +26,6 @@ matrix:
       before_install: 
         - go get -v github.com/schrej/godacov
         - go get -u -a golang.org/x/tools/cmd/stringer
-        - go generate
       script: 
         - make local-go
       after_success:

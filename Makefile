@@ -150,7 +150,8 @@ build-go: export GOPATH = $(CURDIR)/$(GOSRC)
 build-go: export GOBIN = $(CURDIR)/$(GOSRC)/bin
 build-go:
 	cd $(GOSRC)/src/pacman; go get -u github.com/DATA-DOG/godog/cmd/godog ; \
-	 												go get && go build 
+													go get && go build
+	cd $(GOSRC)/src/pacman/dir; go generate
 
 .PHONY: test-go
 test-go: export GOPATH = $(CURDIR)/$(GOSRC)
