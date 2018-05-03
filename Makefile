@@ -150,6 +150,8 @@ build-go: export GOPATH = $(CURDIR)/$(GOSRC)
 build-go: export GOBIN = $(CURDIR)/$(GOSRC)/bin
 build-go:
 	cd $(GOSRC)/src/pacman; go get -u github.com/DATA-DOG/godog/cmd/godog ; \
+													go get -u github.com/schrej/godacov ; \
+													go get -u golang.org/x/tools/cmd/stringer; \
 													go get && go build
 	cd $(GOSRC)/src/pacman/dir; go generate
 
