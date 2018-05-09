@@ -40,10 +40,4 @@ class Pill extends GameElement {
     return this.points;
   }
   
-  getColour(icon) {
-    let token= icons.find((a) => { return a.icon.indexOf(icon) >= 0;});
-    if (token) {
-      return token.colour;
-    }
-  }
 }

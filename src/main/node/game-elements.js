@@ -1,4 +1,5 @@
 "use strict";
+const icons = [];
 
 module.exports =
 
@@ -26,5 +27,12 @@ class GameElement {
   
   getLocation() {
     return {x:this.x,y:this.y};
+  }
+  
+  getColour(icon) {
+    let token= icons.find((a) => { return a.icon.indexOf(icon) >= 0;});
+    if (token) {
+      return token.colour;
+    }
   }
 }
