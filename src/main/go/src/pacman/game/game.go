@@ -76,6 +76,16 @@ func (game *gameState) SetLevelMaps(maps *levelStruct) {
 
 // Parse an input into game state
 func (game *gameState) Parse() {
+	game.setGameInput()
+	runes, columns := game.getMapRunes()
+	game.parseStatus(string(runes[:columns]))
+	rowData := strings.Split(string(runes[columns+1:]), "\n")
+	rows := len(rowData)
+	game.field = new(playField).New(rows, columns)
+	game.parseTokens(rowData)
+}
+
+func (game *gameState) setGameInput() {
 	if game.levelMaps != nil {
 		game.SetInput(game.levelMaps.Get(game.level))
 	} else if strings.Contains(game.input, "SEPARATOR") {
@@ -83,13 +93,12 @@ func (game *gameState) Parse() {
 		game.SetLevelMaps(gameLevel)
 		game.SetInput(game.levelMaps.Get(game.level))
 	}
+}
+
+func (game *gameState) getMapRunes() ([]rune, int) {
 	columns := strings.Index(game.input, "\n")
 	runes := []rune(game.input)
-	game.parseStatus(string(runes[:columns]))
-	rowData := strings.Split(string(runes[columns+1:]), "\n")
-	rows := len(rowData)
-	game.field = new(playField).New(rows, columns)
-	game.parseTokens(rowData)
+	return runes, columns
 }
 
 func (game *gameState) parseStatus(status string) {
