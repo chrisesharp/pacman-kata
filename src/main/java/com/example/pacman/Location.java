@@ -1,7 +1,6 @@
 package com.example.pacman;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Collections;
 
 public class Location {
     enum Direction {
@@ -21,17 +20,14 @@ public class Location {
         }
     }
     
-    private static final Map<Direction,Location> deltasMap =
-    Collections.unmodifiableMap(new HashMap<Direction, Location>() {
-      private static final long serialVersionUID = 42L;
-      {
-        put(Direction.LEFT, new Location(-1,0));
-        put(Direction.RIGHT, new Location(1,0));
-        put(Direction.UP, new Location(0,-1));
-        put(Direction.DOWN, new Location(0,1));
-        put(null, new Location(0,0));
-      }
-    });
+    private static final Map<Direction,Location> deltasMap = new HashMap<Direction, Location>();
+    static {
+      deltasMap.put(Direction.LEFT, new Location(-1,0));
+      deltasMap.put(Direction.RIGHT, new Location(1,0));
+      deltasMap.put(Direction.UP, new Location(0,-1));
+      deltasMap.put(Direction.DOWN, new Location(0,1));
+      deltasMap.put(null, new Location(0,0));
+    }
     
     private int x;
     private int y;
