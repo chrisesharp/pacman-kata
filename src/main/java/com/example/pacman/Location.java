@@ -1,4 +1,8 @@
 package com.example.pacman;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Collections;
+
 public class Location {
     enum Direction {
         UP, RIGHT, DOWN, LEFT;
@@ -16,6 +20,19 @@ public class Location {
             return vals[(this.ordinal()+2) % vals.length];
         }
     }
+    
+    private static final Map<Direction,Location> deltasMap =
+    Collections.unmodifiableMap(new HashMap<Direction, Location>() {
+      private static final long serialVersionUID = 42L;
+      {
+        put(Direction.LEFT, new Location(-1,0));
+        put(Direction.RIGHT, new Location(1,0));
+        put(Direction.UP, new Location(0,-1));
+        put(Direction.DOWN, new Location(0,1));
+        put(null, new Location(0,0));
+      }
+    });
+    
     private int x;
     private int y;
      
@@ -38,31 +55,8 @@ public class Location {
     }
 
     public Location next(Direction direction) {
-        int dx=0;
-        int dy=0;
-        switch (direction) {
-          case LEFT:
-              dx=-1;
-              dy=0;
-              break;
-          case RIGHT:
-              dx=1;
-              dy=0;
-              break;
-          case UP:
-              dx=0;
-              dy=-1;
-              break;
-          case DOWN:
-              dx=0;
-              dy=1;
-              break;
-          default:
-              dx=0;
-              dy=0;
-              break;
-        }
-        return (new Location(x+dx, y+dy));
+        Location delta = deltasMap.get(direction);
+        return (new Location(x+delta.x(), y+delta.y()));
     }
 
     public Direction avoid(Location loc) {
@@ -71,16 +65,6 @@ public class Location {
           heading = (this.isLeftOf(loc)) ? Direction.LEFT : Direction.RIGHT;
         } else {
           heading = (this.isAbove(loc)) ? Direction.UP : Direction.DOWN;
-        }
-        return heading;
-    }
-
-    public Direction follow(Location loc) {
-        Direction heading;
-        if (this.isLevelWith(loc)) {
-          heading = (this.isLeftOf(loc)) ? Direction.RIGHT : Direction.LEFT;
-        } else {
-          heading = (this.isAbove(loc)) ? Direction.DOWN : Direction.UP;
         }
         return heading;
     }
