@@ -1,13 +1,12 @@
 package com.example.pacman;
 import static com.example.pacman.Colours.Colour;
 import static com.example.pacman.Colours.Colour.*;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.io.OutputStream;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ColourDisplay extends MonoDisplay {
-  private static final Map<Colour,String> COLOURMAP = new HashMap<Colour, String>();
+  private static final EnumMap<Colour,String> COLOURMAP = new EnumMap<>(Colour.class);
   static {
     COLOURMAP.put(BLINK, "\u001B[5m");
     COLOURMAP.put(REVERSE, "\u001B[7m");

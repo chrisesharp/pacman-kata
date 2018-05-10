@@ -20,7 +20,7 @@ public class Location {
         }
     }
     
-    private static final Map<Direction,Location> deltasMap = new HashMap<Direction, Location>();
+    private static final Map<Direction,Location> deltasMap = new HashMap<>();
     static {
       deltasMap.put(Direction.LEFT, new Location(-1,0));
       deltasMap.put(Direction.RIGHT, new Location(1,0));

@@ -15,7 +15,7 @@ public class Keyboard implements InputController {
   private Moveable element;
   private static final Logger log = Logger.getLogger(Keyboard.class);
   private static final int TIME_INTERVAL_MS = 100;
-  private static final Map<Character, Direction> keyMap = new HashMap<Character, Direction>();
+  private static final Map<Character, Direction> keyMap = new HashMap<>();
   static {
     keyMap.put('j', LEFT);
     keyMap.put('i', UP);
@@ -54,6 +54,6 @@ public class Keyboard implements InputController {
   }
 
   public static Direction mapKeyDirection(char key) {
-    return keyMap.get(new Character((char)key));
+    return keyMap.get(Character.valueOf(key));
   }
 }
