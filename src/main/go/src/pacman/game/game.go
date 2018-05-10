@@ -161,11 +161,8 @@ func renderStatus(theLives int, theScore int, columns int) (string, []Colour) {
 
 // Tick the game turn over
 func (game *gameState) Tick() {
-	for _, ghost := range game.ghosts {
-		ghost.Tick()
-	}
-	if game.pacman != nil {
-		game.pacman.Tick()
+	for _, el := range CollectElements(game.ghosts, []Element{game.pacman}) {
+		el.Tick()
 	}
 
 	if game.isLevelClear() {
