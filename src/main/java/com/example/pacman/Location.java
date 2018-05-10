@@ -40,59 +40,51 @@ public class Location {
     public Location next(Direction direction) {
         int dx=0;
         int dy=0;
-        if (direction!=null) {
-          switch (direction) {
-                  case LEFT:
-                      dx=-1;
-                      dy=0;
-                      break;
-                  case RIGHT:
-                      dx=1;
-                      dy=0;
-                      break;
-                  case UP:
-                      dx=0;
-                      dy=-1;
-                      break;
-                  case DOWN:
-                      dx=0;
-                      dy=1;
-                      break;
-                  default:
-                      dx=0;
-                      dy=0;
-                      break;
-              }
-          }
+        switch (direction) {
+          case LEFT:
+              dx=-1;
+              dy=0;
+              break;
+          case RIGHT:
+              dx=1;
+              dy=0;
+              break;
+          case UP:
+              dx=0;
+              dy=-1;
+              break;
+          case DOWN:
+              dx=0;
+              dy=1;
+              break;
+          default:
+              dx=0;
+              dy=0;
+              break;
+        }
         return (new Location(x+dx, y+dy));
     }
 
     public Direction avoid(Location loc) {
         Direction heading;
-        if (this.x < loc.x) {
-            heading = Direction.LEFT;
-        } else if (this.x > loc.x) {
-            heading = Direction.RIGHT;
-        } else if (this.y < loc.y) {
-            heading = Direction.UP;
-        } else {
-            heading = Direction.DOWN;
-        }
+        heading = (this.isAbove(loc)) ? Direction.UP : Direction.DOWN;
+        heading = (this.isLeftOf(loc)) ? Direction.LEFT : Direction.RIGHT;
         return heading;
     }
 
     public Direction follow(Location loc) {
         Direction heading;
-        if (this.x < loc.x) {
-            heading = Direction.RIGHT;
-        } else if (this.x > loc.x) {
-            heading = Direction.LEFT;
-        } else if (this.y < loc.y) {
-            heading = Direction.DOWN;
-        } else {
-            heading = Direction.UP;
-        }
+        heading = (this.isAbove(loc)) ? Direction.DOWN : Direction.UP;
+        heading = (this.isLeftOf(loc)) ? Direction.RIGHT : Direction.LEFT;
         return heading;
+    }
+    
+    private boolean isLeftOf(Location loc) {
+      return (this.x < loc.x);
+    }
+    
+    private boolean isAbove(Location loc) {
+      return (this.y < loc.y);
     }
 
     @Override
