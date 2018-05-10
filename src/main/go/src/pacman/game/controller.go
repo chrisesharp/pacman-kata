@@ -28,13 +28,13 @@ func (t *keyboard) New(game Game) Controller {
 }
 
 func (t *keyboard) Listen() {
-	if t.game != nil {
+	if t.game != nil && !t.game.IsDebug() {
 		go t.listen()
 	}
 }
 
 func (t *keyboard) Close() {
-	if t.game != nil {
+	if t.game != nil && !t.game.IsDebug() {
 		termbox.Close()
 	}
 	fmt.Println()
@@ -44,7 +44,6 @@ func (t *keyboard) listen() {
 	if !termbox.IsInit {
 		termbox.Init()
 	}
-	defer termbox.Close()
 	termbox.SetInputMode(termbox.InputEsc)
 	defer termbox.Close()
 	for {

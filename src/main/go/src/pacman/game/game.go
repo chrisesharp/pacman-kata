@@ -14,6 +14,7 @@ import (
 var theGame Game
 
 type gameState struct {
+	debug        bool
 	input        string
 	output       string
 	colour       []Colour
@@ -32,6 +33,7 @@ type gameState struct {
 	display      Display
 	controller   Controller
 	outputStream *os.File
+	frequency    int
 }
 
 var keyDirectionMap = map[string]dir.Direction{
@@ -41,15 +43,23 @@ var keyDirectionMap = map[string]dir.Direction{
 	"l": dir.RIGHT,
 }
 
+const frequency = 850
+
 // New clears state
-func (game *gameState) New() Game {
-	return &gameState{input: "",
-		field:    nil,
-		lives:    3,
-		score:    0,
-		pacman:   nil,
-		gameOver: false,
-		level:    1}
+func (game *gameState) New(debug bool) Game {
+	gameFrequency := frequency
+	if debug {
+		gameFrequency = 0
+	}
+	return &gameState{debug: debug,
+		input:     "",
+		field:     nil,
+		lives:     3,
+		score:     0,
+		pacman:    nil,
+		gameOver:  false,
+		level:     1,
+		frequency: gameFrequency}
 }
 
 // SetDisplay for rendering output
@@ -129,11 +139,6 @@ func (game *gameState) parseTokens(rowData []string) {
 // SetPlayfield for this game state
 func (game *gameState) SetPlayfield(field Playfield) {
 	game.field = field
-}
-
-// GetPlayfield for this game state
-func (game *gameState) GetPlayfield() Playfield {
-	return game.field
 }
 
 // Render the game state as a string
@@ -330,12 +335,10 @@ func (game *gameState) printGameOver() {
 // Play a game
 func (game *gameState) Play(debug bool) {
 	game.Parse()
-	if !debug {
-		game.controller.Listen()
-	}
+	game.controller.Listen()
 	game.display.Init(game.outputStream)
 	pacman := game.GetPacman()
-	for pacman != nil && !game.gameOver {
+	for ok := (pacman != nil); ok; ok = (!debug && !game.gameOver) {
 		game.Tick()
 		game.Render()
 		game.display.Refresh(game.GetOutput())
@@ -344,14 +347,9 @@ func (game *gameState) Play(debug bool) {
 			game.display.Flash()
 			pacman.Restart()
 		}
-		if debug {
-			game.gameOver = true
-		}
 	}
-	if !debug {
-		time.Sleep(time.Second * 1)
-		game.controller.Close()
-	}
+	time.Sleep(time.Duration(game.frequency) * time.Millisecond)
+	game.controller.Close()
 	game.display.Close()
 }
 
@@ -371,31 +369,35 @@ func (game *gameState) Quit() {
 	game.gameOver = true
 }
 
+func (game *gameState) IsDebug() bool {
+	return game.debug
+}
+
 // SetOutput stream for the display
 func (game *gameState) SetOutput(outstream *os.File) {
 	game.outputStream = outstream
 }
 
 // NewGame creates a new gameState
-func NewGame() Game {
-	return new(gameState).New()
+func NewGame(debug bool) Game {
+	return new(gameState).New(debug)
 }
 
 // Start the game with correct flags
 func Start(filePtr string, colour bool, animation bool, debug bool, outstream *os.File) {
-	theGame = NewGame()
+	theGame = NewGame(debug)
 	theGame.SetOutput(outstream)
 	if colour {
 		theGame.SetDisplay(new(colourTerminal).New(theGame))
 	} else {
 		theGame.SetDisplay(new(terminal).New(theGame))
 	}
-	if !debug {
-		theGame.SetController(new(keyboard).New(theGame))
-		if animation {
-			theGame.UseAnimation()
-		}
+
+	theGame.SetController(new(keyboard).New(theGame))
+	if animation {
+		theGame.UseAnimation()
 	}
+
 	level, err := ioutil.ReadFile(filePtr)
 	if err != nil {
 		panic(err)

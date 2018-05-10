@@ -7,7 +7,7 @@ import (
 
 // Game state interface
 type Game interface {
-	New() Game
+	New(bool) Game
 	Parse()
 	Render()
 	SetDisplay(Display)
@@ -15,7 +15,6 @@ type Game interface {
 	SetInput(string)
 	SetOutput(outstream *os.File)
 	SetPlayfield(Playfield)
-	GetPlayfield() Playfield
 	SetLevelMaps(*levelStruct)
 	Lives() int
 	SetLives(lives int)
@@ -41,6 +40,7 @@ type Game interface {
 	UseAnimation()
 	Animated() bool
 	Quit()
+	IsDebug() bool
 }
 
 // Element interface

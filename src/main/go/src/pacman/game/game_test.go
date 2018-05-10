@@ -216,12 +216,6 @@ func weRenderTheStatusLine() error {
 	return nil
 }
 
-func weRenderTheGameField() error {
-	output, _ := theGame.GetPlayfield().RenderField()
-	outputStream.WriteString(output)
-	return nil
-}
-
 // When
 func weParseTheState() error {
 	theGame.Parse()
@@ -539,12 +533,11 @@ func FeatureContext(s *godog.Suite) {
 	s.Step(`^I should get the following output:$`, iShouldGetTheFollowingOutput)
 	s.Step(`^the screen column width is (\d+)$`, theScreenColumnWidthIs)
 	s.Step(`^we render the status line$`, weRenderTheStatusLine)
-	s.Step(`^we render the game field$`, weRenderTheGameField)
 	s.Step(`^a ghost at (\d+) , (\d+)$`, aGhostAt)
 	s.BeforeScenario(func(interface{}) {
 		commandArgs = append(commandArgs, "game.go")
 		outputStream = new(bytes.Buffer)
-		theGame = new(gameState).New() // clean the state before every scenario
+		theGame = new(gameState).New(true) // clean the state before every scenario
 		testDisplay = new(terminal).New(nil)
 		theGame.SetDisplay(testDisplay)
 	})
