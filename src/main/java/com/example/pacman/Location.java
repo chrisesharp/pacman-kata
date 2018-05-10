@@ -67,15 +67,21 @@ public class Location {
 
     public Direction avoid(Location loc) {
         Direction heading;
-        heading = (this.isAbove(loc)) ? Direction.UP : Direction.DOWN;
-        heading = (this.isLeftOf(loc)) ? Direction.LEFT : Direction.RIGHT;
+        if (this.isLevelWith(loc)) {
+          heading = (this.isLeftOf(loc)) ? Direction.LEFT : Direction.RIGHT;
+        } else {
+          heading = (this.isAbove(loc)) ? Direction.UP : Direction.DOWN;
+        }
         return heading;
     }
 
     public Direction follow(Location loc) {
         Direction heading;
-        heading = (this.isAbove(loc)) ? Direction.DOWN : Direction.UP;
-        heading = (this.isLeftOf(loc)) ? Direction.RIGHT : Direction.LEFT;
+        if (this.isLevelWith(loc)) {
+          heading = (this.isLeftOf(loc)) ? Direction.RIGHT : Direction.LEFT;
+        } else {
+          heading = (this.isAbove(loc)) ? Direction.DOWN : Direction.UP;
+        }
         return heading;
     }
     
@@ -85,6 +91,10 @@ public class Location {
     
     private boolean isAbove(Location loc) {
       return (this.y < loc.y);
+    }
+    
+    private boolean isLevelWith(Location loc) {
+      return (this.y == loc.y);
     }
 
     @Override
