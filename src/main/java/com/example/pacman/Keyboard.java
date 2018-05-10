@@ -7,7 +7,6 @@ import org.jline.terminal.TerminalBuilder;
 import org.jline.terminal.Terminal;
 import org.jline.utils.NonBlockingReader;
 import org.apache.log4j.Logger;
-import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -16,16 +15,13 @@ public class Keyboard implements InputController {
   private Moveable element;
   private static final Logger log = Logger.getLogger(Keyboard.class);
   private static final int TIME_INTERVAL_MS = 100;
-  private static final Map<Character, Direction> keyMap = 
-    Collections.unmodifiableMap(new HashMap<Character, Direction>() {
-      private static final long serialVersionUID = 42L;
-      {
-          put('j', LEFT);
-          put('i', UP);
-          put('l', RIGHT);
-          put('m', DOWN);
-      }
-    });
+  private static final Map<Character, Direction> keyMap = new HashMap<Character, Direction>();
+  static {
+    keyMap.put('j', LEFT);
+    keyMap.put('i', UP);
+    keyMap.put('l', RIGHT);
+    keyMap.put('m', DOWN);
+  }
 
   public Keyboard() {
     try {
