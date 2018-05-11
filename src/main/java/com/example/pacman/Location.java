@@ -56,13 +56,15 @@ public class Location {
     }
 
     public Direction avoid(Location loc) {
-        Direction heading;
-        if (this.isLevelWith(loc)) {
-          heading = (this.isLeftOf(loc)) ? Direction.LEFT : Direction.RIGHT;
-        } else {
-          heading = (this.isAbove(loc)) ? Direction.UP : Direction.DOWN;
-        }
-        return heading;
+      return (this.isLevelWith(loc)) ? horizontalMove(loc ) : verticalMove(loc);
+    }
+    
+    private Direction horizontalMove(Location loc) {
+      return (this.isLeftOf(loc)) ? Direction.LEFT : Direction.RIGHT;
+    }
+    
+    private Direction verticalMove(Location loc) {
+      return (this.isAbove(loc)) ? Direction.UP : Direction.DOWN;
     }
     
     private boolean isLeftOf(Location loc) {
