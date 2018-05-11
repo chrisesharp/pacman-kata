@@ -59,6 +59,10 @@ public class Location {
       return (this.isLevelWith(loc)) ? horizontalMove(loc ) : verticalMove(loc);
     }
     
+    private boolean isLevelWith(Location loc) {
+      return (this.y == loc.y);
+    }
+    
     private Direction horizontalMove(Location loc) {
       return (this.isLeftOf(loc)) ? Direction.LEFT : Direction.RIGHT;
     }
@@ -75,9 +79,6 @@ public class Location {
       return (this.y < loc.y);
     }
     
-    private boolean isLevelWith(Location loc) {
-      return (this.y == loc.y);
-    }
 
     @Override
     public boolean equals(Object obj) {
