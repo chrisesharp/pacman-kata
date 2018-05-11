@@ -35,6 +35,7 @@ class Game(object):
         self.last_level = 1
         self.level_maps = None
         self.animation = False
+        self.using_pills = False
 
     def init(self):
         self.parse()
@@ -46,10 +47,10 @@ class Game(object):
             self.render()
             self.refresh()
             sleep(FRAME_RATE)
-            if (self.pacman.alive is False):
+            if (not self.pacman.alive):
                 self.display.flash()
                 self.pacman.restart()
-            if (self.game_over is True) or (debug is True):
+            if self.game_over or debug:
                 break
 
     def parse(self):
@@ -86,6 +87,7 @@ class Game(object):
                     element.add_to_game(self)
 
     def add_pill(self, pill):
+        self.using_pills = True
         self.pills.append(pill)
         self.field.add(pill.coordinates, pill)
 
@@ -113,11 +115,13 @@ class Game(object):
             self.gate = wall
 
     def tick(self):
-        if not self.game_over:
-            for ghost in self.ghosts:
-                ghost.tick()
-            if self.pacman:
-                self.pacman.tick()
+        # if not self.game_over:
+        for ghost in self.ghosts:
+            ghost.tick()
+        if self.pacman:
+            self.pacman.tick()
+        if self.is_level_clear():
+            self.next_level()
         self.update_field()
 
     def render(self):
@@ -185,10 +189,9 @@ class Game(object):
         self.score += pill.score()
         for ghost in self.ghosts:
             ghost.trigger_effect(pill)
-        if len(self.pills) == 0:
-            self.next_level()
 
-    def kill_ghost(self, ghost):
+    def kill_ghost(self, coordinates):
+        ghost = self.field.get(coordinates)
         self.score += ghost.score()
         ghost.kill()
 
@@ -215,6 +218,9 @@ class Game(object):
 
     def set_max_level(self, level):
         self.last_level = level
+
+    def is_level_clear(self):
+        return (len(self.pills) == 0) and self.using_pills
 
     def next_level(self):
         if self.level < self.last_level:

@@ -73,8 +73,8 @@ class Pacman(GameElement):
     def check_collisions(self):
         if self.game.is_pill(self.coordinates):
             self.game.eat_pill(self.coordinates)
-        if self.game.is_ghost(self.coordinates):
-            self.game.kill_ghost(self.game.get_element(self.coordinates))
+        elif self.game.is_ghost(self.coordinates):
+            self.game.kill_ghost(self.coordinates)
 
     def clear(self, coordinates):
         if not self.game.is_wall(coordinates):
