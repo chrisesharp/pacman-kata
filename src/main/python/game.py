@@ -13,6 +13,8 @@ from levels import LevelMaps
 import tokenizer
 import sys
 
+FRAME_RATE = 0.1
+
 
 class Game(object):
     def __init__(self, input_map=None):
@@ -34,21 +36,32 @@ class Game(object):
         self.level_maps = None
         self.animation = False
 
-    def play(self, debug):
+    def init(self):
         self.parse()
         self.display.init(self)
-        while (self.game_over is False):
+
+    def play(self, debug):
+        while True:
             self.tick()
             self.render()
             self.refresh()
-            sleep(0.1)
+            sleep(FRAME_RATE)
             if (self.pacman.alive is False):
                 self.display.flash()
                 self.pacman.restart()
-            if (debug is True):
-                self.game_over = True
+            if (self.game_over is True) or (debug is True):
+                break
 
     def parse(self):
+        self.set_game_input()
+        columns = self.input_map.index("\n")
+        self.parse_status(self.input_map[:columns])
+        screen_rows = self.input_map[columns+1:].split('\n')
+        rows = len(screen_rows)
+        self.field = GameField(columns, rows)
+        self.parse_field(screen_rows)
+
+    def set_game_input(self):
         if self.level_maps:
             self.input_map = self.level_maps.get_level(self.level)
         else:
@@ -56,12 +69,6 @@ class Game(object):
                 self.level_maps = LevelMaps(self.input_map)
                 self.last_level = self.level_maps.max_level()
                 self.input_map = self.level_maps.get_level(self.level)
-        columns = self.input_map.index("\n")
-        self.parse_status(self.input_map[:columns])
-        screen_rows = self.input_map[columns+1:].split('\n')
-        rows = len(screen_rows)
-        self.field = GameField(columns, rows)
-        self.parse_field(screen_rows)
 
     def parse_status(self, status_line):
         elements = status_line.split()
@@ -248,15 +255,16 @@ def start_game(file, colour, debug):
 
     game = Game(level_map)
     controller = Keyboard(game)
-    if (colour is True):
+    if (colour):
         display = ColourDisplay(sys.stdout)
     else:
         display = Display(sys.stdout)
-    if (debug is False):
+    if (not debug):
         controller.init()
         game.set_controller(controller)
         game.use_animation()
     game.set_display(display)
+    game.init()
     game.play(debug)
     controller.close()
 
