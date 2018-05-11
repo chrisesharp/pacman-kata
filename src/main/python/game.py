@@ -115,7 +115,6 @@ class Game(object):
             self.gate = wall
 
     def tick(self):
-        # if not self.game_over:
         for ghost in self.ghosts:
             ghost.tick()
         if self.pacman:
