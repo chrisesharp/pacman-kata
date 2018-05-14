@@ -149,11 +149,16 @@ coverage-go:
 build-go: export GOPATH = $(CURDIR)/$(GOSRC)
 build-go: export GOBIN = $(CURDIR)/$(GOSRC)/bin
 build-go:
-	cd $(GOSRC)/src/pacman/game; go get -u github.com/DATA-DOG/godog/cmd/godog ; \
-													go get -u github.com/schrej/godacov ; \
-													go get -u golang.org/x/tools/cmd/stringer; \
-													go get && go build
+	cd $(GOSRC)/src/pacman/game; \
+		go get -u github.com/DATA-DOG/godog/cmd/godog ; \
+		go get -u github.com/schrej/godacov ; \
+		go get -u golang.org/x/tools/cmd/stringer; \
+		go get && go build
 	cd $(GOSRC)/src/pacman/dir; PATH="$(PATH):$(GOBIN)" go generate
+	docker run --rm -v $(CURDIR):/local swaggerapi/swagger-codegen-cli generate \
+    -i /local/src/main/resources/swagger.json \
+    -l go \
+    -o /local/src/main/go/src/swagger
 
 .PHONY: test-go
 test-go: export GOPATH = $(CURDIR)/$(GOSRC)
@@ -237,6 +242,10 @@ coverage-python:
 
 .PHONY: build-python
 build-python:
+	docker run --rm -v $(CURDIR):/local swaggerapi/swagger-codegen-cli generate \
+		-i /local/src/main/resources/swagger.json \
+		-l python \
+		-o /local/src/main/python/swagger
 
 .PHONY: test-python
 test-python:
