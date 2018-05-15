@@ -15,8 +15,6 @@ matrix:
         - "$HOME/.sonar/cache"
       before_cache:
         - rm -rf $HOME/.m2/repository/io/cucumber
-      before_install:
-        - mvn compile
       sudo: true
       dist: trusty
       addons:
