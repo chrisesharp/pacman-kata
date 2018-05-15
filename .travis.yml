@@ -56,7 +56,7 @@ matrix:
         - make local-python
       after_success:
         - make coverage-python
-      sudo: false
+      sudo: true
       dist: trusty
       addons:
         sonarcloud:
