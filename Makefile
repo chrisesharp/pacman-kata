@@ -90,7 +90,7 @@ local-java: clean-java build-java test-java deploy-java
 
 .PHONY: build-java
 build-java:
-	mvn install
+	mvn compile install
 
 .PHONY: test-java
 test-java:
