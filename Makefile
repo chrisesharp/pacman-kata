@@ -19,6 +19,10 @@ ifndef BDD
 	BDD=not @leave
 endif
 
+ifndef UID
+	UID=$(shell id -u)
+endif
+
 ifndef TRAVIS_COMMIT
   TRAVIS_COMMIT=$(shell git rev-parse HEAD)
 endif
@@ -102,11 +106,11 @@ clean-java:
 	
 .PHONY: deps-java
 deps-java: src/main/resources/swagger.json
-	docker run --rm -v $(CURDIR):/local swaggerapi/swagger-codegen-cli generate \
+	docker run --rm -u $(UID) -v $(CURDIR):/local swaggerapi/swagger-codegen-cli generate \
 		-i /local/src/main/resources/swagger.json \
 		-l java \
-		-o /local/generated-sources/swagger
-	cd $(CURDIR)/generated-sources/swagger ; \
+		-o /local/target/generated-sources/swagger
+	cd $(CURDIR)/target/generated-sources/swagger ; \
 	mvn clean install
 
 .PHONY: coverage-java
