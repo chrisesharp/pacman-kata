@@ -10,8 +10,11 @@ public class ScoreboardClient {
   private DefaultApi apiInstance;
   private String player;
   
-  public ScoreboardClient(String player) {
+  public ScoreboardClient(String player, String scoreboardURL) {
     apiInstance = new DefaultApi();
+    ApiClient apiClient = new ApiClient();
+    apiClient.setBasePath(scoreboardURL);
+    apiInstance.setApiClient(apiClient);
     this.player = player;
   }
   

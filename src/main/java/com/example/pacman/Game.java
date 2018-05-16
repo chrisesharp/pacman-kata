@@ -36,7 +36,8 @@ public class Game implements PacmanGame {
     public Game(Level level ) {
         this.level = level;
         this.player =  System.getenv("USER");
-        scoreboard = new ScoreboardClient(this.player);
+        String scoreboardURL = System.getenv("SCOREBOARD_URL");
+        scoreboard = new ScoreboardClient(this.player, scoreboardURL);
     }
 
     public boolean animatedIcons() {
