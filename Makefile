@@ -105,8 +105,8 @@ deps-java: src/main/resources/swagger.json
 	docker run --rm -v $(CURDIR):/local swaggerapi/swagger-codegen-cli generate \
 		-i /local/src/main/resources/swagger.json \
 		-l java \
-		-o /local/target/generated-sources/swagger
-	cd $(CURDIR)/target/generated-sources/swagger ; \
+		-o /local/generated-sources/swagger
+	cd $(CURDIR)/generated-sources/swagger ; \
 	mvn clean install
 
 .PHONY: coverage-java
