@@ -5,6 +5,8 @@ matrix:
   include:
     - language: java
       jdk: openjdk8
+      before_install:
+        - make deps-java
       script: 
         - make local-java
       after_success:

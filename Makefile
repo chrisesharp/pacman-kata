@@ -86,7 +86,7 @@ local-all: local-java local-go local-node local-python
 # Java
 ################################################################################
 .PHONY: local-java
-local-java: clean-java deps-java build-java test-java deploy-java
+local-java: clean-java build-java test-java deploy-java
 
 .PHONY: build-java
 build-java:
