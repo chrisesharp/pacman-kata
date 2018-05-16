@@ -99,6 +99,15 @@ test-java:
 .PHONY: clean-java
 clean-java:
 	mvn clean
+	
+.PHONY: deps-java
+deps-java:
+	docker run --rm -v $(CURDIR):/local swaggerapi/swagger-codegen-cli generate \
+		-i /local/src/main/resources/swagger.json \
+		-l java \
+		-o /local/target/generated-sources/swagger
+	cd $(CURDIR)/target/generated-sources/swagger ; \
+	mvn clean install
 
 .PHONY: coverage-java
 coverage-java:
@@ -145,6 +154,13 @@ coverage-go:
 																				-Dsonar.projectName=pacman-kata-go
 	$(GOPATH)/bin/godacov -t $(CODACY_PROJECT_TOKEN) -r $(GOSRC)/src/pacman/game/coverage.out -c $(TRAVIS_COMMIT)
 
+.PHONY: deps-go
+deps-go:
+	docker run --rm -v $(CURDIR):/local swaggerapi/swagger-codegen-cli generate \
+		-i /local/src/main/resources/swagger.json \
+		-l go \
+		-o /local/src/main/go/src/swagger
+
 .PHONY: build-go
 build-go: export GOPATH = $(CURDIR)/$(GOSRC)
 build-go: export GOBIN = $(CURDIR)/$(GOSRC)/bin
@@ -155,10 +171,7 @@ build-go:
 		go get -u golang.org/x/tools/cmd/stringer; \
 		go get && go build
 	cd $(GOSRC)/src/pacman/dir; PATH="$(PATH):$(GOBIN)" go generate
-	docker run --rm -v $(CURDIR):/local swaggerapi/swagger-codegen-cli generate \
-    -i /local/src/main/resources/swagger.json \
-    -l go \
-    -o /local/src/main/go/src/swagger
+
 
 .PHONY: test-go
 test-go: export GOPATH = $(CURDIR)/$(GOSRC)
@@ -240,13 +253,16 @@ coverage-python:
 		python-codacy-coverage -r coverage.xml
 
 
-.PHONY: build-python
-build-python:
+.PHONY: deps-python
+deps-python:
 	docker run --rm -v $(CURDIR):/local swaggerapi/swagger-codegen-cli generate \
 		-i /local/src/main/resources/swagger.json \
 		-l python \
 		-o /local/src/main/python/swagger
 
+.PHONY: build-python
+build-python:
+		
 .PHONY: test-python
 test-python:
 	cd $(PYTHONSRC) ; $(PYTHON_TEST_CMD)

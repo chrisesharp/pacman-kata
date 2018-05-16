@@ -5,7 +5,7 @@
     "version" : "1.0.0",
     "title" : "Liberty REST APIs"
   },
-  "host" : "localhost:32778",
+  "host" : "localhost:32780",
   "definitions" : {
     "Score" : {
       "type" : "object",
