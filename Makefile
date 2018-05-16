@@ -94,7 +94,7 @@ local-java: clean-java build-java test-java deploy-java
 
 .PHONY: build-java
 build-java:
-	mvn compile install
+	mvn compile 
 
 .PHONY: test-java
 test-java:
@@ -128,7 +128,7 @@ coverage-java:
 
 .PHONY: deploy-java
 deploy-java:
-	mvn package
+	mvn install -Dmaven.test.skip=true
 
 .PHONY: docker-java
 docker-java:
