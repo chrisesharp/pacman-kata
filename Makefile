@@ -86,7 +86,7 @@ local-all: local-java local-go local-node local-python
 # Java
 ################################################################################
 .PHONY: local-java
-local-java: clean-java build-java test-java deploy-java
+local-java: clean-java deps-java build-java test-java deploy-java
 
 .PHONY: build-java
 build-java:
@@ -101,7 +101,7 @@ clean-java:
 	mvn clean
 	
 .PHONY: deps-java
-deps-java:
+deps-java: src/main/resources/swagger.json
 	docker run --rm -v $(CURDIR):/local swaggerapi/swagger-codegen-cli generate \
 		-i /local/src/main/resources/swagger.json \
 		-l java \
