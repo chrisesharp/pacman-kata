@@ -1,5 +1,6 @@
 package com.example.pacman;
 
+import com.example.pacman.utils.ScoreboardClient;
 import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
@@ -25,12 +26,18 @@ public class Game implements PacmanGame {
     private List<GameElement> walls = new ArrayList<>();
     private List<GameElement> forceFields = new ArrayList<>();
     private GameElement gate;
+    
+    private ScoreboardClient scoreboard;
+    private String player;
 
     public Game() {
     }
 
     public Game(Level level ) {
         this.level = level;
+        this.player =  System.getenv("USER");
+        String scoreboardURL = System.getenv("SCOREBOARD_URL");
+        scoreboard = new ScoreboardClient(this.player, scoreboardURL);
     }
 
     public boolean animatedIcons() {
@@ -234,6 +241,7 @@ public class Game implements PacmanGame {
           pacman.restart();
         }
       }
+      scoreboard.addScore(this.getScore());
     }
     
     public void init(InputController controller, Display display) {

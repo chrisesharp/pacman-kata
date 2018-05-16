@@ -5,6 +5,8 @@ matrix:
   include:
     - language: java
       jdk: openjdk8
+      before_install:
+        - make deps-java
       script: 
         - make local-java
       after_success:
@@ -15,7 +17,7 @@ matrix:
         - "$HOME/.sonar/cache"
       before_cache:
         - rm -rf $HOME/.m2/repository/io/cucumber
-      sudo: false
+      sudo: true
       dist: trusty
       addons:
         sonarcloud:
@@ -27,7 +29,7 @@ matrix:
         - make local-go
       after_success:
         - make coverage-go
-      sudo: false
+      sudo: true
       dist: trusty
       addons:
         sonarcloud:
@@ -39,7 +41,7 @@ matrix:
         - make local-node
       after_success:
         - make coverage-node
-      sudo: false
+      sudo: true
       dist: trusty
       addons:
         sonarcloud:
@@ -54,7 +56,7 @@ matrix:
         - make local-python
       after_success:
         - make coverage-python
-      sudo: false
+      sudo: true
       dist: trusty
       addons:
         sonarcloud:

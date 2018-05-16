@@ -11,9 +11,11 @@ node_modules/
 src/main/go/bin
 src/main/go/src/github.com
 src/main/go/src/pacman/pacman
+src/main/go/src/swagger
 src/main/go/pkg/
 src/main/go/src/golang.org/
 src/main/python/__pycache__/
+src/main/python/swagger
 *.pyc
 .vscode/
 *.code-workspace
