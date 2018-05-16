@@ -155,11 +155,15 @@ coverage-go:
 	$(GOPATH)/bin/godacov -t $(CODACY_PROJECT_TOKEN) -r $(GOSRC)/src/pacman/game/coverage.out -c $(TRAVIS_COMMIT)
 
 .PHONY: deps-go
+deps-go: export GOPATH = $(CURDIR)/$(GOSRC)
+deps-go: export GOBIN = $(CURDIR)/$(GOSRC)/bin
 deps-go:
 	docker run --rm -v $(CURDIR):/local swaggerapi/swagger-codegen-cli generate \
 		-i /local/src/main/resources/swagger.json \
 		-l go \
-		-o /local/src/main/go/src/swagger
+		-o /local/$(GOSRC)/src/swagger
+	cd $(GOSRC)/src/swagger; \
+		go get -d -v && go build -v ./...
 
 .PHONY: build-go
 build-go: export GOPATH = $(CURDIR)/$(GOSRC)
