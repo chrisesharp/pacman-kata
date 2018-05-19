@@ -19,11 +19,12 @@ public class PacmanStepDef {
     GameField gameField;
     Level level;
     String output;
-    ByteArrayOutputStream result = new ByteArrayOutputStream();;
+    ByteArrayOutputStream result = new ByteArrayOutputStream();
     Display display;
     Map<String,byte[]> ANSIcodes = new HashMap<>();
     String command = "java -cp target/pacman-kata-1.0-SNAPSHOT.jar com.example.pacman.Game";
     List<String> commandArgs = new ArrayList<>();
+    String serviceResponse;
     
     // Given steps
     
@@ -157,6 +158,11 @@ public class PacmanStepDef {
         ANSIcodes.put(sequence, hexStringToByteArray(hex));
     }
     
+    @Given("^the user is \"([^\"]*)\"$")
+    public void the_user_is(String user) {
+        game.setPlayer(user);
+    }
+    
     // When steps
     
     @When("^I run the command with the args$")
@@ -227,8 +233,6 @@ public class PacmanStepDef {
     @When("^the display renders the icon \"(.*?)\" in yellow and refreshes$")
     public void the_dispay_renders_the_icon_and_refreshes_the_display(String icon) throws Throwable {
         ANSIcodes.put(icon, hexStringToByteArray(stringToHexString(icon)));
-        //String buffer = display.render(YELLOW, icon);
-        //display.refresh(buffer);
     }
     
     @When("^initialize the display$")
@@ -249,6 +253,16 @@ public class PacmanStepDef {
       DisplayStream video = new DisplayStream();
       video.writeVideo(buffer);
       display.refresh(video);
+    }
+    
+    @When("^I post the score to the scoreboard$")
+    public void i_add_the_score() {
+      game.postScore();
+    }
+    
+    @When("^I get the scores$")
+    public void i_get_the_scores() {
+        serviceResponse = game.getScores().get(0);
     }
     
     // Then steps
@@ -400,6 +414,11 @@ public class PacmanStepDef {
     public void the_game_dimensions_should_equal_the_display_dimensions() {
         assertEquals(game.getGameField().width(),display.width());
         assertEquals(game.getGameField().height(),display.height());
+    }
+    
+    @Then("^I should get the following response:$")
+    public void i_should_get_the_following_response(String expected) {
+        assertEquals(expected, serviceResponse);
     }
     
 

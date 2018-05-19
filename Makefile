@@ -15,6 +15,8 @@
 DOCKERBUILD		= docker build -t
 DOCKERTEST		= docker run --rm -t
 
+SCOREBOARD_URL = https://virtserver.swaggerhub.com/chrissharp/leaderboard-api/v1
+
 ifndef BDD
 	BDD=not @leave
 endif
@@ -107,7 +109,7 @@ clean-java:
 .PHONY: deps-java
 deps-java: src/main/resources/swagger.json
 	docker run --rm -u $(UID) -v $(CURDIR):/local swaggerapi/swagger-codegen-cli generate \
-		-i /local/src/main/resources/swagger.json \
+		-i https://app.swaggerhub.com/apiproxy/schema/file/chrissharp/leaderboard-api/v1/swagger.yaml \
 		-l java \
 		-o /local/target/generated-sources/swagger
 	cd $(CURDIR)/target/generated-sources/swagger ; \

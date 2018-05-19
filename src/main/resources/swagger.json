@@ -1,21 +1,28 @@
 {
   "swagger" : "2.0",
   "info" : {
-    "description" : "Discover REST APIs available within Liberty",
-    "version" : "1.0.0",
-    "title" : "Liberty REST APIs"
+    "description" : "Leaderboard REST service",
+    "version" : "v1",
+    "title" : "Leaderboard API"
   },
-  "host" : "localhost:32782",
+  "host" : "localhost:32784",
+  "tags" : [ {
+    "name" : "Scoreboard",
+    "description" : "Scoreboard REST service"
+  } ],
   "definitions" : {
     "Score" : {
       "type" : "object",
+      "required" : [ "player", "score" ],
       "properties" : {
         "player" : {
-          "type" : "string"
+          "type" : "string",
+          "example" : "chris"
         },
         "score" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int32",
+          "example" : 10000
         }
       }
     },
@@ -56,29 +63,45 @@
     },
     "/leaderboard/v1/scores" : {
       "get" : {
+        "tags" : [ "Scoreboard" ],
+        "summary" : "Get scores as a list",
+        "description" : "",
         "operationId" : "scores",
         "produces" : [ "application/json" ],
         "parameters" : [ ],
         "responses" : {
-          "default" : {
-            "description" : "successful operation"
+          "200" : {
+            "description" : "scores",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Score"
+              }
+            }
           }
         }
       },
       "post" : {
+        "tags" : [ "Scoreboard" ],
+        "summary" : "Post a score to the scoreboard",
+        "description" : "",
         "operationId" : "addScore",
         "consumes" : [ "application/json" ],
+        "produces" : [ "text/plain" ],
         "parameters" : [ {
           "in" : "body",
           "name" : "body",
-          "required" : false,
+          "required" : true,
           "schema" : {
             "$ref" : "#/definitions/Score"
           }
         } ],
         "responses" : {
-          "default" : {
-            "description" : "successful operation"
+          "201" : {
+            "description" : "Score added",
+            "schema" : {
+              "type" : "string"
+            }
           }
         }
       },

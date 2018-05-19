@@ -27,17 +27,17 @@ public class Game implements PacmanGame {
     private List<GameElement> forceFields = new ArrayList<>();
     private GameElement gate;
     
-    private ScoreboardClient scoreboard;
-    private String player;
+    public ScoreboardClient scoreboard;
 
     public Game() {
+      String scoreboardURL = System.getenv("SCOREBOARD_URL");
+      String player = System.getenv("USER");
+      scoreboard = new ScoreboardClient(player, scoreboardURL);
     }
 
     public Game(Level level ) {
-        this.level = level;
-        this.player =  System.getenv("USER");
-        String scoreboardURL = System.getenv("SCOREBOARD_URL");
-        scoreboard = new ScoreboardClient(this.player, scoreboardURL);
+      this();
+      this.level = level;
     }
 
     public boolean animatedIcons() {
@@ -241,7 +241,15 @@ public class Game implements PacmanGame {
           pacman.restart();
         }
       }
+      this.postScore();
+    }
+    
+    public void postScore() {
       scoreboard.addScore(this.getScore());
+    }
+    
+    public List<String> getScores() {
+      return scoreboard.scores();
     }
     
     public void init(InputController controller, Display display) {
@@ -277,6 +285,10 @@ public class Game implements PacmanGame {
         parse();
       }
     }  
+    
+    public void setPlayer(String player) {
+      this.scoreboard.setPlayer(player);
+    }
 
     public static void main(String [] args) {
       ArgParser parser = new ArgParser(args);
