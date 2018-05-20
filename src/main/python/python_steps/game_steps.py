@@ -125,10 +125,13 @@ def step_impl(context):
 def step_impl(context):
     context.display.init(context.game)
 
+@given(u'the user is {user}')
+def step_impl(context, user):
+    context.game.set_player(user)
+
 #
 # Whens
 #
-
 
 @when(u'I run the command with the args')
 def step_impl(context):
@@ -209,6 +212,14 @@ def step_impl(context, string):
     context.ansi_map[string] = sequence
     context.display.refresh(string)
 
+@when(u'I post the score to the scoreboard')
+def step_impl(context):
+    context.game.post_score()
+
+@when(u'I get the scores')
+def step_impl(context):
+    context.output = str(context.game.get_scores()[0])
+    print("scores are " + context.output)
 #
 # Thens
 #
@@ -340,3 +351,7 @@ def step_impl(context, x, y):
 @then(u'ghost at {x:d} , {y:d} should be panicked')
 def step_impl(context, x, y):
     assert context.game.field.get((x, y)).panicked() is True
+
+@then(u'I should get the following response')
+def step_impl(context):
+    assert context.text == context.output

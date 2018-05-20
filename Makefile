@@ -30,7 +30,6 @@ ifndef TRAVIS_COMMIT
 endif
 
 NODE_FORMAT = progress
-#NODE_FORMAT = node_modules/cucumber-pretty
 JAVA_FORMAT = progress
 PYTHON_FORMAT = pretty
 GO_FORMAT = progress
@@ -269,7 +268,9 @@ deps-python:
 	docker run --rm -v $(CURDIR):/local swaggerapi/swagger-codegen-cli generate \
 		-i https://app.swaggerhub.com/apiproxy/schema/file/chrissharp/leaderboard-api/v1/swagger.yaml \
 		-l python \
-		-o /local/src/main/python/swagger
+		-o /local/$(PYTHONSRC)/swagger
+	cd $(PYTHONSRC)/swagger; \
+		pip3 install .
 
 .PHONY: build-python
 build-python:

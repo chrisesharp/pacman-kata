@@ -10,8 +10,11 @@ from ghost import Ghost
 from wall import Wall
 from pill import Pill
 from levels import LevelMaps
-import tokenizer
+from scoreboard import Scoreboard
+
 import sys
+import os
+import tokenizer
 
 FRAME_RATE = 0.1
 
@@ -36,6 +39,8 @@ class Game(object):
         self.level_maps = None
         self.animation = False
         self.using_pills = False
+        self.player = None
+        self.scoreboard = None
 
     def init(self):
         self.parse()
@@ -52,6 +57,7 @@ class Game(object):
                 self.pacman.restart()
             if self.game_over or debug:
                 break
+        self.post_score()
 
     def parse(self):
         self.set_game_input()
@@ -253,6 +259,24 @@ class Game(object):
             field.add((x, y), GAME[i])
             field.add((x, y+1), OVER[i])
 
+    def set_player(self, player):
+        self.player = player
+
+    def post_score(self):
+        if self.scoreboard is None:
+            scoreboard_url = os.getenv("SCOREBOARD_URL")
+            self.scoreboard = Scoreboard(scoreboard_url, self.player)
+        self.scoreboard.post_score(self.score)
+
+    def get_scores(self):
+        response = self.scoreboard.scores()
+        scores = []
+        for score in response:
+            name = score.player
+            points = str(score.score)
+            scores.append(name + ":" + points)
+        return scores
+
 
 def start_game(file, colour, debug):
     with open(file) as f:
@@ -268,6 +292,7 @@ def start_game(file, colour, debug):
         controller.init()
         game.set_controller(controller)
         game.use_animation()
+    game.set_player(os.getenv("USER", "python-user"))
     game.set_display(display)
     game.init()
     game.play(debug)
