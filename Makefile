@@ -142,7 +142,7 @@ docker-java:
 ################################################################################
 
 .PHONY: local-go
-local-go: clean-go deps-gp build-go test-go deploy-go
+local-go: clean-go deps-go build-go test-go deploy-go
 
 .PHONY: clean-go
 clean-go:
