@@ -116,25 +116,19 @@ func (g *ghostStruct) noChoice() dir.Direction {
 }
 
 func (g *ghostStruct) move() {
-	if g.panic%2 == 0 {
-		if g.isClear(g.Location().Next(g.Direction())) {
-			g.SetLocation(g.Location().Next(g.Direction()))
-		}
+	if g.panic%2 == 0 && g.isClear(g.Location().Next(g.Direction())) {
+		g.SetLocation(g.Location().Next(g.Direction()))
 	}
 }
 
 func (g *ghostStruct) checkCollisions() {
 	gate := g.game.GetGate()
-	if gate != nil {
-		if g.Location() == gate.Location() {
-			g.gatePassed = true
-		}
+	if gate != nil && g.Location() == gate.Location() {
+		g.gatePassed = true
 	}
 	pacman := g.game.GetPacman()
-	if pacman != nil {
-		if g.Location() == pacman.Location() {
-			g.TriggerEffect(pacman)
-		}
+	if pacman != nil && g.Location() == pacman.Location() {
+		g.TriggerEffect(pacman)
 	}
 }
 

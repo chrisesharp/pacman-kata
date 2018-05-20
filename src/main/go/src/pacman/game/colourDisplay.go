@@ -65,10 +65,8 @@ func (t *colourTerminal) Flash() {
 }
 
 func (t *colourTerminal) Close() {
-	if t.game != nil {
-		if termbox.IsInit {
-			termbox.Close()
-		}
+	if t.game != nil && termbox.IsInit {
+		termbox.Close()
 	}
 	fmt.Println()
 }

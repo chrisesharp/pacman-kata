@@ -82,7 +82,9 @@ func (el *gameStruct) SetColour(colour Colour) {
 }
 
 // Tick activates this elements turn
-func (el *gameStruct) Tick() {}
+func (el *gameStruct) Tick() {
+	// Base elements have no behaviour
+}
 
 // Score in points for this elements
 func (el *gameStruct) Score() int {
@@ -95,7 +97,9 @@ func (el *gameStruct) Restart() {
 }
 
 // TriggerEffect for this element colliding with the other
-func (el *gameStruct) TriggerEffect(element Element) {}
+func (el *gameStruct) TriggerEffect(element Element) {
+	// Base elements have no effect on other elements
+}
 
 // GetGame for accessing Game context
 func (el *gameStruct) GetGame() Game {
