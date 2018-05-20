@@ -169,7 +169,7 @@ deps-go:
 		-i https://app.swaggerhub.com/apiproxy/schema/file/chrissharp/leaderboard-api/v1/swagger.yaml \
 		-l go \
 		-o /local/$(GOSRC)/src/pacman/swagger
-	cd $(GOSRC)/src/swagger; \
+	cd $(GOSRC)/src/pacman/swagger; \
 		go get -d -v && go build -v ./...
 
 .PHONY: build-go
