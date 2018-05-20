@@ -31,7 +31,7 @@ endif
 
 NODE_FORMAT = progress
 JAVA_FORMAT = progress
-PYTHON_FORMAT = pretty
+PYTHON_FORMAT = progress
 GO_FORMAT = progress
 
 TAG_FIXER = echo $(BDD)|sed "s/not /~/g" |sed "s/ or /,/g"
