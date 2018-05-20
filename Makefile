@@ -241,7 +241,7 @@ docker-node:
 # Python
 ################################################################################
 .PHONY: local-python
-local-python: clean-python build-python test-python deploy-python
+local-python: clean-python deps-python build-python test-python deploy-python
 
 .PHONY: clean-python
 clean-python:
