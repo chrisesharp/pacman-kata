@@ -92,7 +92,7 @@ local-all: local-java local-go local-node local-python
 # Java
 ################################################################################
 .PHONY: local-java
-local-java: clean-java build-java test-java deploy-java
+local-java: clean-java deps-java build-java test-java deploy-java
 
 .PHONY: build-java
 build-java:
@@ -142,12 +142,13 @@ docker-java:
 ################################################################################
 
 .PHONY: local-go
-local-go: clean-go build-go test-go deploy-go
+local-go: clean-go deps-gp build-go test-go deploy-go
 
 .PHONY: clean-go
 clean-go:
 	cd $(GOSRC)/src/pacman/game ; \
-	rm -f coverage.out
+	rm -f coverage.out ; \
+	rm -f $(GOSRC)/src/pacman/swagger
 
 .PHONY: coverage-go
 coverage-go: export GOPATH = $(CURDIR)/$(GOSRC)
@@ -165,9 +166,9 @@ deps-go: export GOPATH = $(CURDIR)/$(GOSRC)
 deps-go: export GOBIN = $(CURDIR)/$(GOSRC)/bin
 deps-go:
 	docker run --rm -v $(CURDIR):/local swaggerapi/swagger-codegen-cli generate \
-		-i /local/src/main/resources/swagger.json \
+		-i https://app.swaggerhub.com/apiproxy/schema/file/chrissharp/leaderboard-api/v1/swagger.yaml \
 		-l go \
-		-o /local/$(GOSRC)/src/swagger
+		-o /local/$(GOSRC)/src/pacman/swagger
 	cd $(GOSRC)/src/swagger; \
 		go get -d -v && go build -v ./...
 
@@ -266,7 +267,7 @@ coverage-python:
 .PHONY: deps-python
 deps-python:
 	docker run --rm -v $(CURDIR):/local swaggerapi/swagger-codegen-cli generate \
-		-i /local/src/main/resources/swagger.json \
+		-i https://app.swaggerhub.com/apiproxy/schema/file/chrissharp/leaderboard-api/v1/swagger.yaml \
 		-l python \
 		-o /local/src/main/python/swagger
 

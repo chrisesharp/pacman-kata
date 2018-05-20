@@ -39,7 +39,7 @@ public class ScoreboardClient {
     try {
         scoreboard.addScore(body);
     } catch (ApiException e) {
-        log.error("For " + scoreboardURL + ":" + e.getStackTrace());
+        log.error("For " + scoreboardURL, e);
     }
   }
   

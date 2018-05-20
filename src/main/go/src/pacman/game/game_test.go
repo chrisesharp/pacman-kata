@@ -23,6 +23,7 @@ var testDisplay Display
 var game Game
 var outputStream *bytes.Buffer
 var commandArgs []string
+var serviceResponse string
 var columns int
 var score int
 var lives int
@@ -186,6 +187,12 @@ func thisIsTheLastLevel() error {
 	return nil
 }
 
+// Given
+func theUserIs(player string) error {
+	theGame.SetPlayer(player)
+	return nil
+}
+
 /** Whens ******************************************************/
 
 // When
@@ -253,6 +260,18 @@ func thePlayerPresses(key string) error {
 // When
 func initializeTheDisplay() error {
 	testDisplay.Init(io.Writer(outputStream))
+	return nil
+}
+
+// When
+func iPostTheScoreToTheScoreboard() error {
+	theGame.PostScore()
+	return nil
+}
+
+// When
+func iGetTheScores() error {
+	serviceResponse = theGame.GetScores()[0]
 	return nil
 }
 
@@ -485,6 +504,14 @@ func ghostAtShouldBePanicked(x, y int) error {
 	return fmt.Errorf("expected ghost at %v,%v to be calm", x, y)
 }
 
+// Then
+func iShouldGetTheFollowingResponse(expected *gherkin.DocString) error {
+	if serviceResponse == expected.Content {
+		return nil
+	}
+	return fmt.Errorf("expected screen to be:\n======\n%v\n but was\n%v\n======", expected.Content, serviceResponse)
+}
+
 // Feature matchers
 func FeatureContext(s *godog.Suite) {
 	s.Step(`^the player score is (\d+)$`, thePlayerScoreIs)
@@ -534,6 +561,10 @@ func FeatureContext(s *godog.Suite) {
 	s.Step(`^the screen column width is (\d+)$`, theScreenColumnWidthIs)
 	s.Step(`^we render the status line$`, weRenderTheStatusLine)
 	s.Step(`^a ghost at (\d+) , (\d+)$`, aGhostAt)
+	s.Step(`^the user is "([^"]*)"$`, theUserIs)
+	s.Step(`^I post the score to the scoreboard$`, iPostTheScoreToTheScoreboard)
+	s.Step(`^I get the scores$`, iGetTheScores)
+	s.Step(`^I should get the following response:$`, iShouldGetTheFollowingResponse)
 	s.BeforeScenario(func(interface{}) {
 		commandArgs = append(commandArgs, "game.go")
 		outputStream = new(bytes.Buffer)

@@ -15,11 +15,14 @@ type Game interface {
 	SetInput(string)
 	SetOutput(outstream *os.File)
 	SetPlayfield(Playfield)
+	SetPlayer(player string)
 	SetLevelMaps(*levelStruct)
 	Lives() int
 	SetLives(lives int)
 	Score() int
 	SetScore(score int)
+	PostScore()
+	GetScores() []string
 	SetLevel(max int)
 	SetMaxLevel(max int)
 	Dimensions() (int, int)

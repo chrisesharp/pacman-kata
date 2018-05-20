@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"pacman/dir"
+	"pacman/scoreboard"
 	"strconv"
 	"strings"
 	"time"
@@ -34,6 +35,8 @@ type gameState struct {
 	controller   Controller
 	outputStream *os.File
 	frequency    int
+	player       string
+	scoreboard   scoreboard.Client
 }
 
 var keyDirectionMap = map[string]dir.Direction{
@@ -82,6 +85,11 @@ func (game *gameState) SetLevelMaps(maps *levelStruct) {
 	game.levelMaps = maps
 	game.levelMaps.Unpack()
 	game.maxLevel = game.levelMaps.Max()
+}
+
+// SetPlayer name for Scoreboard
+func (game *gameState) SetPlayer(player string) {
+	game.player = player
 }
 
 // Parse an input into game state
@@ -274,6 +282,19 @@ func (game *gameState) SetScore(score int) {
 	game.score = score
 }
 
+// PostScore to the scoreboard
+func (game *gameState) PostScore() {
+	if game.scoreboard == nil {
+		game.connectToScoreboard()
+	}
+	game.scoreboard.PostScore(game.Score())
+}
+
+// GetScores from the scoreboard
+func (game *gameState) GetScores() []string {
+	return game.scoreboard.Scores()
+}
+
 // SetLevel for game
 func (game *gameState) SetLevel(level int) {
 	game.level = level
@@ -332,6 +353,11 @@ func (game *gameState) printGameOver() {
 	}
 }
 
+func (game *gameState) connectToScoreboard() {
+	scoreboardURL := os.Getenv("SCOREBOARD_URL")
+	game.scoreboard = scoreboard.NewClient(scoreboardURL, game.player)
+}
+
 // Play a game
 func (game *gameState) Play(debug bool) {
 	game.Parse()
@@ -349,6 +375,7 @@ func (game *gameState) Play(debug bool) {
 		}
 	}
 	time.Sleep(time.Duration(game.frequency) * time.Millisecond)
+	game.PostScore()
 	game.controller.Close()
 	game.display.Close()
 }
@@ -386,6 +413,11 @@ func NewGame(debug bool) Game {
 // Start the game with correct flags
 func Start(filePtr string, colour bool, animation bool, debug bool, outstream *os.File) {
 	theGame = NewGame(debug)
+	player := os.Getenv("USER")
+	if len(player) == 0 {
+		player = "go_player"
+	}
+	theGame.SetPlayer(player)
 	theGame.SetOutput(outstream)
 	if colour {
 		theGame.SetDisplay(new(colourTerminal).New(theGame))
@@ -402,6 +434,7 @@ func Start(filePtr string, colour bool, animation bool, debug bool, outstream *o
 	if err != nil {
 		panic(err)
 	}
+
 	theGame.SetInput(string(level))
 	theGame.Play(debug)
 }
