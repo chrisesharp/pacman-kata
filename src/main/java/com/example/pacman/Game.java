@@ -27,7 +27,7 @@ public class Game implements PacmanGame {
     private List<GameElement> forceFields = new ArrayList<>();
     private GameElement gate;
     
-    public ScoreboardClient scoreboard;
+    private ScoreboardClient scoreboard;
 
     public Game() {
       String scoreboardURL = System.getenv("SCOREBOARD_URL");
