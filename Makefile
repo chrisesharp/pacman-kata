@@ -15,8 +15,9 @@
 DOCKERBUILD		= docker build -t
 DOCKERTEST		= docker run --rm -t
 
-SCOREBOARD_URL = https://virtserver.swaggerhub.com/chrissharp/leaderboard-api/v1
-
+SCOREBOARD_API = chrissharp/leaderboard-api/1.0.0
+SCOREBOARD_URL = https://virtserver.swaggerhub.com/$(SCOREBOARD_API)
+SCOREBOARD_API_YAML = https://app.swaggerhub.com/apiproxy/schema/file/$(SCOREBOARD_API)/swagger.yaml
 ifndef BDD
 	BDD=not @leave
 endif
@@ -29,9 +30,13 @@ ifndef TRAVIS_COMMIT
   TRAVIS_COMMIT=$(shell git rev-parse HEAD)
 endif
 
+#NODE_FORMAT = node_modules/cucumber-pretty
 NODE_FORMAT = progress
+#JAVA_FORMAT = pretty
 JAVA_FORMAT = progress
+#PYTHON_FORMAT = pretty
 PYTHON_FORMAT = progress
+#GO_FORMAT = pretty
 GO_FORMAT = progress
 
 TAG_FIXER = echo $(BDD)|sed "s/not /~/g" |sed "s/ or /,/g"
@@ -108,7 +113,7 @@ clean-java:
 .PHONY: deps-java
 deps-java: src/main/resources/swagger.json
 	docker run --rm -u $(UID) -v $(CURDIR):/local swaggerapi/swagger-codegen-cli generate \
-		-i https://app.swaggerhub.com/apiproxy/schema/file/chrissharp/leaderboard-api/v1/swagger.yaml \
+		-i $(SCOREBOARD_API_YAML) \
 		-l java \
 		-o /local/target/generated-sources/swagger
 	cd $(CURDIR)/target/generated-sources/swagger ; \
@@ -165,7 +170,7 @@ deps-go: export GOPATH = $(CURDIR)/$(GOSRC)
 deps-go: export GOBIN = $(CURDIR)/$(GOSRC)/bin
 deps-go:
 	docker run --rm -v $(CURDIR):/local swaggerapi/swagger-codegen-cli generate \
-		-i https://app.swaggerhub.com/apiproxy/schema/file/chrissharp/leaderboard-api/v1/swagger.yaml \
+		-i $(SCOREBOARD_API_YAML) \
 		-l go \
 		-o /local/$(GOSRC)/src/pacman/swagger
 	cd $(GOSRC)/src/pacman/swagger; \
@@ -206,12 +211,25 @@ docker-go:
 # Node
 ################################################################################
 .PHONY: local-node
-local-node: clean-node build-node test-node deploy-node 
+local-node: clean-node deps-node test-node deploy-node 
 
 .PHONY: clean-node
 clean-node:
-	cd $(NODESRC) ; rm -rf ./coverage
-	
+	cd $(NODESRC) ; rm -rf ./coverage ./swagger
+
+.PHONY: deps-node
+deps-node:
+	docker run --rm -u $(UID) -v $(CURDIR):/local swaggerapi/swagger-codegen-cli generate \
+		-i $(SCOREBOARD_API_YAML) \
+		-l javascript \
+		-o /local/$(NODESRC)/swagger
+	cd $(NODESRC); \
+		npm install --save ./swagger
+	cd $(NODESRC)/swagger; \
+		npm link 
+	cd $(NODESRC) ; \
+		npm link swagger
+
 .PHONY: coverage-node
 coverage-node:
 	cd $(NODESRC) ; npm run coverage && sonar-scanner \
@@ -266,7 +284,7 @@ coverage-python:
 .PHONY: deps-python
 deps-python:
 	docker run --rm -v $(CURDIR):/local swaggerapi/swagger-codegen-cli generate \
-		-i https://app.swaggerhub.com/apiproxy/schema/file/chrissharp/leaderboard-api/v1/swagger.yaml \
+		-i $(SCOREBOARD_API_YAML) \
 		-l python \
 		-o /local/$(PYTHONSRC)/swagger
 	cd $(PYTHONSRC)/swagger; \

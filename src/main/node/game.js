@@ -9,6 +9,7 @@ const Ghost = require("./ghost.js");
 const Wall = require("./walls.js");
 const Pill = require("./pills.js");
 const LevelMap = require("./levels.js");
+const Scoreboard = require("./scoreboard.js");
 
 
 module.exports = 
@@ -31,10 +32,16 @@ class Game {
       this.animated = false;
       this.display = null;
       this.firstFrame = true;
+      this.player = process.env.USER;
+      this.scoreboard = null;
     }
     
     setDebug (debug) {
       this.debug = debug;
+    }
+    
+    setPlayer (player) {
+      this.player = player;
     }
     
     setInput (docString) {
@@ -276,6 +283,18 @@ class Game {
     isGate(loc) {
       let element = this.playfield.getLocation(loc);
       return ( element instanceof Wall && element.isGate() );
+    }
+    
+    postScore(callback) {
+      if (!this.scoreboard) {
+        var scoreboardURL = process.env.SCOREBOARD_URL;
+        this.scoreboard = new Scoreboard(scoreboardURL, this.player);
+      }
+      this.scoreboard.postScore(this.score, callback);
+    }
+    
+    getScores(callback) { 
+      return this.scoreboard.scores(callback);
     }
 }
 

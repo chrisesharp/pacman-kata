@@ -19,6 +19,7 @@ function CustomWorld() {
   this.commandArgs = new ArrayList;
   this.commandArgs.add("index.js");
   this.commandOutput = "";
+  this.serviceResponse = null;
 }
 
 CustomWorld.prototype.addCommandArg = function(arg) {
@@ -54,6 +55,10 @@ CustomWorld.prototype.setGame = function(docString) {
 CustomWorld.prototype.setPlayfield = function(x,y) {
   let playfield = new Playfield(x,y);
   this.game.setPlayfield(playfield);
+}
+
+CustomWorld.prototype.setPlayer = function(player) {
+  this.game.setPlayer(player);
 }
 
 CustomWorld.prototype.setPacman = function(x,y,facing) {
@@ -98,6 +103,38 @@ CustomWorld.prototype.setScore = function(score) {
 
 CustomWorld.prototype.setPlayerScore = function(score) {
   this.score = score;
+}
+
+CustomWorld.prototype.postScore = function() {
+  var game = this.game;
+  return new Promise((resolve, reject) => {
+    var callback = function(error, data, response) {
+      if (!error) {
+        resolve(data[0].player + ":" + data[0].score);
+      } else {
+        reject(error);
+      }
+    }
+    game.postScore(callback);
+  });
+}
+
+CustomWorld.prototype.getScores = function() {
+  var game = this.game;
+  return new Promise((resolve, reject) => {
+    var callback = function(error, data, response) {
+      if (!error) {
+        resolve(data[0].player + ":" + data[0].score);
+      } else {
+        reject(error);
+      }
+    }
+    game.getScores(callback);
+  });  
+}
+
+CustomWorld.prototype.setServiceResponse = function(data) {
+  this.serviceResponse = data;
 }
 
 CustomWorld.prototype.setLives = function(lives) {

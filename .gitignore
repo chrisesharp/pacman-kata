@@ -16,6 +16,7 @@ src/main/go/pkg/
 src/main/go/src/golang.org/
 src/main/python/__pycache__/
 src/main/python/swagger
+src/main/node/swagger
 *.pyc
 .vscode/
 *.code-workspace
