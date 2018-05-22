@@ -25,7 +25,7 @@ matrix:
     - language: go
       go:
         - "1.10"
-      go_import_path: github.com/chrisesharp/pacman-kata/src/main/go/src/pacman
+      go_import_path: github.com/chrisesharp/pacman-kata/src/main/go/src
       script: 
         - make go
       after_success:
