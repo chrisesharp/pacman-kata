@@ -63,9 +63,9 @@ build:
 	cd src/pacman/game; \
 		go get -u github.com/DATA-DOG/godog/cmd/godog ; \
 		go get -u github.com/schrej/godacov ; \
-		go get -u golang.org/x/tools/cmd/stringer; \
-		go get && go build
+		go get -u golang.org/x/tools/cmd/stringer; 
 	cd src/pacman/dir; PATH="$(PATH):$(GOBIN)" go generate
+	cd src/pacman/game; go get && go build
 
 
 .PHONY: test
