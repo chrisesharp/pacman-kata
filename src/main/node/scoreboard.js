@@ -12,14 +12,7 @@ class Scoreboard {
     this.player = player;
   }
 
-  postScore(score) {
-    var callback = function(error, data, response) {
-      if (error) {
-        console.error(error);
-      } else {
-        console.log("Score posted " + data);
-      }
-    };
+  postScore(score, callback) {
     var body = new client.Score(this.player, score);
     this.api.addScore(body, callback);
   }

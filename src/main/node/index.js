@@ -14,14 +14,6 @@ var game;
 function draw() {
   if (!game.firstFrame) {
     game.refreshDisplay();
-    if (!(game.getPacman().isAlive())) {
-      game.display.flash();
-      game.pacman.restart();
-    }
-    if (game.gameOver) {
-      MainLoop.stop();
-      process.exit();
-    }
   } else {
     game.firstFrame = false;
   }
@@ -33,6 +25,50 @@ function update() {
     game.gameOver = true;
   }
 }
+
+function endOfLoop() {
+  if (!(game.getPacman().isAlive())) {
+    game.display.flash();
+    game.pacman.restart();
+  }
+  if (game.gameOver) {
+    endGame();
+  }
+}
+
+function endGame() {
+  const timeout = 2000;
+  const scoreboardPost = new Promise(
+    (resolve, reject) => {
+      var callback = function(error, data, response) {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(data);
+        }
+      }
+      setTimeout(() => {
+        reject("Timeout waiting for score post");
+      }, timeout);
+      game.postScore(callback);
+    });
+  
+  async function postToScoreboard() {
+    try {
+      let posted = await scoreboardPost;
+    }
+    catch (error) {
+      console.log(error.message);
+    }
+  };
+  
+  (async () => {
+    MainLoop.stop();
+    await postToScoreboard();
+    process.exit();
+  })();
+}
+
 
 // This is the equivalent of 'main' in node
 if (require.main === module) {
@@ -62,5 +98,5 @@ if (require.main === module) {
     keyboard.keyPressed(key);
   });
   
-  MainLoop.setSimulationTimestep(interval_ms).setUpdate(update).setDraw(draw).start();  
+  MainLoop.setSimulationTimestep(interval_ms).setUpdate(update).setDraw(draw).setEnd(endOfLoop).start();  
 }
