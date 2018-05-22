@@ -8,7 +8,7 @@ matrix:
       before_install:
         - make deps-java
       script: 
-        - make local-java
+        - make java
       after_success:
         - make coverage-java
       cache:
@@ -26,9 +26,9 @@ matrix:
       go:
         - "1.10"
       script: 
-        - make local-go
+        - make go
       after_success:
-        - make coverage-go
+        - cd src/main/go && make coverage
       sudo: true
       dist: trusty
       addons:
@@ -38,9 +38,9 @@ matrix:
       node_js:
         - "9.3.0"
       script: 
-        - make local-node
+        - make node
       after_success:
-        - make coverage-node
+        - cd src/main/node && make coverage
       sudo: true
       dist: trusty
       addons:
@@ -53,9 +53,9 @@ matrix:
         - pip install -r src/main/python/requirements.txt
         - pip install -r src/main/python/requirements-test.txt
       script: 
-        - make local-python
+        - make python
       after_success:
-        - make coverage-python
+        - cd src/main/python && make coverage
       sudo: true
       dist: trusty
       addons:
