@@ -25,7 +25,6 @@ matrix:
     - language: go
       go:
         - "1.10"
-      go_import_path: src/main/go
       script: 
         - make go
       after_success:
