@@ -12,72 +12,20 @@
 ################################################################################
 # COMMAND DEFINITIONS
 ################################################################################
-DOCKERBUILD		= docker build -t
-DOCKERTEST		= docker run --rm -t
+include makefile.inc
 
-SCOREBOARD_API = chrissharp/leaderboard-api/1.0.0
-SCOREBOARD_URL = https://virtserver.swaggerhub.com/$(SCOREBOARD_API)
-SCOREBOARD_API_YAML = https://app.swaggerhub.com/apiproxy/schema/file/$(SCOREBOARD_API)/swagger.yaml
-ifndef BDD
-	BDD=not @leave
-endif
-
-ifndef UID
-	UID=$(shell id -u)
-endif
-
-ifndef TRAVIS_COMMIT
-  TRAVIS_COMMIT=$(shell git rev-parse HEAD)
-endif
-
-#NODE_FORMAT = node_modules/cucumber-pretty
-NODE_FORMAT = progress
-#JAVA_FORMAT = pretty
-JAVA_FORMAT = progress
-#PYTHON_FORMAT = pretty
-PYTHON_FORMAT = progress
-#GO_FORMAT = pretty
-GO_FORMAT = progress
-
-TAG_FIXER = echo $(BDD)|sed "s/not /~/g" |sed "s/ or /,/g"
-
-JAVA_TEST_CMD	= mvn test -Dcucumber.options="--glue com.example.pacman \
-																						--plugin $(JAVA_FORMAT) \
-																						--tags "$(shell $(TAG_FIXER))" \
-																					  classpath:features"
-GO_TEST_CMD = go test  -coverprofile=coverage.out \
-											--godog.format=$(GO_FORMAT) \
-											--godog.tags="$(shell $(TAG_FIXER))"
-NODE_TEST_CMD = npm test -- -f $(NODE_FORMAT) --tags "$(BDD)"
-PYTHON_TEST_CMD = behave -f $(PYTHON_FORMAT) -t "$(shell $(TAG_FIXER))" -k
-
-JAVA_IMG   = java-pacman
 JAVASRC    = src
+JAVA_IMG   = java-pacman
 
-GO_IMG     = go-pacman
-GOSRC      = src/main/go
-ifndef GOPATH
-	GOPATH = $(CURDIR)/$(GOSRC)
-endif
-
-NODE_IMG   = node-pacman
 NODESRC    = src/main/node
+NODE_IMG   = node-pacman
 
-PYTHON_IMG = python-pacman
 PYTHONSRC  = src/main/python
+PYTHON_IMG = python-pacman
 
-FEATURES   = src/test
-VOLUME		 = -v$(CURDIR)
+GOSRC      = src/main/go
+GO_IMG     = go-pacman
 
-################################################################################
-# Sonar and Codacy hooks
-################################################################################
-# SONAR_TOKEN = ** should be passed via to env **
-SONAR_URL = https://sonarcloud.io
-SONAR_ORG = pacman-kata
-
-# CODACY_PROJECT_TOKEN = ** should be passed via to env **
-CODACY_API_TOKEN=7FnGdigREcGP8j88LxQz
 ################################################################################
 # Targets
 ################################################################################
@@ -87,222 +35,95 @@ CODACY_API_TOKEN=7FnGdigREcGP8j88LxQz
 all: local-all
 
 .PHONY: docker-all
-docker-all: docker-java docker-go docker-node docker-python
+docker-all: java-docker go-docker node-docker python-docker
 
 .PHONY: local-all
-local-all: local-java local-go local-node local-python
+local-all: java go node python
 
 ################################################################################
 # Java
+# Because maven spreads itself out all over the place, we'll run this at the top
+# We include the definitions of each target here from the Makefile stored with 
+# the rest of the java source.
 ################################################################################
-.PHONY: local-java
-local-java: clean-java deps-java build-java test-java deploy-java
+include src/main/java/Makefile
 
-.PHONY: build-java
-build-java:
-	mvn compile 
-
-.PHONY: test-java
-test-java:
-	$(JAVA_TEST_CMD)
+.PHONY: java
+java: clean-java deps-java build-java test-java deploy-java
 
 .PHONY: clean-java
 clean-java:
-	mvn clean
-	
+	$(CLEAN_JAVA)
+
 .PHONY: deps-java
 deps-java: src/main/resources/swagger.json
-	docker run --rm -u $(UID) -v $(CURDIR):/local swaggerapi/swagger-codegen-cli generate \
-		-i $(SCOREBOARD_API_YAML) \
-		-l java \
-		-o /local/target/generated-sources/swagger
-	cd $(CURDIR)/target/generated-sources/swagger ; \
-	mvn clean install
+	$(DEPS_JAVA)
+
+.PHONY: build-java
+build-java:
+	$(BUILD_JAVA) 
+
+.PHONY: test-java
+test-java:
+	$(TEST_JAVA)
 
 .PHONY: coverage-java
 coverage-java:
-	mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
-	    -Dsonar.host.url=$(SONAR_URL) \
-	    -Dsonar.organization=$(SONAR_ORG) \
-			-Dsonar.projectKey=org.$(SONAR_ORG).pacman-kata-java \
-			-Dsonar.projectName=pacman-kata-java \
-			-Dsonar.exclusions="**/*.xml" \
-    	-Dsonar.login=$(SONAR_TOKEN)
-	mvn com.gavinmogan:codacy-maven-plugin:coverage \
-			-DcoverageReportFile=target/site/jacoco-ut/jacoco.xml \
-			-DprojectToken=$(CODACY_PROJECT_TOKEN) -DapiToken=$(CODACY_API_TOKEN)
-
+	$(COVERAGE_JAVA)
+	
 .PHONY: deploy-java
 deploy-java:
-	mvn install -Dmaven.test.skip=true
+	$(DEPLOY_JAVA)
 
-.PHONY: docker-java
-docker-java:
-	$(DOCKERBUILD) $(JAVA_IMG) . -f Dockerfile.$(JAVA_IMG)
-	$(DOCKERTEST)   $(VOLUME)/.m2:/root/.m2 $(VOLUME)/$(JAVASRC):/src -e BDD $(JAVA_IMG) $(JAVA_TEST_CMD)
-
+.PHONY: java-docker
+java-docker:
+	$(DOCKERBUILD) $(JAVA_IMG) . -f Dockerfile.$(JAVA_IMG) ;\
+	$(DOCKERTEST) $(VOLUME)/.m2:/root/.m2 $(VOLUME)/$(JAVASRC):/src -e BDD \
+	$(JAVA_IMG) $(TEST_JAVA)
 ################################################################################
 # Golang
+# self-contained in the GOSRC directory
 ################################################################################
 
-.PHONY: local-go
-local-go: clean-go deps-go build-go test-go deploy-go
+.PHONY: go
+go:
+	cd $(GOSRC) ; ${MAKE}
 
-.PHONY: clean-go
-clean-go:
-	cd $(GOSRC)/src/pacman/game ; \
-	rm -f coverage.out ; \
-	rm -f $(GOSRC)/src/pacman/swagger
-
-.PHONY: coverage-go
-coverage-go: export GOPATH = $(CURDIR)/$(GOSRC)
-coverage-go: export GOBIN = $(CURDIR)/$(GOSRC)/bin
-coverage-go:
-	cd $(GOSRC)/src/pacman/game; sonar-scanner -Dsonar.login=$(SONAR_TOKEN) \
-																				-Dsonar.host.url=$(SONAR_URL) \
-																				-Dsonar.organization=$(SONAR_ORG) \
-																				-Dsonar.projectKey=org.$(SONAR_ORG).pacman-kata-go \
-																				-Dsonar.projectName=pacman-kata-go
-	$(GOPATH)/bin/godacov -t $(CODACY_PROJECT_TOKEN) -r $(GOSRC)/src/pacman/game/coverage.out -c $(TRAVIS_COMMIT)
-
-.PHONY: deps-go
-deps-go: export GOPATH = $(CURDIR)/$(GOSRC)
-deps-go: export GOBIN = $(CURDIR)/$(GOSRC)/bin
-deps-go:
-	docker run --rm -v $(CURDIR):/local swaggerapi/swagger-codegen-cli generate \
-		-i $(SCOREBOARD_API_YAML) \
-		-l go \
-		-o /local/$(GOSRC)/src/pacman/swagger
-	cd $(GOSRC)/src/pacman/swagger; \
-		go get -d -v && go build -v ./...
-
-.PHONY: build-go
-build-go: export GOPATH = $(CURDIR)/$(GOSRC)
-build-go: export GOBIN = $(CURDIR)/$(GOSRC)/bin
-build-go:
-	cd $(GOSRC)/src/pacman/game; \
-		go get -u github.com/DATA-DOG/godog/cmd/godog ; \
-		go get -u github.com/schrej/godacov ; \
-		go get -u golang.org/x/tools/cmd/stringer; \
-		go get && go build
-	cd $(GOSRC)/src/pacman/dir; PATH="$(PATH):$(GOBIN)" go generate
-
-
-.PHONY: test-go
-test-go: export GOPATH = $(CURDIR)/$(GOSRC)
-test-go: export GOBIN = $(CURDIR)/$(GOSRC)/bin
-test-go:
-	cd $(GOSRC)/src/pacman/game; go get -t && $(GO_TEST_CMD) 
-
-
-.PHONY: deploy-go
-deploy-go: export GOPATH = $(CURDIR)/$(GOSRC)
-deploy-go: export GOBIN = $(CURDIR)/$(GOSRC)/bin
-deploy-go:
-	cd $(GOSRC)/src/pacman; go install
-
-.PHONY: docker-go
-docker-go:
+.PHONY: go-docker
+GO_TEST = go test  -coverprofile=coverage.out \
+							--godog.format=progress \
+							--godog.tags="$(shell $(TAG_FIXER))"
+go-docker:
 	$(DOCKERBUILD) $(GO_IMG) . -f Dockerfile.$(GO_IMG)
 	$(DOCKERTEST)  $(VOLUME)/$(FEATURES):/test \
-	 										-e BDD $(GO_IMG) /bin/bash -c "cd game && $(GO_TEST_CMD)"
+	 		-e BDD $(GO_IMG) /bin/bash -c "cd game && $(GO_TEST)"
+
 
 ################################################################################
 # Node
+# self-contained in the NODESRC directory
 ################################################################################
-.PHONY: local-node
-local-node: clean-node deps-node test-node deploy-node 
+.PHONY: node
+node: 
+	cd $(NODESRC) ; ${MAKE} 
 
-.PHONY: clean-node
-clean-node:
-	cd $(NODESRC) ; rm -rf ./coverage ./swagger
-
-.PHONY: deps-node
-deps-node:
-	docker run --rm -u $(UID) -v $(CURDIR):/local swaggerapi/swagger-codegen-cli generate \
-		-i $(SCOREBOARD_API_YAML) \
-		-l javascript \
-		-o /local/$(NODESRC)/swagger
-	cd $(NODESRC); \
-		npm install --save ./swagger
-	cd $(NODESRC)/swagger; \
-		npm link 
-	cd $(NODESRC) ; \
-		npm link swagger
-
-.PHONY: coverage-node
-coverage-node:
-	cd $(NODESRC) ; npm run coverage && sonar-scanner \
-																			-Dsonar.login=$(SONAR_TOKEN) \
-																			-Dsonar.host.url=$(SONAR_URL) \
-																			-Dsonar.organization=$(SONAR_ORG) \
-																			-Dsonar.projectKey=org.$(SONAR_ORG).pacman-kata-node \
-																			-Dsonar.projectName=pacman-kata-node
-.PHONY: build-node
-build-node:
-	cd $(NODESRC) ; npm install
-
-.PHONY: test-node
-test-node:
-	cd $(NODESRC) ; $(NODE_TEST_CMD)
-
-.PHONY: deploy-node
-deploy-node:
-	cd $(NODESRC) ; npm install
-
-.PHONY: docker-node
-docker-node:
+.PHONY: node-docker
+node-docker:
 	$(DOCKERBUILD) $(NODE_IMG) . -f Dockerfile.$(NODE_IMG)
-	$(DOCKERTEST)  $(VOLUME)/$(NODESRC):/src/  -e BDD $(NODE_IMG) $(NODE_TEST_CMD)
-
+	$(DOCKERTEST)  $(VOLUME)/$(NODESRC):/src/  -e BDD  \
+	$(NODE_IMG) npm test -- -f progress --tags "$(BDD)"
+	
 ################################################################################
 # Python
+# self-contained in the PYTHONSRC directory
 ################################################################################
-.PHONY: local-python
-local-python: clean-python deps-python build-python test-python deploy-python
+.PHONY: python
+python:
+	cd $(PYTHONSRC) ; ${MAKE}
 
-.PHONY: clean-python
-clean-python:
-	cd $(PYTHONSRC) ;\
-	rm -rf ./__pycache__ ;\
-	coverage erase ; \
-	rm -f coverage.xml
-	
-.PHONY: coverage-python
-coverage-python:
-	cd $(PYTHONSRC) ; \
-		coverage run --source='.' -m behave; \
-		coverage xml -i ; \
-		sonar-scanner -Dsonar.login=$(SONAR_TOKEN) \
-							-Dsonar.host.url=$(SONAR_URL) \
-							-Dsonar.organization=$(SONAR_ORG) \
-							-Dsonar.projectKey=org.$(SONAR_ORG).pacman-kata-python \
-							-Dsonar.projectName=pacman-kata-python ;\
-		python-codacy-coverage -r coverage.xml
-
-
-.PHONY: deps-python
-deps-python:
-	docker run --rm -v $(CURDIR):/local swaggerapi/swagger-codegen-cli generate \
-		-i $(SCOREBOARD_API_YAML) \
-		-l python \
-		-o /local/$(PYTHONSRC)/swagger
-	cd $(PYTHONSRC)/swagger; \
-		pip3 install .
-
-.PHONY: build-python
-build-python:
-		
-.PHONY: test-python
-test-python:
-	cd $(PYTHONSRC) ; $(PYTHON_TEST_CMD)
-
-.PHONY: deploy-python
-deploy-python:
-
-.PHONY: docker-python
-docker-python:
+.PHONY: python-docker
+python-docker:
 	$(DOCKERBUILD) $(PYTHON_IMG) . -f Dockerfile.$(PYTHON_IMG)
-	$(DOCKERTEST)  $(VOLUME)/$(PYTHONSRC):/opt/src/pacman \
-									$(VOLUME)/$(FEATURES):/opt/test -e BDD \
-									$(PYTHON_IMG) $(PYTHON_TEST_CMD)
+		$(DOCKERTEST)  $(VOLUME)/$(PYTHONSRC):/opt/src/pacman \
+				$(VOLUME)/$(FEATURES):/opt/test -e BDD \
+				$(PYTHON_IMG) behave -f progress -t "$(shell $(TAG_FIXER))" -k
