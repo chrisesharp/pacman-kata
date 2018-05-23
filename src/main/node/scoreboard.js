@@ -1,6 +1,6 @@
 "use strict";
 
-var client = require('leaderboard_api');
+var client = require("leaderboard_api");
 
 module.exports =
 
@@ -21,4 +21,4 @@ class Scoreboard {
     return this.api.scores(callback);
   }
   
-}
+};

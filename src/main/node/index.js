@@ -26,16 +26,6 @@ function update() {
   }
 }
 
-function endOfLoop() {
-  if (!(game.getPacman().isAlive())) {
-    game.display.flash();
-    game.pacman.restart();
-  }
-  if (game.gameOver) {
-    endGame();
-  }
-}
-
 function endGame() {
   const timeout = 2000;
   const scoreboardPost = new Promise(
@@ -46,13 +36,14 @@ function endGame() {
         } else {
           resolve(data);
         }
-      }
+      };
       setTimeout(() => {
         reject("Timeout waiting for score post");
       }, timeout);
       game.postScore(callback);
     });
   
+  /*eslint no-console: allow:  */
   async function postToScoreboard() {
     try {
       let posted = await scoreboardPost;
@@ -60,7 +51,7 @@ function endGame() {
     catch (error) {
       console.log(error.message);
     }
-  };
+  }
   
   (async () => {
     MainLoop.stop();
@@ -69,6 +60,15 @@ function endGame() {
   })();
 }
 
+function endOfLoop() {
+  if (!(game.getPacman().isAlive())) {
+    game.display.flash();
+    game.pacman.restart();
+  }
+  if (game.gameOver) {
+    endGame();
+  }
+}
 
 // This is the equivalent of 'main' in node
 if (require.main === module) {

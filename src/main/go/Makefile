@@ -21,9 +21,7 @@ GO_TEST_CMD = go test  -coverprofile=coverage.out \
 							--godog.format=$(GO_FORMAT) \
 							--godog.tags="$(shell $(TAG_FIXER))"
 
-#ifndef GOPATH
 GOPATH = $(CURDIR)
-#endif
 
 export GOPATH
 export GOBIN = $(GOPATH)/bin
