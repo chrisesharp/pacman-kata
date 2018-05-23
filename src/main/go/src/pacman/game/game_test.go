@@ -199,6 +199,7 @@ func theUserIs(player string) error {
 func iRunTheCommandWithTheArgs() error {
 	r, w, _ := os.Pipe()
 	defer w.Close()
+	defer r.Close()
 
 	f := flag.NewFlagSet("f", flag.ContinueOnError)
 	filePtr := f.String("file", "data/pacman.txt", "level txt file")
