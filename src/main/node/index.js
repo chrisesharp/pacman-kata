@@ -46,7 +46,7 @@ function endGame() {
   /*eslint no-console: allow:  */
   async function postToScoreboard() {
     try {
-      let posted = await scoreboardPost;
+      await scoreboardPost;
     }
     catch (error) {
       console.log(error.message);
