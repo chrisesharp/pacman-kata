@@ -57,14 +57,14 @@ deps:
 		-o /local/src/pacman/swagger
 	cd src/pacman/swagger; \
 		go get -d -v && go build -v ./...
-
-.PHONY: build
-build:
 	cd src/pacman/game; \
 		go get -u github.com/DATA-DOG/godog/cmd/godog ; \
 		go get -u github.com/schrej/godacov ; \
 		go get -u golang.org/x/tools/cmd/stringer; 
 	cd src/pacman/dir; PATH="$(PATH):$(GOBIN)" go generate
+
+.PHONY: build
+build:
 	cd src/pacman/game; go get && go build
 
 

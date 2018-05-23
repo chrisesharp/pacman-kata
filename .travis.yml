@@ -25,8 +25,10 @@ matrix:
     - language: go
       go:
         - "1.10"
+      install:
+        - cd src/main/go && make deps
       script: 
-        - make go
+        - cd src/main/go && make build test
       after_success:
         - cd src/main/go && make coverage
       sudo: true
