@@ -28,6 +28,8 @@ public class Game implements PacmanGame {
     private GameElement gate;
     
     private ScoreboardClient scoreboard;
+    
+    private boolean debug = false;
 
     public Game() {
       String scoreboardURL = System.getenv("SCOREBOARD_URL");
@@ -222,15 +224,6 @@ public class Game implements PacmanGame {
     public boolean gameOver() {
       return gameOver;
     }
-
-    public void play(boolean debug) {
-      if (debug) {
-        tick();      
-        display.refresh(this.render());
-      } else {
-        play();
-      }
-    }
     
     public void play() {
       while (!gameOver) {
@@ -240,6 +233,7 @@ public class Game implements PacmanGame {
           display.flash();
           pacman.restart();
         }
+        gameOver = this.debug || gameOver;
       }
       this.postScore();
     }
@@ -289,6 +283,10 @@ public class Game implements PacmanGame {
     public void setPlayer(String player) {
       this.scoreboard.setPlayer(player);
     }
+    
+    private void enableDebug() {
+      this.debug = true;
+    }
 
     public static void main(String [] args) {
       ArgParser parser = new ArgParser(args);
@@ -307,8 +305,10 @@ public class Game implements PacmanGame {
       Game game = new Game(level);
       if (!parser.getDebug()) {
         game.animateIcons();
+      } else {
+        game.enableDebug();
       }
       game.init(keyboard, display);
-      game.play(parser.getDebug());
+      game.play();
     }
 }
