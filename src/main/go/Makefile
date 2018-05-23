@@ -41,10 +41,10 @@ clean:
 .PHONY: coverage
 coverage:
 	cd src/pacman/game; sonar-scanner -Dsonar.login=$(SONAR_TOKEN) \
-																				-Dsonar.host.url=$(SONAR_URL) \
-																				-Dsonar.organization=$(SONAR_ORG) \
-																				-Dsonar.projectKey=org.$(SONAR_ORG).pacman-kata-go \
-																				-Dsonar.projectName=pacman-kata-go
+			-Dsonar.host.url=$(SONAR_URL) \
+			-Dsonar.organization=$(SONAR_ORG) \
+			-Dsonar.projectKey=org.$(SONAR_ORG).pacman-kata-go \
+			-Dsonar.projectName=pacman-kata-go
 	$(GOPATH)/bin/godacov -t $(CODACY_PROJECT_TOKEN) -r src/pacman/game/coverage.out -c $(TRAVIS_COMMIT)
 
 .PHONY: deps
