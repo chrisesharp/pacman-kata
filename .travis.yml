@@ -28,9 +28,9 @@ matrix:
       install:
         - cd src/main/go && make deps
       script: 
-        - cd src/main/go && make build test
+        - make build test
       after_success:
-        - cd src/main/go && make coverage
+        - make coverage
       sudo: true
       dist: trusty
       addons:
