@@ -27,7 +27,7 @@ COVERAGE_JAVA = mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package s
 		-Dsonar.organization=$(SONAR_ORG) \
 		-Dsonar.projectKey=org.$(SONAR_ORG).pacman-kata-java \
 		-Dsonar.projectName=pacman-kata-java \
-		-Dsonar.exclusions="**/*.xml" \
+		-Dsonar.exclusions="**/*.xml,**/swagger/**" \
     -Dsonar.login=$(SONAR_TOKEN) && \
 	mvn com.gavinmogan:codacy-maven-plugin:coverage \
 		-DcoverageReportFile=target/site/jacoco-ut/jacoco.xml \
