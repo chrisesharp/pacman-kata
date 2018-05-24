@@ -49,7 +49,7 @@ function endGame() {
       await scoreboardPost;
     }
     catch (error) {
-      Console.log(error.message);
+      console.error(error.message);
     }
   }
   
