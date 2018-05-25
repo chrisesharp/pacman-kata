@@ -16,7 +16,7 @@ import sys
 import os
 import tokenizer
 
-FRAME_RATE = 0.1
+FRAME_RATE_IN_SECS = 0.1
 
 
 class Game(object):
@@ -51,7 +51,7 @@ class Game(object):
             self.tick()
             self.render()
             self.refresh()
-            sleep(FRAME_RATE)
+            sleep(FRAME_RATE_IN_SECS)
             if (not self.pacman.alive):
                 self.display.flash()
                 self.pacman.restart()
