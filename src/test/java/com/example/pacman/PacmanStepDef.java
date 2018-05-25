@@ -456,7 +456,7 @@ public class PacmanStepDef {
     public static void printByteArray(String name, byte[] bytes) {
       System.out.println(name + " bytes:");
       for (byte b: bytes) {
-        System.out.print("[" + b + "]");
+        System.out.print("[" + String.format("%2X", b) + "]");
       }
       System.out.println();
     }

@@ -51,13 +51,14 @@ public class Game implements PacmanGame {
     }
 
     public void parse() {
-        int columns = level.getLevelMap().indexOf('\n');
-        status.update(level.getLevelMap().substring(0, columns));
-        String screenRows = level.getLevelMap().substring(columns + 1);
-        int rows = screenRows.split("\n").length;
-        gameField = new GameField(columns,rows);
-        GameTokenFactory.parseGameTokens(this, screenRows);
-        gameField.update(this);
+      String levelMap = level.getLevelMap(); 
+      int columns = levelMap.indexOf('\n');
+      status.update(levelMap.substring(0, columns));
+      String playfield = levelMap.substring(columns + 1);
+      int rows = playfield.split("\n").length;
+      gameField = new GameField(columns,rows);
+      GameTokenFactory.parseGameTokens(this, playfield);
+      gameField.update(this);
 
     }
 
@@ -215,7 +216,6 @@ public class Game implements PacmanGame {
     private void powerPillEffect(GameElement pill) {
       addScore(pill.score());
       powerPills.remove(pill);
-      pacman.triggerEffect(pill);
       for (GameElement ghost: ghosts) {
           ghost.triggerEffect(pill);
       }

@@ -31,7 +31,6 @@ public class WallToken extends NullToken {
     PacmanGame theGame = (PacmanGame) game;
     if (this.valid()) {
       Wall wall = new Wall(location);
-      wall.setGame(theGame);
       wall.setIcon(icon);
       theGame.addWall(wall);
     }

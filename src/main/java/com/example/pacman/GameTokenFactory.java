@@ -7,8 +7,7 @@ public final class GameTokenFactory {
     throw new IllegalStateException("Factory class");
   }
 
-  public static GameToken getToken(String cursor) {
-    String token = cursor ;
+  public static GameToken getTokenizer(String token) {
     GameToken[] tokenizers = {
                               new PacmanToken(token),
                               new GhostToken(token),
@@ -33,7 +32,7 @@ public final class GameTokenFactory {
           final AtomicInteger x = new AtomicInteger(0);
           line.codePoints().forEach( i -> {
             StringBuilder codepoint = new StringBuilder().appendCodePoint(i);
-            GameToken token = getToken(codepoint.toString());
+            GameToken token = getTokenizer(codepoint.toString());
             token.addGameElement(game,new Location(x.get(),y.get()));
             x.incrementAndGet();
           });

@@ -46,7 +46,8 @@ public class ColourDisplay extends MonoDisplay {
         final AtomicInteger x = new AtomicInteger(0);
         line.codePoints().forEach(i -> {
           StringBuilder codepoint = new StringBuilder().appendCodePoint(i);
-          Colour colour = colourStream[y.intValue()*this.width() + x.intValue()];
+          int mapIndex = y.intValue()*this.width() + x.intValue();
+          Colour colour = (colourStream.length > 0) ? colourStream[mapIndex] : DEFAULT;
           displayWrite(COLOURMAP.get(colour));
           displayWrite(codepoint.toString());
           displayWrite(ANSI_RESET + COLOURMAP.get(DEFAULT));    
