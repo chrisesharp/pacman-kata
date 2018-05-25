@@ -31,10 +31,71 @@ type ghostStruct struct {
 	origColour Colour
 	gatePassed bool
 	game       Game
+	behaviour  behaviour
 }
 
 var ghostColours = []ColourAtt{RED, CYAN, GREEN, PURPLE}
 var ghostColour = 0
+
+type behaviour interface {
+	tick()
+	noChoiceDirection() dir.Direction
+	shouldMove() bool
+	triggerEffect(Element)
+}
+
+type panicBehaviour struct {
+	ghost     *ghostStruct
+	turnsLeft int
+}
+
+func (p *panicBehaviour) tick() {
+	if p.turnsLeft == 0 {
+		p.ghost.behaviour = &calmBehaviour{p.ghost}
+		return
+	}
+	pacman := p.ghost.game.GetPacman()
+	if pacman != nil {
+		p.ghost.SetDirection(p.ghost.Location().Avoid(pacman.Location()))
+	}
+	p.ghost.SetColour(panicColour)
+	p.turnsLeft--
+}
+
+func (p *panicBehaviour) noChoiceDirection() dir.Direction {
+	return p.ghost.Direction()
+}
+
+func (p *panicBehaviour) shouldMove() bool {
+	return p.turnsLeft%2 == 0
+}
+
+func (p *panicBehaviour) triggerEffect(pacman Element) {
+	p.ghost.game.SetScore(p.ghost.game.Score() + ghostPoints)
+	p.ghost.behaviour = &calmBehaviour{p.ghost}
+	p.ghost.gatePassed = false
+	p.ghost.Restart()
+}
+
+type calmBehaviour struct {
+	ghost *ghostStruct
+}
+
+func (c *calmBehaviour) tick() {
+	c.ghost.SetColour(c.ghost.origColour)
+}
+
+func (c *calmBehaviour) shouldMove() bool {
+	return true
+}
+
+func (c *calmBehaviour) noChoiceDirection() dir.Direction {
+	return c.ghost.Direction().Opposite()
+}
+
+func (c *calmBehaviour) triggerEffect(pacman Element) {
+	pacman.TriggerEffect(c.ghost)
+}
 
 // NewGhost creates a clean populated ghostStruct
 func NewGhost(game Game, icon rune, loc dir.Location) Ghost {
@@ -43,41 +104,34 @@ func NewGhost(game Game, icon rune, loc dir.Location) Ghost {
 		colour = Colour{ghostColours[ghostColour], BLACK}
 		ghostColour = (ghostColour + 1) % len(ghostColours)
 	}
-	var panic int
+	var startingBehaviour behaviour
 	element := NewElement(game, icon, loc, dir.LEFT, ghostPoints)
-	if GhostPanic(icon) {
-		panic = panicLevel
-		element.SetColour(panicColour)
-	} else {
-		element.SetColour(colour)
-	}
-
-	return &ghostStruct{Element: element,
-		panic:      panic,
+	ghost := &ghostStruct{Element: element,
 		origColour: colour,
 		gatePassed: false,
 		game:       game}
+	if GhostPanic(icon) {
+		startingBehaviour = &panicBehaviour{
+			turnsLeft: panicLevel,
+			ghost:     ghost,
+		}
+		element.SetColour(panicColour)
+	} else {
+		startingBehaviour = &calmBehaviour{
+			ghost: ghost,
+		}
+		element.SetColour(colour)
+	}
+	ghost.behaviour = startingBehaviour
+	return ghost
 }
 
 // Tick activates this elements turn
 func (g *ghostStruct) Tick() {
-	g.managePanic()
+	g.behaviour.tick()
 	g.chooseDirection()
 	g.checkCollisions()
 	g.SetIcon(GhostIcon(g.IsPanicked()))
-}
-
-func (g *ghostStruct) managePanic() {
-	if g.panic > 0 {
-		pacman := g.game.GetPacman()
-		if pacman != nil {
-			g.SetDirection(g.Location().Avoid(pacman.Location()))
-		}
-		g.SetColour(panicColour)
-		g.panic--
-	} else {
-		g.SetColour(g.origColour)
-	}
 }
 
 func (g *ghostStruct) chooseDirection() {
@@ -87,7 +141,7 @@ func (g *ghostStruct) chooseDirection() {
 	if options != nil {
 		g.SetDirection(randomChoice(options))
 	} else {
-		g.SetDirection(g.noChoice())
+		g.SetDirection(g.behaviour.noChoiceDirection())
 	}
 	g.move()
 }
@@ -107,16 +161,8 @@ func randomChoice(options []dir.Direction) dir.Direction {
 	return options[index]
 }
 
-func (g *ghostStruct) noChoice() dir.Direction {
-	direction := g.Direction()
-	if g.panic == 0 {
-		direction = direction.Opposite()
-	}
-	return direction
-}
-
 func (g *ghostStruct) move() {
-	if g.panic%2 == 0 && g.isClear(g.Location().Next(g.Direction())) {
+	if g.behaviour.shouldMove() && g.isClear(g.Location().Next(g.Direction())) {
 		g.SetLocation(g.Location().Next(g.Direction()))
 	}
 }
@@ -134,26 +180,23 @@ func (g *ghostStruct) checkCollisions() {
 
 // Panic the ghost
 func (g *ghostStruct) Panic() {
-	g.panic = panicLevel
-	g.SetIcon(GhostIcon(g.panic > 0))
+	g.behaviour = &panicBehaviour{
+		turnsLeft: panicLevel,
+		ghost:     g,
+	}
+	g.SetIcon(GhostIcon(true))
 	g.SetColour(panicColour)
 }
 
 // IsPanicked returns true is the ghost panic level is non-zero
 func (g *ghostStruct) IsPanicked() bool {
-	return g.panic > 0
+	_, panicking := g.behaviour.(*panicBehaviour)
+	return panicking
 }
 
 // TriggerEffect of colliding with this element
 func (g *ghostStruct) TriggerEffect(pacman Element) {
-	if g.panic > 0 {
-		g.game.SetScore(g.game.Score() + ghostPoints)
-		g.panic = 0
-		g.gatePassed = false
-		g.Restart()
-	} else {
-		pacman.TriggerEffect(g)
-	}
+	g.behaviour.triggerEffect(pacman)
 }
 
 func (g *ghostStruct) isClear(nextLoc dir.Location) bool {
