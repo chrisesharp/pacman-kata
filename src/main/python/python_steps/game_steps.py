@@ -2,6 +2,7 @@ from behave import given, when, then
 from game import Game
 from ghost import Ghost
 from display import Display
+from colourdisplay import ColourDisplay
 import subprocess
 import io
 
@@ -84,7 +85,9 @@ def step_impl(context):
 
 @given(u'a colour display')
 def step_impl(context):
-    raise NotImplementedError(u'STEP: Given a colour display')
+    buffer = io.BufferedWriter(io.BytesIO())
+    context.stream = io.TextIOWrapper(buffer)
+    context.display = ColourDisplay(context.stream)
 
 
 @given(u'the ANSI "{sequence}" sequence is "{hex}"')

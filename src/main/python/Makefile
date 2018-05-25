@@ -14,8 +14,8 @@
 ################################################################################
 include ../../../makefile.inc
 
-#PYTHON_FORMAT = pretty
-PYTHON_FORMAT = progress
+PYTHON_FORMAT = pretty
+#PYTHON_FORMAT = progress
 PYTHON_TEST_CMD = behave -f $(PYTHON_FORMAT) -t "$(shell $(TAG_FIXER))" -k
 
 FEATURES   = features
