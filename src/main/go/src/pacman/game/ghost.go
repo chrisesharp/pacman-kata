@@ -38,63 +38,61 @@ var ghostColours = []ColourAtt{RED, CYAN, GREEN, PURPLE}
 var ghostColour = 0
 
 type behaviour interface {
-	tick()
-	noChoiceDirection() dir.Direction
+	tick(*ghostStruct)
+	noChoiceDirection(dir.Direction) dir.Direction
 	shouldMove() bool
-	triggerEffect(Element)
+	triggerEffect(Element, *ghostStruct)
 }
 
 type panicBehaviour struct {
-	ghost     *ghostStruct
 	turnsLeft int
 }
 
-func (p *panicBehaviour) tick() {
+func (p *panicBehaviour) tick(ghost *ghostStruct) {
+	pacman := ghost.game.GetPacman()
+	if pacman != nil {
+		ghost.SetDirection(ghost.Location().Avoid(pacman.Location()))
+	}
+	ghost.SetColour(panicColour)
+	p.turnsLeft--
 	if p.turnsLeft == 0 {
-		p.ghost.behaviour = &calmBehaviour{p.ghost}
+		ghost.behaviour = &calmBehaviour{}
 		return
 	}
-	pacman := p.ghost.game.GetPacman()
-	if pacman != nil {
-		p.ghost.SetDirection(p.ghost.Location().Avoid(pacman.Location()))
-	}
-	p.ghost.SetColour(panicColour)
-	p.turnsLeft--
 }
 
-func (p *panicBehaviour) noChoiceDirection() dir.Direction {
-	return p.ghost.Direction()
+func (*panicBehaviour) noChoiceDirection(currentDirection dir.Direction) dir.Direction {
+	return currentDirection
 }
 
 func (p *panicBehaviour) shouldMove() bool {
 	return p.turnsLeft%2 == 0
 }
 
-func (p *panicBehaviour) triggerEffect(pacman Element) {
-	p.ghost.game.SetScore(p.ghost.game.Score() + ghostPoints)
-	p.ghost.behaviour = &calmBehaviour{p.ghost}
-	p.ghost.gatePassed = false
-	p.ghost.Restart()
+func (p *panicBehaviour) triggerEffect(pacman Element, ghost *ghostStruct) {
+	ghost.game.SetScore(ghost.game.Score() + ghostPoints)
+	ghost.behaviour = &calmBehaviour{}
+	ghost.gatePassed = false
+	ghost.Restart()
 }
 
 type calmBehaviour struct {
-	ghost *ghostStruct
 }
 
-func (c *calmBehaviour) tick() {
-	c.ghost.SetColour(c.ghost.origColour)
+func (c *calmBehaviour) tick(ghost *ghostStruct) {
+	ghost.SetColour(ghost.origColour)
 }
 
 func (c *calmBehaviour) shouldMove() bool {
 	return true
 }
 
-func (c *calmBehaviour) noChoiceDirection() dir.Direction {
-	return c.ghost.Direction().Opposite()
+func (c *calmBehaviour) noChoiceDirection(currentDirection dir.Direction) dir.Direction {
+	return currentDirection.Opposite()
 }
 
-func (c *calmBehaviour) triggerEffect(pacman Element) {
-	pacman.TriggerEffect(c.ghost)
+func (c *calmBehaviour) triggerEffect(pacman Element, ghost *ghostStruct) {
+	pacman.TriggerEffect(ghost)
 }
 
 // NewGhost creates a clean populated ghostStruct
@@ -106,29 +104,25 @@ func NewGhost(game Game, icon rune, loc dir.Location) Ghost {
 	}
 	var startingBehaviour behaviour
 	element := NewElement(game, icon, loc, dir.LEFT, ghostPoints)
-	ghost := &ghostStruct{Element: element,
-		origColour: colour,
-		gatePassed: false,
-		game:       game}
 	if GhostPanic(icon) {
 		startingBehaviour = &panicBehaviour{
 			turnsLeft: panicLevel,
-			ghost:     ghost,
 		}
 		element.SetColour(panicColour)
 	} else {
-		startingBehaviour = &calmBehaviour{
-			ghost: ghost,
-		}
+		startingBehaviour = &calmBehaviour{}
 		element.SetColour(colour)
 	}
-	ghost.behaviour = startingBehaviour
-	return ghost
+	return &ghostStruct{Element: element,
+		behaviour:  startingBehaviour,
+		origColour: colour,
+		gatePassed: false,
+		game:       game}
 }
 
 // Tick activates this elements turn
 func (g *ghostStruct) Tick() {
-	g.behaviour.tick()
+	g.behaviour.tick(g)
 	g.chooseDirection()
 	g.checkCollisions()
 	g.SetIcon(GhostIcon(g.IsPanicked()))
@@ -141,7 +135,7 @@ func (g *ghostStruct) chooseDirection() {
 	if options != nil {
 		g.SetDirection(randomChoice(options))
 	} else {
-		g.SetDirection(g.behaviour.noChoiceDirection())
+		g.SetDirection(g.behaviour.noChoiceDirection(ahead))
 	}
 	g.move()
 }
@@ -182,7 +176,6 @@ func (g *ghostStruct) checkCollisions() {
 func (g *ghostStruct) Panic() {
 	g.behaviour = &panicBehaviour{
 		turnsLeft: panicLevel,
-		ghost:     g,
 	}
 	g.SetIcon(GhostIcon(true))
 	g.SetColour(panicColour)
@@ -196,7 +189,7 @@ func (g *ghostStruct) IsPanicked() bool {
 
 // TriggerEffect of colliding with this element
 func (g *ghostStruct) TriggerEffect(pacman Element) {
-	g.behaviour.triggerEffect(pacman)
+	g.behaviour.triggerEffect(pacman, g)
 }
 
 func (g *ghostStruct) isClear(nextLoc dir.Location) bool {
