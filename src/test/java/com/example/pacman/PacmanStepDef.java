@@ -1,5 +1,8 @@
 package com.example.pacman;
 
+import static com.example.pacman.Colours.Colour;
+import static com.example.pacman.Colours.Colour.*;
+
 import static org.junit.Assert.*;
 import cucumber.api.java.en.*;
 import cucumber.api.DataTable;
@@ -233,6 +236,10 @@ public class PacmanStepDef {
     @When("^the display renders the icon \"(.*?)\" in yellow and refreshes$")
     public void the_dispay_renders_the_icon_and_refreshes_the_display(String icon) throws Throwable {
         ANSIcodes.put(icon, hexStringToByteArray(stringToHexString(icon)));
+        DisplayStream video = new DisplayStream();
+        video.writeVideo(icon);
+        video.writeColour(Colour.YELLOW); 
+        display.refresh(video);
     }
     
     @When("^initialize the display$")
@@ -249,7 +256,6 @@ public class PacmanStepDef {
     
     @When("^we refresh the display with the buffer \"([^\"]*)\"$")
     public void we_refresh_the_display_with_the_buffer(String buffer) {
-      ANSIcodes.put(buffer, hexStringToByteArray(stringToHexString(buffer))); 
       DisplayStream video = new DisplayStream();
       video.writeVideo(buffer);
       display.refresh(video);
