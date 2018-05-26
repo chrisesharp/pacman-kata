@@ -621,7 +621,5 @@ func FeatureContext(s *godog.Suite) {
 	})
 	s.AfterScenario(func(interface{}, error) {
 		commandArgs = nil
-		theGame.GetDisplay().Close()
-		return
 	})
 }

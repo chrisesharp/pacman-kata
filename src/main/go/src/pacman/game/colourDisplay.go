@@ -24,6 +24,7 @@ var palette = map[ColourAtt]termbox.Attribute{
 type colourTerminal struct {
 	game          Game
 	rows, columns int
+	output        io.Writer
 }
 
 func (t *colourTerminal) New(game Game) Display {
@@ -32,6 +33,7 @@ func (t *colourTerminal) New(game Game) Display {
 }
 
 func (t *colourTerminal) Init(stream io.Writer) {
+	t.output = stream
 	if t.game != nil {
 		if !termbox.IsInit {
 			termbox.Init()
@@ -68,5 +70,5 @@ func (t *colourTerminal) Close() {
 	if t.game != nil && termbox.IsInit {
 		termbox.Close()
 	}
-	fmt.Println()
+	fmt.Fprintln(t.output)
 }
