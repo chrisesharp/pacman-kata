@@ -70,6 +70,11 @@ func (game *gameState) SetDisplay(thisDisplay Display) {
 	game.display = thisDisplay
 }
 
+// GetDisplay for rendering output
+func (game *gameState) GetDisplay() Display {
+	return game.display
+}
+
 // SetController for controlling the game
 func (game *gameState) SetController(controller Controller) {
 	game.controller = controller

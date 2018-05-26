@@ -11,6 +11,7 @@ type Game interface {
 	Parse()
 	Render()
 	SetDisplay(Display)
+	GetDisplay() Display
 	SetController(Controller)
 	SetInput(string)
 	SetOutput(outstream *os.File)
