@@ -12,6 +12,7 @@ const ColourDisplay = require("../colourdisplay.js");
 const ArrayList = require("arraylist");
 const { REV, ESC, CLR, RST, REVON, REVOFF, BLINK } = require("../ansi-term.js");
 
+
 function CustomWorld() {
   this.game = new Game();
   this.keyboard = new Keyboard(this.game);
@@ -106,16 +107,20 @@ CustomWorld.prototype.setPlayerScore = function(score) {
   this.score = score;
 }
 
-CustomWorld.prototype.postScore = function() {
-  var game = this.game;
-  return new Promise((resolve, reject) => {
-    var callback = function(error, data, response) {
+CustomWorld.prototype.callbackPromiseHandler= function(resolve, reject) {
+  return function(error, data, response) {
       if (!error) {
         resolve(data[0].player + ":" + data[0].score);
       } else {
         reject(error);
       }
     }
+}
+
+CustomWorld.prototype.postScore = function() {
+  var game = this.game;
+  return new Promise((resolve, reject) => {
+    var callback = this.callbackPromiseHandler(resolve, reject);
     game.postScore(callback);
   });
 }
@@ -123,13 +128,7 @@ CustomWorld.prototype.postScore = function() {
 CustomWorld.prototype.getScores = function() {
   var game = this.game;
   return new Promise((resolve, reject) => {
-    var callback = function(error, data, response) {
-      if (!error) {
-        resolve(data[0].player + ":" + data[0].score);
-      } else {
-        reject(error);
-      }
-    }
+    var callback = this.callbackPromiseHandler(resolve, reject);
     game.getScores(callback);
   });  
 }
