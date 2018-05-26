@@ -40,7 +40,7 @@ Then the display byte stream should be
 | newline     |
 
 @leave
-Scenario: display buffer rendered as a new screen with bold white pill
+Scenario: display buffer rendered as a new screen with bold ++
 Given a colour display
 And initialize the display
 And the ANSI "clearscreen" sequence is "1B5B481B5B324A"
