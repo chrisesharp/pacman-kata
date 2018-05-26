@@ -20,6 +20,14 @@ public class DisplayStream {
     videoBuffer += data;
   }
   
+  public void writeVideo() {
+    videoBuffer += "\n";
+  }
+  
+  public void writeColour() {
+    colourBuffer.add(Colour.DEFAULT);
+  }
+  
   public void writeColour(Colour data) {
     colourBuffer.add(data);
   }

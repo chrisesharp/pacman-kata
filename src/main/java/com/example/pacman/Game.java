@@ -65,8 +65,10 @@ public class Game implements PacmanGame {
     public DisplayStream render() {
       gameField.generateDisplayStream();
       DisplayStream stream = new DisplayStream();
-      stream.writeVideo(status.toString() + "\n");
+      stream.writeVideo(status.toString());
       stream.writeColour(status.getColourStream());
+      stream.writeVideo();
+      stream.writeColour();
       stream.writeVideo(gameField.getVideoStream());
       stream.writeColour(gameField.getColourStream());
       return stream;

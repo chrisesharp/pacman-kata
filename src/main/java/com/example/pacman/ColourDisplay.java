@@ -26,7 +26,7 @@ public class ColourDisplay extends MonoDisplay {
     COLOURMAP.put(PURPLE_BG, "\u001B[45m");
     COLOURMAP.put(CYAN_BG, "\u001B[46m");
     COLOURMAP.put(WHITE_BG, "\u001B[47m");
-    COLOURMAP.put(DEFAULT, "\u001B[40m\u001B[37m");
+    COLOURMAP.put(DEFAULT, "\u001B[37m\u001B[40m");
   }
 
   public ColourDisplay(OutputStream stream) {
@@ -41,21 +41,20 @@ public class ColourDisplay extends MonoDisplay {
     displayWrite(ANSI_CLEARSCREEN);
     displayWrite(COLOURMAP.get(DEFAULT));
     
-    final AtomicInteger y = new AtomicInteger(0);
-    for (String line: outputStream.split("\n")) {
-        final AtomicInteger x = new AtomicInteger(0);
-        line.codePoints().forEach(i -> {
-          StringBuilder codepoint = new StringBuilder().appendCodePoint(i);
-          int mapIndex = y.intValue()*this.width() + x.intValue();
-          Colour colour = (colourStream.length > 0) ? colourStream[mapIndex] : DEFAULT;
-          displayWrite(COLOURMAP.get(colour));
-          displayWrite(codepoint.toString());
-          displayWrite(ANSI_RESET + COLOURMAP.get(DEFAULT));    
-          x.incrementAndGet();
-        });
-        displayWrite("\n");
-        y.incrementAndGet();
-    }
+    final AtomicInteger idx = new AtomicInteger(0);
+    outputStream.codePoints().forEach( cp -> {
+      StringBuilder codepoint = new StringBuilder().appendCodePoint(cp);
+      int mapIndex = idx.intValue();
+      if (colourStream.length > 0) {
+        displayWrite(COLOURMAP.get(colourStream[mapIndex]));
+        displayWrite(codepoint.toString());
+        displayWrite(ANSI_RESET + COLOURMAP.get(DEFAULT));
+      } else {
+        displayWrite(codepoint.toString());
+      } 
+      idx.incrementAndGet();
+    });
+
     displayWrite(ANSI_RESET);
     displayWrite("\n");
   }

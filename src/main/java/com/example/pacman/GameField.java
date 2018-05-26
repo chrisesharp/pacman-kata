@@ -82,6 +82,7 @@ public class GameField {
           }    
         }
         buffer.append('\n');
+        colours.add(Colour.DEFAULT);
     }
     this.colourStream = colours.toArray(new Colour[colours.size()]);
     this.videoStream = buffer.toString().trim();
