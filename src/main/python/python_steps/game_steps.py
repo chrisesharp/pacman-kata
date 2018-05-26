@@ -2,6 +2,7 @@ from behave import given, when, then
 from game import Game
 from ghost import Ghost
 from display import Display
+from colour import Colour
 from colourdisplay import ColourDisplay
 import subprocess
 import io
@@ -184,16 +185,11 @@ def step_impl(context, turns):
         context.game.tick()
 
 
-@when(u'the game refreshes the display with the buffer "{content}"')
-def step_impl(context, content):
-    raise NotImplementedError(u'STEP: When the game refreshes the display \
-                              with the buffer "' + content + '"')
-
-
 @when(u'the display renders the icon "{icon}" in yellow and refreshes')
 def step_impl(context, icon):
-    raise NotImplementedError(u'STEP: When the display renders the icon "' +
-                              icon + '" in yellow and refreshes')
+    hex = '{:02X}'.format(ord(icon))
+    context.ansi_map[icon] = hex
+    context.display.refresh(icon, [Colour.YELLOW])
 
 
 @when(u'the player presses "{key}"')
@@ -208,11 +204,6 @@ def step_impl(context):
 
 @when(u'we refresh the display with the buffer "{string}"')
 def step_impl(context, string):
-    output = [ord(c) for c in string]
-    sequence = ""
-    for b in output:
-        sequence += '{:02X}'.format(b)
-    context.ansi_map[string] = sequence
     context.display.refresh(string)
 
 @when(u'I post the score to the scoreboard')
