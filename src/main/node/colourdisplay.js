@@ -19,10 +19,12 @@ class ColourDisplay extends Display {
     for (let i=0;i<output.length;i++) {
       if (parseInt(colour[i],10) > 0) { 
         this.write(ESC+parseInt(colour[i])+"m");
+        this.write(output[i]);
+        this.write(RST);
+        this.write(DEFAULT); 
+      } else {
+        this.write(output[i]);
       }
-      this.write(output[i]);
-      this.write(RST);
-      this.write(DEFAULT);  
     }
     this.write(RST);
     this.write("\n");

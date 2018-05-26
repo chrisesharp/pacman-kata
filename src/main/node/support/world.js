@@ -8,6 +8,7 @@ const Wall = require("../walls.js");
 const Direction = require("../direction.js");
 const Keyboard = require("../keyboard.js");
 const Display = require("../display.js");
+const ColourDisplay = require("../colourdisplay.js");
 const ArrayList = require("arraylist");
 const { REV, ESC, CLR, RST, REVON, REVOFF, BLINK } = require("../ansi-term.js");
 
@@ -167,6 +168,11 @@ CustomWorld.prototype.setDisplay = function() {
   this.game.setDisplay(display);
 }
 
+CustomWorld.prototype.setColourDisplay = function() {
+  let display = new ColourDisplay(this.game);
+  this.game.setDisplay(display);
+}
+
 CustomWorld.prototype.initDisplay = function() {
   let outStream = [];
   this.game.getDisplay().init(outStream);
@@ -213,13 +219,15 @@ CustomWorld.prototype.gameDimensionsMatchDisplay = function() {
   return (playfield.width()===display.width() && playfield.height()===display.height());
 }
 
-CustomWorld.prototype.refreshDisplay = function(string) {
+CustomWorld.prototype.refreshDisplay = function(string, colour) {
   var hex="";
   for (var i=0; i< string.length; i++) {
     hex += string.codePointAt(i).toString(16).toUpperCase();
   }
   this.ansiMap[string]=hex;
-  this.game.getDisplay().refresh(string);
+  let colourBuffer = new ArrayList;
+  colourBuffer.add(colour);
+  this.game.getDisplay().refresh(string, colourBuffer);
 }
 
 CustomWorld.prototype.displayOut = function() {
