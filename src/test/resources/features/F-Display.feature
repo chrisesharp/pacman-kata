@@ -42,6 +42,7 @@ Then the display byte stream should be
 @leave
 Scenario: display buffer rendered as a new screen with bold white pill
 Given a colour display
+And initialize the display
 And the ANSI "clearscreen" sequence is "1B5B481B5B324A"
 And the ANSI "bold" sequence is "1B5B316D"
 And the ANSI "black-background" sequence is "1B5B34306D"
@@ -54,27 +55,17 @@ Then the display byte stream should be
 | SEQUENCE         |
 | clearscreen      |
 | bold             |
-| black-background |
 | white-foreground |
 | black-background |
-| white-foreground |
 | +                |
-| reset            |
-| black-background |
-| white-foreground |
-| black-background |
-| white-foreground |
 | +                |
-| reset            |
-| black-background |
-| white-foreground |
-| newline          |
 | reset            |
 | newline          |
 
 @leave
 Scenario: display buffer rendered as a new screen with yellow pacman
 Given a colour display
+And initialize the display
 And the ANSI "clearscreen" sequence is "1B5B481B5B324A"
 And the ANSI "bold" sequence is "1B5B316D"
 And the ANSI "black-background" sequence is "1B5B34306D"
@@ -87,11 +78,12 @@ Then the display byte stream should be
 | SEQUENCE         |
 | clearscreen      |
 | bold             |
-| black-background |
 | white-foreground |
+| black-background |
 | yellow           |
 | <                |
 | reset            |
-| black-background |
 | white-foreground |
+| black-background |
 | reset            |
+| newline          |
