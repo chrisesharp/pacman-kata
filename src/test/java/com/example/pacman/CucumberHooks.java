@@ -13,24 +13,6 @@ public final class CucumberHooks {
   private static boolean prevScenarioFailed = false;
   
   public static boolean wantsToQuit = false;
-/*
-  @Before
-  public void quitIfRequested(Scenario scenario) {
-    if (wantsToQuit)
-      throw new RuntimeException("Cucumber wants to quit.");
-  }
-  
-  @Then("^something bad$")
-  public void quit() throws Throwable {
-    throw new RuntimeException("Fail!");
-  }
-  
-  @After
-  public void after(Scenario s) throws Exception {
-    // Tell Cucumber to quit after this scenario is done - if it failed.
-    CucumberHooks.wantsToQuit = false == s.isFailed();
-  }
-  */
  
   @After
   public void watch_this_tagged_scenario(Scenario scenario) throws Exception {

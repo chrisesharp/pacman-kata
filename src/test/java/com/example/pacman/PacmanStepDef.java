@@ -275,12 +275,7 @@ public class PacmanStepDef {
     
     @Then("^I should get the following output:$")
     public void i_should_get_the_following_output(String expected) {
-      String received = result.toString();
-      received = received.replaceAll("\u001B\\[[\\d]*m", "");
-      received = received.replaceAll("\u001B\\[H", "");
-      received = received.replaceAll("\u001B\\[2J", "");
-      received = received.replaceAll("\u001B\\[?5[h|l]", "");
-      received = received.trim();
+      String received = removeANSIControlChars(result.toString());
       assertEquals(expected, received);
     }
 
@@ -384,9 +379,9 @@ public class PacmanStepDef {
           expected.add(ANSIcodes.get(sequence));
         }
         byte[] expectedBytes = flattenArrayListOfBytes(expected);
-        printByteArray("expected", expectedBytes);
+        printByteArray("\nexpected", expectedBytes);
         byte[] resultingBytes = result.toByteArray();
-        printByteArray("resulting", resultingBytes);
+        printByteArray("\nresulting", resultingBytes);
 
         assertArrayEquals(expectedBytes, resultingBytes);
     }
@@ -428,6 +423,16 @@ public class PacmanStepDef {
     }
     
 
+
+    public static String removeANSIControlChars(String input) {
+      String output;
+      output = input.replaceAll("\u001B\\[[\\d]*m", "");
+      output = output.replaceAll("\u001B\\[H", "");
+      output = output.replaceAll("\u001B\\[2J", "");
+      output = output.replaceAll("\u001B\\[?5[h|l]", "");
+      return output.trim();
+    }
+    
     public static byte[] hexStringToByteArray(String input) {
       int len = input.length();
       byte[] data = new byte[len / 2];
@@ -462,7 +467,7 @@ public class PacmanStepDef {
     public static void printByteArray(String name, byte[] bytes) {
       System.out.println(name + " bytes:");
       for (byte b: bytes) {
-        System.out.print("[" + String.format("%2X", b) + "]");
+        System.out.print(String.format("%2X", b) + "|");
       }
       System.out.println();
     }
