@@ -39,7 +39,6 @@ Then the display byte stream should be
 | reset       |
 | newline     |
 
-@leave
 Scenario: display buffer rendered as a new screen with bold ++
 Given a colour display
 And initialize the display
@@ -62,7 +61,6 @@ Then the display byte stream should be
 | reset            |
 | newline          |
 
-@leave
 Scenario: display buffer rendered as a new screen with yellow pacman
 Given a colour display
 And initialize the display
