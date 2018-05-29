@@ -56,7 +56,7 @@ clean-java:
 	$(CLEAN_JAVA)
 
 .PHONY: deps-java
-deps-java: src/main/resources/swagger.json
+deps-java:
 	$(DEPS_JAVA)
 
 .PHONY: build-java
