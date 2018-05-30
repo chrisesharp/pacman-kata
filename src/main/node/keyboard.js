@@ -1,6 +1,6 @@
 "use strict";
 
-const Dir = require("./direction.js").Direction
+const Dir = require("./direction.js").Direction;
 
 
 const keyMap = {
