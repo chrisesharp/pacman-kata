@@ -19,7 +19,7 @@ public class ScoreboardClient {
     this.scoreboardURL = scoreboardURL;
     
     ApiClient client = new ApiClient();
-    scoreboard = new ScoreboardApi();
+    this.scoreboard = new ScoreboardApi();
     this.setApiClient(client);
   }
   
@@ -39,7 +39,7 @@ public class ScoreboardClient {
     try {
         scoreboard.addScore(body);
     } catch (ApiException e) {
-        log.error("For " + scoreboardURL, e);
+        log.error("Failed to addScore for " + scoreboardURL, e);
     }
   }
   

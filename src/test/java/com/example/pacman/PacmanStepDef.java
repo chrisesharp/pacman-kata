@@ -1,7 +1,6 @@
 package com.example.pacman;
 
 import static com.example.pacman.Colours.Colour;
-import static com.example.pacman.Colours.Colour.*;
 
 import static org.junit.Assert.*;
 import cucumber.api.java.en.*;
