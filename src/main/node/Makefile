@@ -17,7 +17,7 @@ include ../../../makefile.inc
 #NODE_FORMAT = node_modules/cucumber-pretty
 NODE_FORMAT = progress
 
-NODE_TEST_CMD = npm test -- -f $(NODE_FORMAT) --tags "$(BDD)"
+NODE_TEST_CMD = npm test -- -f $(NODE_FORMAT)  --tags "($(BDD)) $(NOTRUN)"
 
 NODE_IMG   = node-pacman
 

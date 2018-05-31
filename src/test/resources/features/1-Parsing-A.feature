@@ -1,5 +1,4 @@
 @1
-@test
 Feature: initial game field parsing
   As a game engine
   I can parse an initial game state as a screen shot

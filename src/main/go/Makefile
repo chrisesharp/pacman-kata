@@ -17,9 +17,11 @@ include ../../../makefile.inc
 #GO_FORMAT = pretty
 GO_FORMAT = progress
 
+GO_TAG_FIXER = echo $(BDD) $(NOTRUN)|sed "s/not /~/g" |sed "s/or /,/g" |sed "s/and/\&\&/g"
+
 GO_TEST_CMD = go test  -coverprofile=coverage.out \
 							--godog.format=$(GO_FORMAT) \
-							--godog.tags="$(shell $(TAG_FIXER))"
+							--godog.tags="$(shell $(GO_TAG_FIXER))"
 
 GOPATH = $(CURDIR)
 

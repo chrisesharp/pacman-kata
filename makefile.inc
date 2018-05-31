@@ -11,6 +11,8 @@ export SCOREBOARD_API_YAML = https://app.swaggerhub.com/apiproxy/schema/file/$(S
 
 ifndef BDD
 	export BDD=not @leave
+else
+  export NOTRUN=and not @leave
 endif
 
 ifndef UID
@@ -20,8 +22,6 @@ endif
 ifndef TRAVIS_COMMIT
   export TRAVIS_COMMIT=$(shell git rev-parse HEAD)
 endif
-
-export TAG_FIXER = echo $(BDD)|sed "s/not /~/g" |sed "s/ or /,/g"
 
 FEATURES = src/test
 VOLUME = -v$(CURDIR)

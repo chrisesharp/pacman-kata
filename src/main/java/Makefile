@@ -10,7 +10,7 @@ BUILD_JAVA = mvn compile
 
 TEST_JAVA = mvn test -Dcucumber.options="--glue com.example.pacman \
 		--plugin $(JAVA_FORMAT) \
-		--tags '$(BDD)' \
+		--tags '($(BDD)) $(NOTRUN)' \
 		classpath:features"
 
 CLEAN_JAVA = mvn clean

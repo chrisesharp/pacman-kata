@@ -16,7 +16,10 @@ include ../../../makefile.inc
 
 PYTHON_FORMAT = pretty
 #PYTHON_FORMAT = progress
-PYTHON_TEST_CMD = behave -f $(PYTHON_FORMAT) -t "$(shell $(TAG_FIXER))" -k
+
+PY_TAG_FIXER = echo $(BDD) $(NOTRUN)|sed "s/not /~/g" |sed "s/or /,/g" |sed "s/ and /\" -t \"/g"
+
+PYTHON_TEST_CMD = behave -f $(PYTHON_FORMAT) -t "$(shell $(PY_TAG_FIXER))" -k
 
 FEATURES   = features
 DATA			 = data
