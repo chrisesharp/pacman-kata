@@ -175,25 +175,17 @@ public class PacmanStepDef {
     }
     
     @When("^we render the status line$")
-    public void we_render_the_status_line() {
-      try {
-        result.write(GameStats.renderStatus(this.lives,
-                                            this.score,
-                                            this.columns).getBytes());
-      } catch (Exception e) {
-        System.out.println("Something weird happened here!");
-      }
+    public void we_render_the_status_line() throws Exception {
+      result.write(GameStats.renderStatus(this.lives,
+                                          this.score,
+                                          this.columns).getBytes());
     }
     
     @When("^we render the game field$")
-    public void we_render_the_game_field() {
+    public void we_render_the_game_field() throws Exception {
       GameField field = game.getGameField();
       field.generateDisplayStream();
-      try {
-        result.write(field.getVideoStream().getBytes());
-      } catch (Exception e) {
-        System.out.println("Something weird happened here!");
-      }
+      result.write(field.getVideoStream().getBytes());
     }
     
     @When("^we parse the state$")
