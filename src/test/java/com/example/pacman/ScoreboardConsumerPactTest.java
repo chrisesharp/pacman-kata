@@ -23,11 +23,11 @@ public class ScoreboardConsumerPactTest  {
     public PactProviderRuleMk2 mockProvider = new PactProviderRuleMk2("scoreboard_provider", this);
     
     @Pact(provider="scoreboard_provider", consumer="scoreboard_consumer")
-    public RequestResponsePact createFragment(PactDslWithProvider builder) {
+    public RequestResponsePact createPact(PactDslWithProvider builder) {
         Map<String, String> postReq = new HashMap<>();
-        Map<String, String> postResp = new HashMap<>();
         postReq.put("Content-Type", "application/json");
         postReq.put("accept", "text/plain");
+        Map<String, String> postResp = new HashMap<>();
         postResp.put("Content-Type", "text/plain");
         Map<String, String> getReq = new HashMap<>();
         getReq.put("accept", "application/json");
