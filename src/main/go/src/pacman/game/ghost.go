@@ -45,7 +45,7 @@ type behaviour interface {
 }
 
 type panicBehaviour struct {
-	turnsLeft int
+	numTurnsLeft int
 }
 
 func (p *panicBehaviour) tick(ghost *ghostStruct) {
@@ -54,8 +54,8 @@ func (p *panicBehaviour) tick(ghost *ghostStruct) {
 		ghost.SetDirection(ghost.Location().Avoid(pacman.Location()))
 	}
 	ghost.SetColour(panicColour)
-	p.turnsLeft--
-	if p.turnsLeft == 0 {
+	p.numTurnsLeft--
+	if p.numTurnsLeft == 0 {
 		ghost.behaviour = &calmBehaviour{}
 		return
 	}
@@ -66,7 +66,7 @@ func (*panicBehaviour) noChoiceDirection(currentDirection dir.Direction) dir.Dir
 }
 
 func (p *panicBehaviour) shouldMove() bool {
-	return p.turnsLeft%2 == 0
+	return p.numTurnsLeft%2 == 0
 }
 
 func (p *panicBehaviour) triggerEffect(pacman Element, ghost *ghostStruct) {
@@ -106,7 +106,7 @@ func NewGhost(game Game, icon rune, loc dir.Location) Ghost {
 	element := NewElement(game, icon, loc, dir.LEFT, ghostPoints)
 	if GhostPanic(icon) {
 		startingBehaviour = &panicBehaviour{
-			turnsLeft: panicLevel,
+			numTurnsLeft: panicLevel,
 		}
 		element.SetColour(panicColour)
 	} else {
@@ -175,7 +175,7 @@ func (g *ghostStruct) checkCollisions() {
 // Panic the ghost
 func (g *ghostStruct) Panic() {
 	g.behaviour = &panicBehaviour{
-		turnsLeft: panicLevel,
+		numTurnsLeft: panicLevel,
 	}
 	g.SetIcon(GhostIcon(true))
 	g.SetColour(panicColour)
