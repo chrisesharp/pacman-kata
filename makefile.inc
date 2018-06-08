@@ -24,4 +24,3 @@ ifndef TRAVIS_COMMIT
 endif
 
 FEATURES = src/test
-VOLUME = -v$(CURDIR)

@@ -76,10 +76,42 @@ deploy-java:
 	$(DEPLOY_JAVA)
 
 .PHONY: java-docker
-java-docker:
-	$(DOCKERBUILD) $(JAVA_IMG) . -f Dockerfile.$(JAVA_IMG) ;\
-	$(DOCKERTEST) $(VOLUME)/.m2:/root/.m2 $(VOLUME)/$(JAVASRC):/src -e BDD \
-	$(JAVA_IMG) $(TEST_JAVA)
+java-docker: java-docker-package java-docker-image
+
+.PHONY: java-docker-package
+java-docker-package:
+	$(DOCKERTEST) -u $(UID) -v $(CURDIR):/local swaggerapi/swagger-codegen-cli generate \
+		-i $(SCOREBOARD_API_YAML) \
+		-l java \
+		-o /local/target/generated-sources/swagger
+	$(DOCKERTEST) -v"$(CURDIR)/target/generated-sources/swagger":/usr/src/mymaven \
+			-v"$(CURDIR)/.m2":/root/.m2 \
+			-v"$(CURDIR)/target":/usr/src/mymaven/target \
+			-w /usr/src/mymaven \
+			-e BDD \
+			maven \
+			$(DEPLOY_JAVA)
+	$(DOCKERTEST) -v"$(CURDIR)":/usr/src/mymaven \
+			-v"$(CURDIR)/.m2":/root/.m2 \
+			-v"$(CURDIR)/target":/usr/src/mymaven/target \
+			-w /usr/src/mymaven \
+			-e BDD \
+			maven \
+			$(DEPLOY_JAVA)
+
+.PHONY: java-docker-test
+java-docker-test:
+	$(DOCKERTEST) -v "$(CURDIR)":/usr/src/mymaven \
+			-v "$(CURDIR)/.m2":/root/.m2 \
+			-v "$(CURDIR)/target":/usr/src/mymaven/target \
+			-w /usr/src/mymaven \
+			-e BDD \
+			maven \
+			$(TEST_JAVA)
+			
+.PHONY: java-docker-image
+java-docker-image:
+	$(DOCKERBUILD) $(JAVA_IMG) . -f Dockerfile.$(JAVA_IMG)
 ################################################################################
 # Golang
 # self-contained in the GOSRC directory
@@ -95,7 +127,7 @@ GO_TEST = go test  -coverprofile=coverage.out \
 							--godog.tags="$(shell $(TAG_FIXER))"
 go-docker:
 	$(DOCKERBUILD) $(GO_IMG) . -f Dockerfile.$(GO_IMG)
-	$(DOCKERTEST)  $(VOLUME)/$(FEATURES):/test \
+	$(DOCKERTEST)  -v "$(CURDIR)/$(FEATURES)":/test \
 	 		-e BDD $(GO_IMG) /bin/bash -c "cd game && $(GO_TEST)"
 
 
@@ -110,7 +142,7 @@ node:
 .PHONY: node-docker
 node-docker:
 	$(DOCKERBUILD) $(NODE_IMG) . -f Dockerfile.$(NODE_IMG)
-	$(DOCKERTEST)  $(VOLUME)/$(NODESRC):/src/  -e BDD  \
+	$(DOCKERTEST)  -v "$(CURDIR)/$(NODESRC)":/src/  -e BDD  \
 	$(NODE_IMG) npm test -- -f progress --tags "$(BDD)"
 	
 ################################################################################
@@ -124,6 +156,6 @@ python:
 .PHONY: python-docker
 python-docker:
 	$(DOCKERBUILD) $(PYTHON_IMG) . -f Dockerfile.$(PYTHON_IMG)
-		$(DOCKERTEST)  $(VOLUME)/$(PYTHONSRC):/opt/src/pacman \
-				$(VOLUME)/$(FEATURES):/opt/test -e BDD \
+	$(DOCKERTEST)  -v "$(CURDIR)/$(PYTHONSRC)":/opt/src/pacman \
+			-v "$(CURDIR)/$(FEATURES)":/opt/test -e BDD \
 				$(PYTHON_IMG) behave -f progress -t "$(shell $(TAG_FIXER))" -k
