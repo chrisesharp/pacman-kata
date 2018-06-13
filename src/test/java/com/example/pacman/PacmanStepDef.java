@@ -391,16 +391,15 @@ public class PacmanStepDef {
     public void ghost_at_should_be_calm(int x, int y) {
       Location thisLocation = new Location(x,y);
       Ghost theGhost = (Ghost)game.getGameElement(thisLocation);
-      assertFalse(theGhost.panicked());
+      assertEquals(GhostToken.getToken(0), theGhost.icon());
     }
 
     @Then("^ghost at (\\d+) , (\\d+) should be panicked$")
     public void ghost_at_should_be_panicked(int x, int y) {
       Location thisLocation = new Location(x,y);
       Ghost theGhost = (Ghost)game.getGameElement(thisLocation);
-      assertTrue(theGhost.panicked());
-    }   
-    
+      assertEquals(GhostToken.getToken(1), theGhost.icon());
+    }
 
     @Then("^the game dimensions should equal the display dimensions$")
     public void the_game_dimensions_should_equal_the_display_dimensions() {
