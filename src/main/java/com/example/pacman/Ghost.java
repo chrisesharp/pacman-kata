@@ -5,6 +5,7 @@ import static com.example.pacman.Colours.Colour;
 import static com.example.pacman.Colours.Colour.*;
 
 import java.util.Random;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,9 +26,9 @@ public class Ghost extends GameElement implements Moveable {
     private static int colour=0;
     private Colour normalColour;
     private static final Colour PANIC_COLOUR = BLUE;
-    private int panic=0;
     private boolean passedGate=false;
     private Random randomizer = new Random();
+    private Behaviour behaviour = new CalmBehaviour();
 
     public Ghost(Location location) {
         super(location);
@@ -38,21 +39,10 @@ public class Ghost extends GameElement implements Moveable {
 
     @Override
     public void tick() {
-        managePanic();
+    	behaviour.tick();
         chooseDirection();
         move();
         checkCollisions();
-    }
-    
-    private void managePanic() {
-      if (panicked()) {
-        GameElement pacman = super.getGame().getGameElementByType(Pacman.class);
-        Location pacmanLocation;
-        pacmanLocation = (pacman!=null) ? pacman.location() : this.location();
-        setDirection(location().avoid(pacmanLocation));
-        panic--;
-        setIcon(GhostToken.getToken(panic));
-      }
     }
 
     @Override
@@ -61,11 +51,7 @@ public class Ghost extends GameElement implements Moveable {
         panic();
       }
       if (element instanceof Pacman) {
-        if (panicked()) {
-          this.kill();
-        } else {
-          element.kill();
-        }
+        behaviour.triggerPacmanEffect((Pacman) element);
       }
     }
     
@@ -77,7 +63,7 @@ public class Ghost extends GameElement implements Moveable {
     }
 
     private void move() {
-      if (panic%2==0 && isClear(direction())) {
+      if (behaviour.shouldMove() && isClear(direction())) {
           setLocation(location().next(direction()));
       }
     }
@@ -113,7 +99,7 @@ public class Ghost extends GameElement implements Moveable {
     private Direction chooseOption(List<Direction> options) {
       Direction option;
       if (options.isEmpty()) {
-        option = (panicked()) ? null : direction().turnBack();
+        option = behaviour.noChoiceDirection();
       } else {
         option = chooseRandom(options);
       }
@@ -121,12 +107,8 @@ public class Ghost extends GameElement implements Moveable {
     }
 
     public void panic() {
-        panic=PANIC_LEVEL;
-        setIcon(GhostToken.getToken(panic));
-    }
-
-    protected boolean panicked() {
-      return (panic > CALM_LEVEL);
+    	behaviour = new PanickedBehaviour();
+        setIcon(GhostToken.getToken(PANIC_LEVEL));
     }
 
     @Override
@@ -136,13 +118,13 @@ public class Ghost extends GameElement implements Moveable {
     
     @Override
     public Colour getColour() {
-      return panicked() ? PANIC_COLOUR : normalColour;
+      return behaviour.getColour();
     }
 
     @Override
     public void kill() {
-      panic=CALM_LEVEL;
-      setIcon(GhostToken.getToken(panic));
+      behaviour = new CalmBehaviour();
+      setIcon(GhostToken.getToken(CALM_LEVEL));
       restart();
       super.getGame().addScore(SCORE);
     }
@@ -194,5 +176,93 @@ public class Ghost extends GameElement implements Moveable {
     @Override
     public int hashCode() {
       return super.hashCode() * 31;
+    }
+    
+    private interface Behaviour {
+    	void tick();
+    	Colour getColour();
+		boolean panicked();
+		Direction noChoiceDirection();
+    	boolean shouldMove();
+    	void triggerPacmanEffect(Pacman pacman);
+    	
+    }
+    
+    private class PanickedBehaviour implements Behaviour {
+
+    	private int turnsLeft = PANIC_LEVEL;
+    	
+		@Override
+		public void tick() {
+			GameElement pacman = getGame().getGameElementByType(Pacman.class);
+	        Location pacmanLocation;
+	        pacmanLocation = (pacman!=null) ? pacman.location() : location();
+	        setDirection(location().avoid(pacmanLocation));
+	        turnsLeft--;
+	        if (turnsLeft == 0) {
+	        	behaviour = new CalmBehaviour();
+	        }
+	        setIcon(GhostToken.getToken(turnsLeft));
+		}
+
+		@Override
+		public Direction noChoiceDirection() {
+			return null;
+		}
+
+		@Override
+		public boolean shouldMove() {
+			return turnsLeft%2==0;
+		}
+
+		@Override
+		public void triggerPacmanEffect(Pacman pacman) {
+			kill();
+		}
+
+		@Override
+		public boolean panicked() {
+			return true;
+		}
+
+		@Override
+		public Colour getColour() {
+			return PANIC_COLOUR;
+		}
+    	
+    }
+    
+    private class CalmBehaviour implements Behaviour {
+
+		@Override
+		public void tick() {
+			// No-op
+		}
+
+		@Override
+		public Direction noChoiceDirection() {
+			return direction().turnBack();
+		}
+
+		@Override
+		public boolean shouldMove() {
+			return true;
+		}
+
+		@Override
+		public void triggerPacmanEffect(Pacman pacman) {
+			pacman.kill();
+		}
+
+		@Override
+		public boolean panicked() {
+			return false;
+		}
+
+		@Override
+		public Colour getColour() {
+			return normalColour;
+		}
+    	
     }
 }
