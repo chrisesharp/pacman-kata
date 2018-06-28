@@ -15,9 +15,12 @@ TEST_JAVA = mvn test -Dcucumber.options="--glue com.example.pacman \
 
 CLEAN_JAVA = mvn clean
 
-DEPS_JAVA = docker run --rm -u $(UID) -v $(CURDIR):/local swaggerapi/swagger-codegen-cli generate \
+#GENERATOR = swaggerapi/swagger-codegen-cli
+GENERATOR = openapitools/openapi-generator-cli
+
+DEPS_JAVA = docker run --rm -u $(UID) -v $(CURDIR):/local $(GENERATOR) generate \
 		-i $(SCOREBOARD_API_YAML) \
-		-l java \
+		-g java \
 		-o /local/target/generated-sources/swagger && \
 		cd target/generated-sources/swagger && \
 		mvn clean install

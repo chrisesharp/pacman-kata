@@ -24,6 +24,10 @@ PYTHON_TEST_CMD = behave -f $(PYTHON_FORMAT) -t "$(shell $(PY_TAG_FIXER))" -k
 FEATURES   = features
 DATA			 = data
 
+
+#GENERATOR = swaggerapi/swagger-codegen-cli
+GENERATOR = openapitools/openapi-generator-cli
+
 ################################################################################
 # Targets
 ################################################################################
@@ -38,9 +42,9 @@ clean:
 
 .PHONY: deps
 deps:
-	docker run --rm -v $(CURDIR):/local swaggerapi/swagger-codegen-cli generate \
+	docker run --rm -v $(CURDIR):/local $(GENERATOR) generate \
 		-i $(SCOREBOARD_API_YAML) \
-		-l python \
+		-g python \
 		-o /local/swagger
 	cd swagger; \
 		pip3 install .

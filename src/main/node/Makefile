@@ -21,6 +21,9 @@ NODE_TEST_CMD = npm test -- -f $(NODE_FORMAT)  --tags "($(BDD)) $(NOTRUN)"
 
 NODE_IMG   = node-pacman
 
+
+#GENERATOR = swaggerapi/swagger-codegen-cli
+GENERATOR = openapitools/openapi-generator-cli
 ################################################################################
 # Targets
 ################################################################################
@@ -34,9 +37,9 @@ clean:
 
 .PHONY: deps
 deps:
-	docker run --rm -u $(UID) -v $(CURDIR):/local swaggerapi/swagger-codegen-cli generate \
+	docker run --rm -u $(UID) -v $(CURDIR):/local $(GENERATOR) generate \
 		-i $(SCOREBOARD_API_YAML) \
-		-l javascript \
+		-g javascript \
 		-o /local/swagger
 	npm install --save ./swagger
 	cd swagger; npm link 

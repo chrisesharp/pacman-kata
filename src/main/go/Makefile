@@ -27,6 +27,10 @@ GOPATH = $(CURDIR)
 
 export GOPATH
 export GOBIN = $(GOPATH)/bin
+
+
+#GENERATOR = swaggerapi/swagger-codegen-cli
+GENERATOR = openapitools/openapi-generator-cli
 ################################################################################
 # Targets
 ################################################################################
@@ -51,9 +55,9 @@ coverage:
 
 .PHONY: deps
 deps:
-	docker run --rm -v $(CURDIR):/local swaggerapi/swagger-codegen-cli generate \
+	docker run --rm -v $(CURDIR):/local $(GENERATOR) generate \
 		-i $(SCOREBOARD_API_YAML) \
-		-l go \
+		-g go \
 		-o /local/src/pacman/swagger
 	cd src/pacman/swagger; \
 		go get -d -v && go build -v ./...
