@@ -21,8 +21,8 @@ GENERATOR = openapitools/openapi-generator-cli
 DEPS_JAVA = docker run --rm -u $(UID) -v $(CURDIR):/local $(GENERATOR) generate \
 		-i $(SCOREBOARD_API_YAML) \
 		-g java \
-		-o /local/target/generated-sources/swagger && \
-		cd target/generated-sources/swagger && \
+		-o /local/target/generated-sources/openapi && \
+		cd target/generated-sources/openapi && \
 		mvn clean install
 
 COVERAGE_JAVA = mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
@@ -30,7 +30,7 @@ COVERAGE_JAVA = mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package s
 		-Dsonar.organization=$(SONAR_ORG) \
 		-Dsonar.projectKey=org.$(SONAR_ORG).pacman-kata-java \
 		-Dsonar.projectName=pacman-kata-java \
-		-Dsonar.exclusions="**/*.xml,**/swagger/**" \
+		-Dsonar.exclusions="**/*.xml,**/swagger/**,**/openapi/**" \
     -Dsonar.login=$(SONAR_TOKEN) && \
 	mvn com.gavinmogan:codacy-maven-plugin:coverage \
 		-DcoverageReportFile=target/site/jacoco-ut/jacoco.xml \

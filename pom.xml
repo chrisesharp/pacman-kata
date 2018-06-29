@@ -58,8 +58,8 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-        <groupId>io.swagger</groupId>
-        <artifactId>swagger-java-client</artifactId>
+        <groupId>org.openapitools</groupId>
+        <artifactId>openapi-java-client</artifactId>
         <version>1.0.0</version>
     </dependency>
   </dependencies>

@@ -1,9 +1,9 @@
 package com.example.pacman.utils;
 
-import io.swagger.client.ApiClient;
-import io.swagger.client.ApiException;
-import io.swagger.client.model.Score;
-import io.swagger.client.api.ScoreboardApi;
+import org.openapitools.client.ApiClient;
+import org.openapitools.client.ApiException;
+import org.openapitools.client.model.Score;
+import org.openapitools.client.api.ScoreboardApi;
 import org.apache.log4j.Logger;
 import java.util.List;
 import java.util.ArrayList;
