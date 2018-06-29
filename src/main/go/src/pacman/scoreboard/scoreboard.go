@@ -3,7 +3,7 @@ package scoreboard
 import (
 	"context"
 	"fmt"
-	sw "pacman/swagger"
+	sw "pacman/openapi"
 )
 
 // Client interface

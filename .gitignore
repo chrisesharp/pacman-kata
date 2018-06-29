@@ -12,11 +12,14 @@ src/main/go/bin
 src/main/go/src/github.com
 src/main/go/src/pacman/pacman
 src/main/go/src/pacman/swagger
+src/main/go/src/pacman/openapi
 src/main/go/pkg/
 src/main/go/src/golang.org/
 src/main/python/__pycache__/
 src/main/python/swagger
+src/main/python/openapi
 src/main/node/swagger
+src/main/node/openapi
 *.pyc
 .vscode/
 *.code-workspace

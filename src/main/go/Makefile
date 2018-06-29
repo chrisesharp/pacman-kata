@@ -42,7 +42,7 @@ all: clean deps build test deploy
 clean:
 	cd src/pacman/game ; \
 	rm -f coverage.out ; \
-	rm -f src/pacman/swagger
+	rm -f src/pacman/openapi
 
 .PHONY: coverage
 coverage:
@@ -58,8 +58,8 @@ deps:
 	docker run --rm -v $(CURDIR):/local $(GENERATOR) generate \
 		-i $(SCOREBOARD_API_YAML) \
 		-g go \
-		-o /local/src/pacman/swagger
-	cd src/pacman/swagger; \
+		-o /local/src/pacman/openapi
+	cd src/pacman/openapi; \
 		go get -d -v && go build -v ./...
 	cd src/pacman/game; \
 		go get -u github.com/DATA-DOG/godog/cmd/godog ; \

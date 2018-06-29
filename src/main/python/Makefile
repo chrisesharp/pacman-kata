@@ -39,14 +39,15 @@ clean:
 	rm -rf ./__pycache__ ;\
 	coverage erase ; \
 	rm -f coverage.xml
+	rm -rf ./openapi
 
 .PHONY: deps
 deps:
 	docker run --rm -v $(CURDIR):/local $(GENERATOR) generate \
 		-i $(SCOREBOARD_API_YAML) \
 		-g python \
-		-o /local/swagger
-	cd swagger; \
+		-o /local/openapi
+	cd openapi; \
 		pip3 install .
 
 .PHONY: build

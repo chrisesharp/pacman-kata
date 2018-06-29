@@ -33,17 +33,17 @@ all: clean deps test deploy
 
 .PHONY: clean
 clean:
-	rm -rf ./coverage ./swagger
+	rm -rf ./coverage ./openapi
 
 .PHONY: deps
 deps:
 	docker run --rm -u $(UID) -v $(CURDIR):/local $(GENERATOR) generate \
 		-i $(SCOREBOARD_API_YAML) \
 		-g javascript \
-		-o /local/swagger
-	npm install --save ./swagger
-	cd swagger; npm link 
-	npm link swagger
+		-o /local/openapi
+	npm install --save ./openapi
+	cd openapi; npm link 
+	npm link openapi
 
 .PHONY: coverage
 coverage:

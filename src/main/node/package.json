@@ -5,7 +5,7 @@
   "main": "game.js",
   "dependencies": {
     "arraylist": "^0.1.0",
-    "leaderboard_api": "file:swagger",
+    "leaderboard_api": "file:openapi",
     "mainloop.js": "^1.0.4",
     "minimist": "^1.2.0"
   },
