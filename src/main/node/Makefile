@@ -42,8 +42,8 @@ deps:
 		-g javascript \
 		-o /local/openapi
 	npm install --save ./openapi
-	cd openapi; npm link 
-	npm link openapi
+	#cd openapi; npm link 
+	#npm link scoreboard_service_api
 
 .PHONY: coverage
 coverage:

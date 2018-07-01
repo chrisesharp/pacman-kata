@@ -1,6 +1,6 @@
 "use strict";
 
-var client = require("leaderboard_api");
+var client = require("scoreboard_service_api");
 
 module.exports =
 

@@ -5,9 +5,9 @@
   "main": "game.js",
   "dependencies": {
     "arraylist": "^0.1.0",
-    "leaderboard_api": "file:openapi",
     "mainloop.js": "^1.0.4",
-    "minimist": "^1.2.0"
+    "minimist": "^1.2.0",
+    "scoreboard_service_api": "file:openapi"
   },
   "devDependencies": {
     "assert": "^1.4.1",

@@ -2,9 +2,9 @@ FROM node:slim
 WORKDIR /app/src/pacman
 COPY src/main/node/package.json .
 COPY src/main/node/package-lock.json .
-COPY src/main/node/swagger .
-WORKDIR /app/src/pacman/swagger
-RUN npm install 
+COPY src/main/node/openapi .
+WORKDIR /app/src/pacman/openapi
+RUN npm install
 WORKDIR /app/src/pacman
 RUN npm install
 COPY src/main/node/ .
