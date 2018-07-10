@@ -40,6 +40,7 @@ public class ScoreboardConsumerPactTest  {
                   .method("POST")
                   .body("{\n\"player\": \"david\",\n\"score\": 8000\n}")
                   .headers(postReq)
+                  .matchHeader("Authorization", "Bearer .*")
               .willRespondWith()
                   .status(200)
                   .headers(postResp)
