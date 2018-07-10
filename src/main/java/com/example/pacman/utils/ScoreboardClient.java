@@ -15,10 +15,12 @@ public class ScoreboardClient {
   private ScoreboardApi scoreboard;
   private String player;
   private String scoreboardURL;
+  private String jwtToken = "JWT_goes_here"; 
   
   public ScoreboardClient(String player, String scoreboardURL) {
     this.player = player;
     this.scoreboardURL = scoreboardURL;
+    this.jwtToken = (System.getenv("AUTH_TOKEN")==null) ? this.jwtToken : System.getenv("AUTH_TOKEN");
     
     ApiClient client = new ApiClient();
     this.scoreboard = new ScoreboardApi();
@@ -29,7 +31,7 @@ public class ScoreboardClient {
     client.setBasePath(scoreboardURL);
     ApiKeyAuth authScheme = (ApiKeyAuth) client.getAuthentication("scoreboardService_auth_Bearer");
     authScheme.setApiKeyPrefix("Bearer");
-    authScheme.setApiKey("JWT_goes_here");
+    authScheme.setApiKey(jwtToken);
     scoreboard.setApiClient(client);
   }
   
