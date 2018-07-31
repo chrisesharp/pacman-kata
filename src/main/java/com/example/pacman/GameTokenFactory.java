@@ -1,7 +1,5 @@
 package com.example.pacman;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 public final class GameTokenFactory {
   private GameTokenFactory() {
     throw new IllegalStateException("Factory class");
@@ -27,16 +25,16 @@ public final class GameTokenFactory {
   }
 
   public static void parseGameTokens(GameEngine game, String screen) {
-      final AtomicInteger y = new AtomicInteger(0);
+      int y = 0;
       for (String line: screen.split("\n")) {
-          final AtomicInteger x = new AtomicInteger(0);
-          line.codePoints().forEach( i -> {
-            StringBuilder codepoint = new StringBuilder().appendCodePoint(i);
-            GameToken token = getTokenizer(codepoint.toString());
-            token.addGameElement(game,new Location(x.get(),y.get()));
-            x.incrementAndGet();
-          });
-          y.incrementAndGet();
+        int x = 0;
+        for (int codepoint : line.codePoints().toArray()) {
+          String tokenStr = new String(new int[] { codepoint }, 0, 1);
+          GameToken token = getTokenizer(tokenStr);
+          token.addGameElement(game,new Location(x,y));
+          x++;
+        }
+        y++;
       }
   }
 }
