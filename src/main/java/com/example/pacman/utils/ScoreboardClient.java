@@ -8,7 +8,6 @@ import org.openapitools.client.auth.ApiKeyAuth;
 import org.apache.log4j.Logger;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Map;
 
 public class ScoreboardClient {
   private static final Logger log = Logger.getLogger(ScoreboardClient.class);
